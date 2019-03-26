@@ -1,0 +1,100 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global"
+                controller="FRM3_ClubDetailController">
+
+    <aura:handler name="init" value="{!this}" action="{!c.loadData}"/>
+    <aura:attribute name="club" type="Object" />
+    
+    <lightning:card title="{!'Club Status: ' + v.club.Status__c}" iconName="{!v.club.Status__c == 'Open' ? 'utility:activity' : 'utility:custom_apps'}">
+        <lightning:layout>
+            <lightning:layoutItem padding="around-small">
+                <div class="header-column">
+                    <img src="{!$Resource.logo}"/>
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small" flexibility="auto">
+                <div class="header-column">
+                    <div class="info slds-m-bottom_xx-large">
+                        <h1 class="slds-truncate slds-text-heading_large" title="Club">{!v.club.Name}</h1>                            
+                        <p class="slds-truncate address-container" title="Address">
+                            <lightning:icon class="slds-m-right_medium" iconName="utility:home" size="x-small" alternativeText="home"/> 
+                            <span class="address">
+                                <aura:if isTrue="{!v.club.ShippingStreet.length >0}">
+                                    {!v.club.ShippingStreet}<br/>
+                                </aura:if> 
+                                {!v.club.ShippingCity}, {!v.club.ShippingState} &nbsp;{!v.club.ShippingPostalCode}
+                            </span>   
+                        </p>
+                        <p class="slds-truncate" title="Email">
+                            <lightning:icon class="slds-m-right_medium" iconName="utility:email" size="x-small" alternativeText="email"/> 
+                            {!v.club.Club_Assigned_Email__c}
+                        </p>
+                        <p class="slds-truncate" title="Phone">
+                            <lightning:icon class="slds-m-right_medium" iconName="utility:call" size="x-small" alternativeText="call"/> 
+                            {!v.club.Phone}
+                        </p>
+                    </div>                
+                    <dl class="PFinfo slds-dl_horizontal">                       
+                        <dt class="slds-dl_horizontal__label">
+                            <p class="slds-truncate" title="Company">PF Club ID:</p>
+                        </dt>
+                        <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                            <p class="slds-truncate" title="Salesforce">{!v.club.PF_Club_ID__c}</p>
+                        </dd>
+                        
+                        <dt class="slds-dl_horizontal__label">
+                            <p class="slds-truncate" title="Email">POS Club ID:</p>
+                        </dt>
+                        <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                            <p class="slds-truncate" title="salesforce-ux@salesforce.com">{!v.club.POS_Club_ID__c}</p>
+                        </dd>
+                        
+                        <dt class="slds-dl_horizontal__label">
+                            <p class="slds-truncate" title="Email">Group:</p>
+                        </dt>
+                        <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                            <p class="slds-truncate" title="salesforce-ux@salesforce.com">{!v.club.Group_Name__r.Name}</p>
+                        </dd>
+                        
+                        <dt class="slds-dl_horizontal__label">
+                            <p class="slds-truncate" title="Email">Projected Open Date:</p>
+                        </dt>
+                        <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                            <p class="slds-truncate" title="salesforce-ux@salesforce.com">
+                                <lightning:formattedDateTime value="{!v.club.Project_Open_Date__c}" />
+                            </p>
+                        </dd>
+                        
+                        <dt class="slds-dl_horizontal__label">
+                            <p class="slds-truncate" title="Email">Opened:</p>
+                        </dt>
+                        <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                            <p class="slds-truncate" title="salesforce-ux@salesforce.com">
+                                <lightning:formattedDateTime value="{!v.club.Date_Opened__c}" />
+                            </p>
+                        </dd>
+                    </dl>                                
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small" size="4">
+                <div class="header-column social">
+                    <a href="{!v.club.Facebook_URL__c.length > 0 ? v.club.Facebook_URL__c : v.settings.Facebook_URL__c}" target="_blank">
+                        <img src="{!$Resource.SocialIconsPurple + '/images/facebook_circle.png'}"/>
+                    </a>
+                    <a href="{!v.club.Twitter_URL__c.length > 0 ? v.club.Twitter_URL__c : v.settings.Twitter_URL__c}" target="_blank">                    
+                        <img src="{!$Resource.SocialIconsPurple + '/images/twitter_circle.png'}"/>
+                    </a>
+                    <a href="{!v.club.Instagram_URL__c.length > 0 ? v.club.Instagram_URL__c : v.settings.Instagram_URL__c}" target="_blank">                    
+                        <img src="{!$Resource.SocialIconsPurple + '/images/Instagram_circle.png'}"/>
+                    </a>
+                    <a href="{!v.club.Google_Plus_URL__c.length > 0 ? v.club.Google_Plus_URL__c : v.settings.Google_Plus_URL__c}" target="_blank">
+                        <img src="{!$Resource.SocialIconsPurple + '/images/google_circle.png'}"/>
+                    </a>
+                    <a href="{!v.club.Website}" target="_blank">
+                        <img src="{!$Resource.Social_Icons + '/images/planetfitness_icon_sm.png'}"/>
+                    </a>
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </lightning:card>       
+    
+</aura:component>

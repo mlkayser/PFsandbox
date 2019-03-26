@@ -1,0 +1,85 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global"
+                controller="FRM3_ClubsController">
+    
+    <aura:attribute name="openClubs" type="object[]" />
+    <aura:attribute name="nRows" type="Integer" default=""/>  
+    <aura:attribute name="isHomePage" type="Boolean" />
+    <aura:handler name="init" value="{!this}" action="{!c.loadClubs}"/>
+    
+    <lightning:accordion aura:id="accordion" allowMultipleSectionsOpen="true" activeSectionName="Open" >
+        <lightning:accordionSection name="Open" label="Open Clubs">
+            <lightning:card iconName="utility:activity" title="Open Clubs" class="slds-is-open">
+                <table class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal">    
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="slds-text-title_caps" scope="col">
+                                <div class="slds-truncate" title="Location">Location</div>
+                            </th>
+                            <th class="slds-text-title_caps" scope="col">
+                                <div class="slds-truncate" title="Open Since">Open Since</div>
+                            </th>
+                            <th class="slds-text-title_caps" scope="col">
+                                <div class="slds-truncate" title="Members">Members</div>
+                            </th>
+                            <th class="slds-text-title_caps" scope="col">
+                                <div class="slds-truncate" title="FA Exp Date">FA Expiration</div>
+                            </th>
+                            <th class="slds-text-title_caps" scope="col">
+                                <div class="slds-truncate" title="EFT">EFT</div>
+                            </th>
+                            <th class="slds-text-title_caps" scope="col">
+                                <div class="slds-truncate" title="Prior Month EFT">Prior Month EFT</div>
+                            </th>
+                            <th class="slds-text-title_caps" scope="col">
+                                <div class="slds-truncate" title="EFT Change">EFT Change</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.openClubs}" var="club" end="{!v.nRows}">
+                            <tr class="slds-hint-parent">
+                                <th data-label="Location" scope="row">
+                                    <div class="slds-truncate" title="Location">
+                                        <lightning:button variant="base" label="{!club.clubObj.Name}" title="{!club.clubObj.Id}" onclick="{! c.gotoDetail }"/>
+                                    </div>
+                                </th>
+                                <td data-label="Open Since">
+                                    <div class="slds-truncate" title="Open Since">
+                                        <lightning:formattedDateTime value="{!club.clubObj.Date_Opened__c}" />
+                                    </div>
+                                </td>
+                                <td data-label="Members">
+                                    <div class="slds-truncate" title="Members">{!club.clubObj.All_Active_Members__c}</div>
+                                </td>
+                                <td data-label="FA Expiration Date">
+                                    <div class="slds-truncate" title="FA Exp Date">
+                                        <lightning:formattedDateTime value="{!club.faExpirationDate}" />
+                                    </div>
+                                </td>
+                                <td data-label="EFT">
+                                    <div class="slds-truncate" title="EFT">
+                                        <lightning:formattedNumber value="{!club.clubObj.Club_EFT__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>
+                                <td data-label="Prior Month EFT">
+                                    <div class="slds-truncate" title="Prior Month EFT">
+                                        <lightning:formattedNumber value="{!club.clubObj.Previous_Month_EFT__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>
+                                <td data-label="EFT Change">
+                                    <div class="slds-truncate" title="EFT Change">
+                                        <lightning:formattedNumber value="{!club.clubObj.EFT_Difference_Without_Tax__c}" style="currency" currencyCode="USD"/>
+                                    </div>
+                                </td>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+                <aura:if isTrue="{!and(v.isHomePage, v.openClubs.length > 5)}">
+                    <lightning:button label="View all Open Clubs" title="View all clubs" onclick="{! c.gotoMyClubs }"/>
+                </aura:if>
+            </lightning:card>	            
+        </lightning:accordionSection>
+    </lightning:accordion>
+    
+</aura:component>

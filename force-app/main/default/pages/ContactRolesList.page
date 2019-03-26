@@ -1,0 +1,44 @@
+<apex:page standardController="Opportunity" extensions="ContactRolesListController" tabStyle="Opportunity">
+    <style>
+    .myheader {
+        background: #f2f3f3;
+        border-width: 1px;
+        border-color: #e0e3e5;
+        color: #000;
+        font-size: .9em;
+        font-weight: bold;
+        padding: 5px 2px 4px 5px;
+    }
+    .mycell {
+        border-top: 1px solid #e0e3e5;
+        border-right: 1px solid #e0e3e5;
+        font-size: .9em;
+        padding: 5px 2px 4px 5px;
+        min-width:150px;
+    }
+    .mycellLast {
+        border-top: 1px solid #e0e3e5;
+        font-size: .9em;
+        padding: 5px 2px 4px 5px;
+        min-width:200px;
+    }
+    </style>
+    <apex:form target="_top">
+        
+    
+    <apex:dataTable value="{!MyContacts}" var="ContactRole" style="border: 1px solid #e0e3e5;">
+        
+        <apex:column headerValue="Name" headerClass="myheader" styleClass="mycell">
+            <apex:outputLink value="/{!ContactRole.Contact.id}" target="_parent">{!ContactRole.Contact.Name}</apex:outputLink>
+        </apex:column>
+        <apex:column value="{!ContactRole.isPrimary}" headerValue="Is Primary" headerClass="myheader" styleClass="mycell" style="min-width:75px; text-align:center;"/>
+        <apex:column value="{!ContactRole.Contact.NDA_Effective_Date__c}" headerValue="NDA Effective Date" headerClass="myheader" styleClass="mycellLast"/>
+        <!--<apex:column value="{!ContactRole.Contact.Email}" headerValue="Email" headerClass="myheader" styleClass="mycell"/>
+        <apex:column value="{!ContactRole.Contact.Phone}" headerValue="Phone" headerClass="myheader" styleClass="mycell"/>
+        <apex:column value="{!ContactRole.Role}" headerValue="Role" headerClass="myheader" styleClass="mycell"/>-->
+    </apex:dataTable>
+    
+   
+        
+        </apex:form>
+</apex:page>

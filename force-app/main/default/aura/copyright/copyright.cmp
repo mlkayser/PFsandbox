@@ -1,0 +1,7 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+
+    <aura:handler name="init" value="{!this}" action="{!c.getYear}"/>
+    <aura:attribute name="year" type="String" />
+
+    <p>Copyright {!v.year} PlanetFitness.com | <a href="terms-and-conditions">Terms and Conditions</a></p>
+</aura:component>

@@ -1,0 +1,20 @@
+.THIS li {
+    display:inline-block !important;
+    margin-bottom:2em;
+    outline:1px solid lightgrey;
+    margin-right:1em; margin-left:1em;
+    width:300px;
+    vertical-align:top;
+}
+.THIS button {
+    width:100%;
+    border-radius: 0 !important;
+    
+}
+.THIS button:active,
+.THIS button:hover {
+	/*background-color: rgb(86, 8, 75);*/
+}
+.THIS li p {
+    padding:1em;
+}

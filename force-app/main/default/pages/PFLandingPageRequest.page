@@ -1,0 +1,34 @@
+<apex:page docType="html-5.0" title="Request a Landing Page | Planet Fitness Franchise Community" label="PFLandingPageRequest" name="PFLandingPageRequest" showHeader="true" sidebar="false" standardStylesheets="false">
+	<div class="no-sf-style page-body page-landing-page-request">
+	 	<div class="container">
+	 		<div class="jumbotron">
+		        <div class="row">
+		        	<div class="col-md-6 page-description">
+		        		<h1>Request A Landing Page</h1>
+		        		<p>placeholder</p>
+		        	</div>
+		        	<div class="col-md-6 page-description-image hidden-xs hidden-sm">
+		        		<img class="img-responsive" src="http://placehold.it/555x139"/>
+		        	</div>
+		        </div>
+	      	</div>
+
+	      	<ol class="breadcrumb">
+			  <li><a href="/apex/PFHomepage">Home</a></li>
+			  <li>Request A Landing Page</li>
+ 			</ol>
+
+	  		<div class="row">
+	 			<div class="col-md-12">
+	 				<div class="main-section">
+			 			<p class="section-title">Request A Landing Page</p>
+			 		</div>
+			 	</div>
+			</div>
+			
+
+
+
+	 	</div>
+	</div>
+</apex:page>

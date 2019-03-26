@@ -1,0 +1,99 @@
+<apex:component controller="PFMyClubsController" >
+    <apex:outputPanel id="resultsContainer">
+        <apex:form >
+            <table class="col-md-12 table-striped table-condensed cf home-table">
+                <thead class="cf thead-custom">
+                    <tr>
+                        <th>
+                            <apex:commandLink action="{!sortOpenRecords}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="ShippingCity" />
+                                <apex:param name="sortDirection" value="{!IF(sortDirection='ASC', 'DESC', 'ASC')}" assignTo="{!sortDirection}" />Location
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'ShippingCity'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}" />
+                            </apex:commandLink>
+                        </th>
+                        <th>
+                            <apex:commandLink action="{!sortOpenRecords}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="Date_Opened__c" />
+                                <apex:param name="sortDirection" value="{!IF(sortDirection='ASC', 'DESC', 'ASC')}" assignTo="{!sortDirection}" />Open Since
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'Date_Opened__c'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}" />
+                            </apex:commandLink>
+                        </th>
+                        <th>
+                            <apex:commandLink action="{!sortOpenRecords}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="Active_EFT_Members__c" />
+                                <apex:param name="sortDirection" value="{!IF(sortDirection='ASC', 'DESC', 'ASC')}" assignTo="{!sortDirection}" />Members
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'Active_EFT_Members__c'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}" />
+                            </apex:commandLink>
+                            
+                        </th>
+                        <th>
+                            <apex:commandLink action="{!sortOpenRecords}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="BC__c" />
+                                <apex:param name="sortDirection" value="{!IF(sortDirection='ASC', 'DESC', 'ASC')}" assignTo="{!sortDirection}" />BCM%
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'BC__c'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}" />
+                            </apex:commandLink>
+                            
+                        </th>
+                        <th>
+                            <apex:commandLink action="{!sortOpenRecords}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="Club_EFT__c" />
+                                <apex:param name="sortDirection" value="{!IF(sortDirection='ASC', 'DESC', 'ASC')}" assignTo="{!sortDirection}" />EFT
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'Club_EFT__c'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}" />
+                            </apex:commandLink>
+                            
+                        </th>
+                        <th>
+                            <apex:commandLink action="{!sortOpenRecords}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="Previous_Month_EFT__c" />
+                                <apex:param name="sortDirection" value="{!IF(sortDirection='ASC', 'DESC', 'ASC')}" assignTo="{!sortDirection}" />Prior Month EFT
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'Previous_Month_EFT__c'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}" />
+                            </apex:commandLink>
+                        </th>
+                        <th>
+                            <apex:commandLink action="{!sortOpenRecords}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="EFT_Difference_Without_Tax__c" />
+                                <apex:param name="sortDirection" value="{!IF(sortDirection='ASC', 'DESC', 'ASC')}" assignTo="{!sortDirection}" />EFT Change
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'EFT_Difference_Without_Tax__c'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}" />
+                            </apex:commandLink>
+                        </th>
+                        <th style="{!IF(NOT(isHomePage), '', 'display:none;')}">
+                            <apex:commandLink action="{!sortOpenRecords}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="BER_Score__c" />
+                                <apex:param name="sortDirection" value="{!IF(sortDirection='ASC', 'DESC', 'ASC')}" assignTo="{!sortDirection}" />BER
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'BER_Score__c'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}" />
+                            </apex:commandLink>
+                            
+                        </th>
+                        <!-- <th style="{!IF(NOT(isHomePage), '', 'display:none;')}">
+                            <apex:commandLink action="{!sortOpenRecords}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="Cases" />
+                                <apex:param name="sortDirection" value="{!IF(sortDirection='ASC', 'DESC', 'ASC')}" assignTo="{!sortDirection}" />Open Cases
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'Cases'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}" />
+                            </apex:commandLink>
+                        </th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <apex:repeat value="{!OpenRecords}" var="myClub" rows="{!if(isHomePage,5,100)}" >
+                        <tr>
+                            <td data-title="Location"><a href="/apex/PFClubDetail?Id={!myClub.clubObj.Id}">{!myClub.clubObj['Name']}</a></td>
+                            <td data-title="Open Since"><apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                                <apex:param value="{!myClub.clubObj['Date_Opened__c']}" /> 
+                                 </apex:outputText>
+                            </td>
+                            <td data-title="Members"><apex:outputField value="{!myClub.clubObj['All_Active_Members__c']}" /></td>
+                            <td data-title="BCM%"><apex:outputField value="{!myClub.clubObj.BC__c}" /> </td>
+                            <td data-title="EFT"><apex:outputField value="{!myClub.clubObj['Club_EFT__c']}" /></td>
+                            <td data-title="Prior Month EFT"><apex:outputField value="{!myClub.clubobj['Previous_Month_EFT__c']}" /></td>
+                            <td data-title="EFT Change"><apex:outputField value="{!myClub.clubobj['EFT_Difference_Without_Tax__c']}" /></td>
+                                                   
+                            <td data-title="BER" style="{!IF(NOT(isHomePage), '', 'display:none;')}"><apex:outputField value="{!myClub.clubObj.BER_Score__c}" /></td>
+                            <!-- <td data-title="Open Cases" style="{!IF(NOT(isHomePage), '', 'display:none;')}">{!myClub.totalOpenCases}</td> -->
+                        </tr>
+                    </apex:repeat>
+                </tbody>
+            </table>
+            <apex:outputText rendered="{!Records.size == 0}"><p class="no-data-msg">There are no current open clubs</p></apex:outputText>
+        </apex:form>
+    </apex:outputPanel>
+</apex:component>

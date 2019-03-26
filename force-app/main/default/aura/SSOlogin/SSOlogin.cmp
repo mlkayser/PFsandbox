@@ -1,0 +1,99 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+    
+    <lightning:card iconName="utility:crossfilter" title="Club Operations" class="slds-is-open">
+        <ul class="applications">
+            <li class="slds-button-group-item">
+                <lightning:button variant="brand" label="Sharing Wizard" onclick="{!c.gotoPage}" 
+                                  title="/sharing-wizard"/>
+                <p>Assign club level access to all of the users within your group.<br/>Please note: this includes assigning member concern escalation emails for your clubs.</p>
+            </li>
+            <li class="slds-button-group-item">
+                <lightning:button variant="brand" label="User Management Tool" onclick="{!c.gotoPage}" 
+                                  title="/user-management"/>
+                <p>Add, delete, and modify Franchise Management accounts for your group. You can also assign application access (such as Franchisee Reporting) to your users within this application.</p>
+            </li>
+            <li class="slds-button-group-item">
+                <lightning:button variant="brand" label="Franchisee Reporting" onclick="{!c.gotoPage}" 
+                                  title="https://full2-fm-planetfitness.cs26.force.com/idp/login?app=0sp0a000000XbW3"/>
+                <p>Also referred to as the Club KPI Dashboard and Cognos Reporting. An area where you can view reports (such as the Daily Joins Report) on the clubs you have access to in Franchise Management.</p>
+            </li>
+            <li class="slds-button-group-item">
+                <lightning:button variant="brand" label="Matrix" onclick="{!c.gotoPage}" 
+                                  title="https://full2-fm-planetfitness.cs26.force.com/frm3/idp/login?app=0sp210000004CD0"/>
+                <p>Matrix</p>
+            </li>        
+            <li class="slds-button-group-item">
+                <lightning:button variant="brand" label="Life Fitness" onclick="{!c.gotoPage}" 
+                                  title="https://pf.lifefitness.com/"/>
+                <p>Life Fitness</p>
+            </li> 
+            <li class="slds-button-group-item">
+                <lightning:button variant="brand" label="PFU" onclick="{!c.gotoPage}" 
+                                  title="https://planetfitnessuniversity.com/"/>
+                <p>Learn at Planet Fitness University! Sign into PFU to take various training courses on our eLearning site.  </p>
+            </li> 
+            <li class="slds-button-group-item">
+                <lightning:button variant="brand" label="Career Plug" onclick="{!c.gotoPage}" 
+                                  title="https://app.careerplug.com/user/sign_in"/>
+                <p>Post club jobs and review applicants.</p>
+            </li> 
+        </ul>
+ 	</lightning:card> 
+    <lightning:card iconName="utility:advertising" title="Marketing" class="slds-is-open">
+        <ul class="applications">
+            <li class="slds-button-group-item">
+                <lightning:button variant="brand" label="Marketing Spend Submission" onclick="{!c.gotoPage}" 
+                                  title="/marketing-spend-status"/>
+                <p>Upload your monthly marketing spends using this application.</p>
+            </li>
+            <li class="slds-button-group-item">
+                <lightning:button variant="brand" label="Email Marketing" onclick="{!c.gotoPage}" 
+                                  title="https://fm-planetfitness.force.com/idp/login?app=0sp0a000000XbWm"/>
+                <p>Access to the Marketing Cloud application to send marketing campaigns to members, prospects, and past members.</p>
+            </li>
+            <li class="slds-button-group-item">
+                <lightning:button variant="brand" label="M.A.T.C.H." onclick="{!c.gotoPage}" 
+                                  title="https://fm-planetfitness.force.com/idp/login?app=0spj0000000GnZg"/>
+                <p>Marketing and Admin Tracking Customization House. Creative library for groups and agencies to download marketing creative.</p>
+            </li>        
+            <li class="slds-button-group-item">
+                <lightning:button variant="brand" label="CCM" onclick="{!c.gotoPage}" 
+                                  title="https://clubs.planetfitness.com/"/>
+                <p>Manage club offers, edit club hours of operations and emergency messages.</p>
+            </li>        
+            <li class="slds-button-group-item">
+                <lightning:button variant="brand" label="Planet of Triumphs" onclick="{!c.gotoPage}" 
+                                  title="https://www.planetoftriumphs.com/"/>
+                <p>Our Judgement Free Community to celebrate members achievements, big and small!</p>
+            </li>  
+        </ul>	
+    </lightning:card>      
+    <lightning:card iconName="utility:custom_apps" title="Development" class="slds-is-open">
+        <ul class="applications">
+            <li class="slds-button-group-item">
+                <lightning:button variant="brand" label="New Territory" onclick="{!c.gotoPage}" 
+                                  title="/request-new-territory"/>
+                <p>Request new territory</p>
+            </li>
+            <li class="slds-button-group-item">
+                <lightning:button variant="brand" label="New Project" onclick="{!c.gotoPage}" 
+                                  title="/request-new-project"/>
+                <p>Request new project</p>
+            </li>
+        </ul>	
+    </lightning:card>      
+    <lightning:card iconName="utility:questions_and_answers" title="Support" class="slds-is-open">
+        <ul class="applications">
+            <li class="slds-button-group-item">
+                <lightning:button variant="brand" label="ABC Support" onclick="{!c.gotoPage}" 
+                                  title=""/>
+                <p>Request ABC support</p>
+            </li>
+            <li class="slds-button-group-item">
+                <lightning:button variant="brand" label="FM Support" onclick="{!c.gotoPage}" 
+                                  title="mailto:fm@planetfitness.com"/>
+                <p>Request FM support</p>
+            </li>
+        </ul>	
+    </lightning:card>      
+</aura:component>

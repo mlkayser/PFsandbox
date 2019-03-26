@@ -1,0 +1,9 @@
+<apex:page docType="html-5.0" title="{!Case.Subject} | Planet Fitness Franchise Community" label="PFCaseView" name="PFCaseView" standardController="Case" showHeader="true" sidebar="false" standardStylesheets="false">
+	<div class="no-sf-style page-body page-site-request">
+	 	<div class="container">
+			<div class="sites-listview-container">
+				<apex:detail showChatter="false" subject="{!Case.Id}" />
+			</div>
+	 	</div>
+	</div>
+</apex:page>

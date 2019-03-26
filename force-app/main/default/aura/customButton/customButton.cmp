@@ -1,0 +1,9 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+    <aura:attribute name="url" type="String" default="http://www.google.com" access="global" />
+    <aura:attribute name="text" type="String" default="Click Me" access="global" />
+    <button class="slds-align_absolute-center slds-button slds-button_brand forceCommunityAskCommunity" onclick="{!c.handleClick}">
+        <a href="{!v.url}">
+        	{!v.text}
+    	</a>
+    </button>
+</aura:component>

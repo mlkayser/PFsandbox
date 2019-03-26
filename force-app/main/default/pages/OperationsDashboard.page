@@ -1,0 +1,15 @@
+<apex:page >
+    <apex:pageBlock title="Select Your View Using One of the Options Below">
+        <apex:form >
+            <apex:selectList >
+                <apex:selectOption >Region</apex:selectOption>
+            </apex:selectList>
+        </apex:form>
+    </apex:pageBlock>
+    
+    <apex:pageBlock title="Membership KPIs">
+    </apex:pageBlock>
+    
+    <apex:pageBlock title="Development Schedule Details">
+    </apex:pageBlock>
+</apex:page>

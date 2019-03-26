@@ -1,0 +1,1348 @@
+<apex:page controller="UserManagementController" showHeader="true" sidebar="false">
+    
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head> 
+            <apex:stylesheet value="{!URLFOR($Resource.MultiselectPicklist)}"/>
+            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"/>
+            <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"/>
+            <apex:includeScript value="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"/>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"/>
+            <script src="https://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js" type="text/javascript"/>
+            <apex:slds />
+        </head>
+        
+        <div id="spinner" class="modal slds-spinner_container" style="z-index: 9010 !important;">
+            <div class="slds-spinner--brand slds-spinner slds-spinner--medium" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+       
+        <div ng-app="app" ng-controller="appCtrl" id="mainDiv" class="slds" style="display:none;"> 
+            
+            <article class="slds-card">
+                
+                <div class="slds-card__body">
+                
+                    <div class="slds-grid slds-wrap" style="padding: 0.75rem;">
+                        <div class="slds-size_1-of-6 slds-align--absolute-center" style="display: block;">
+                            <h2 style="color:white;" class="slds-grid slds-grid_vertical-align-center">
+                                <span class="slds-text-heading_small"><b>User Management</b></span>
+                            </h2>
+                        </div>
+                        <div class="slds-size_4-of-6 slds-align--absolute-center">
+                            <span class="helpTextCls">
+                                This page displays only active Franchise Management users that are part of Groups that you are assigned to.<br/>
+                                <b>Note:</b> if you wish to create a club manager account, please contact your Franchise Business Coach.
+                            </span>
+                        </div>
+                        <div class="slds-size_1-of-6 slds-align--absolute-center" style="text-align: right;">
+                            <button ng-click="addNewUser();" class="slds-button slds-button_neutral" type="button">
+                                <svg class="slds-button__icon slds-button__icon_left" aria-hidden="true">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#add"/>
+                                </svg>Add New User
+                            </button>
+                        </div>
+                    </div>
+                    <table class="slds-table slds-table_fixed-layout slds-table_bordered slds-no-row-hover slds-table_cell-buffer">
+                        <thead style="background-color: transparent;">
+                            <tr class="slds-text-title_caps">
+                                <th style="width:6rem;cursor: default;"> <span class="slds-truncate" title="Actions"><b>Actions</b></span></th>
+                                <th scope="col" ng-click="changeSortColoum('FirstName');" style="width:9rem;">
+                                    <span class="slds-truncate" title="First Name"><b>First Name</b></span>
+                                    <div class="slds-icon_container" ng-show="sort.column == 'FirstName'" title="{{sort.descending ? 'Descending' : 'Ascending'}}">
+                                        <svg class="slds-button__icon slds-button__icon_right" aria-hidden="true" ng-hide="sort.descending">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#arrowdown"/>
+                                        </svg>
+                                        <svg class="slds-button__icon slds-button__icon_right" aria-hidden="true" ng-show="sort.descending">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#arrowup"/>
+                                        </svg>
+                                    </div>
+                                </th>
+                                <th scope="col" ng-click="changeSortColoum('LastName');" style="width:9rem;">
+                                    <span class="slds-truncate" title="Last Name"><b>Last Name</b></span>
+                                    <div class="slds-icon_container" ng-show="sort.column == 'LastName'" title="{{sort.descending ? 'Descending' : 'Ascending'}}">
+                                        <svg class="slds-button__icon slds-button__icon_right" aria-hidden="true" ng-hide="sort.descending">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#arrowdown"/>
+                                        </svg>
+                                        <svg class="slds-button__icon slds-button__icon_right" aria-hidden="true" ng-show="sort.descending">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#arrowup"/>
+                                        </svg>
+                                    </div>
+                                </th>
+                                <th scope="col" ng-click="changeSortColoum('Email');">
+                                    <span class="slds-truncate" title="Username/Email"><b>Username/Email</b></span>
+                                    <div class="slds-icon_container" ng-show="sort.column == 'Email'" title="{{sort.descending ? 'Descending' : 'Ascending'}}">
+                                        <svg class="slds-button__icon slds-button__icon_right" aria-hidden="true" ng-hide="sort.descending">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#arrowdown"/>
+                                        </svg>
+                                        <svg class="slds-button__icon slds-button__icon_right" aria-hidden="true" ng-show="sort.descending">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#arrowup"/>
+                                        </svg>
+                                    </div>
+                                </th>
+                                <th scope="col" ng-click="changeSortColoum('Title');">
+                                    <span class="slds-truncate" title="Title"><b>Title</b></span>
+                                    <div class="slds-icon_container" ng-show="sort.column == 'Title'" title="{{sort.descending ? 'Descending' : 'Ascending'}}">
+                                        <svg class="slds-button__icon slds-button__icon_right" aria-hidden="true" ng-hide="sort.descending">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#arrowdown"/>
+                                        </svg>
+                                        <svg class="slds-button__icon slds-button__icon_right" aria-hidden="true" ng-show="sort.descending">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#arrowup"/>
+                                        </svg>
+                                    </div>
+                                </th>
+                                <th scope="col" ng-click="changeSortColoum('Phone');">
+                                    <span class="slds-truncate" title="Phone"><b>Phone</b></span>
+                                    <div class="slds-icon_container" ng-show="sort.column == 'Phone'" title="{{sort.descending ? 'Descending' : 'Ascending'}}">
+                                        <svg class="slds-button__icon slds-button__icon_right" aria-hidden="true" ng-hide="sort.descending">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#arrowdown"/>
+                                        </svg>
+                                        <svg class="slds-button__icon slds-button__icon_right" aria-hidden="true" ng-show="sort.descending">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#arrowup"/>
+                                        </svg>
+                                    </div>
+                                </th>
+                                <th scope="col" ng-click="changeSortColoum('SSO_Access__c');">
+                                    <span class="slds-truncate" title="Application Access">
+                                        <div style="white-space: pre-wrap;"><b>Application Access</b></div>
+                                    </span>
+                                    <div class="slds-icon_container" ng-show="sort.column == 'SSO_Access__c'" title="{{sort.descending ? 'Descending' : 'Ascending'}}">
+                                        <svg class="slds-button__icon slds-button__icon_right" aria-hidden="true" ng-hide="sort.descending">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#arrowdown"/>
+                                        </svg>
+                                        <svg class="slds-button__icon slds-button__icon_right" aria-hidden="true" ng-show="sort.descending">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#arrowup"/>
+                                        </svg>
+                                    </div>
+                                </th>
+                                <th scope="col" ng-click="changeSortColoum('LastPasswordChangeDate');">
+                                    <span class="slds-truncate" title="Last Password Reset">
+                                        <div style="white-space: pre-wrap;"><b>Last Password Reset</b></div>
+                                    </span>
+                                    <div class="slds-icon_container" ng-show="sort.column == 'LastPasswordChangeDate'" title="{{sort.descending ? 'Descending' : 'Ascending'}}">
+                                        <svg class="slds-button__icon slds-button__icon_right" aria-hidden="true" ng-hide="sort.descending">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#arrowdown"/>
+                                        </svg>
+                                        <svg class="slds-button__icon slds-button__icon_right" aria-hidden="true" ng-show="sort.descending">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#arrowup"/>
+                                        </svg>
+                                    </div>
+                                </th>
+                                <th scope="col" ng-click="changeSortColoum('LastLoginDate');">
+                                    <span class="slds-truncate" title="Last Login Date">
+                                        <div style="white-space: pre-wrap;"><b>Last Login Date</b></div>
+                                    </span>
+                                    <div class="slds-icon_container" ng-show="sort.column == 'LastLoginDate'" title="{{sort.descending ? 'Descending' : 'Ascending'}}">
+                                        <svg class="slds-button__icon slds-button__icon_right" aria-hidden="true" ng-hide="sort.descending">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#arrowdown"/>
+                                        </svg>
+                                        <svg class="slds-button__icon slds-button__icon_right" aria-hidden="true" ng-show="sort.descending">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#arrowup"/>
+                                        </svg>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="slds-hint-parent" ng-repeat="usr in users | orderBy:sort.column:sort.descending | startFrom:currentPage*pageSize | limitTo:pageSize">
+                                <td>
+                                    <button ng-click="updateUser(usr)" class="slds-button slds-button_neutral iconBtn" type="button" title="Edit">
+                                        <svg class="slds-button__icon" aria-hidden="true">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#edit"/>
+                                        </svg>
+                                    </button>
+                                    <button ng-click="resetPassword(usr);" class="slds-button slds-button_neutral iconBtn" type="button" title="Reset Password">
+                                        <svg class="slds-button__icon" aria-hidden="true">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#refresh"/>
+                                        </svg>
+                                    </button>
+                                    <button ng-click="banUserFn(usr);" class="slds-button slds-button_neutral iconBtn" type="button" title="Deactivate">
+                                        <svg class="slds-button__icon" aria-hidden="true">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#ban"/>
+                                        </svg>
+                                    </button>
+                                </td>
+                                <td><div class="slds-truncate" title="{{usr.FirstName}}">{{usr.FirstName}}</div></td>
+                                <td><div class="slds-truncate" title="{{usr.LastName}}">{{usr.LastName}}</div></td>
+                                <td><div class="slds-truncate" title="{{usr.Email}}">{{usr.Email}}</div></td>
+                                <td><div class="slds-truncate" title="{{usr.Title}}">{{usr.Title}}</div></td>
+                                <td><div class="slds-truncate" title="{{usr.Phone}}">{{usr.Phone}}</div></td>
+                                <td><div class="slds-truncate" title="{{usr.SSO_Access__c}}">{{usr.SSO_Access__c}}</div></td>
+                                <td><div class="slds-truncate" title="{{usr.LastPasswordChangeDate}}">{{usr.LastPasswordChangeDate | date:'MM/dd/yyyy hh:mm a'}}</div></td>
+                                <td><div class="slds-truncate" title="{{usr.LastLoginDate}}">{{usr.LastLoginDate | date:'MM/dd/yyyy hh:mm a'}}</div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="paginationDiv" class="slds-box slds-box_x-small slds-align--absolute-center" style="background-color: #f0efec;">
+                        <button ng-disabled="currentPage == 0" ng-click="paginationFunction('pre');" type="button" class="slds-button slds-button--neutral" style="{{currentPage == 0 ? 'cursor: not-allowed;' : ''}}">
+                            Previous
+                        </button>
+                        <div style="margin:0rem 1rem;">{{currentPage+1}}/{{users.length == 0 ? '1' : (Math.ceil(users.length/pageSize))}}</div>
+                        <button ng-disabled="currentPage >= users.length/pageSize - 1" ng-click="paginationFunction('next');" type="button" class="slds-button slds-button--neutral" style="{{(currentPage >= users.length/pageSize - 1) ? 'cursor: not-allowed;' : ''}}">
+                            Next
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <div ng-show="showCreateUserPopup" style="height: 640px;">
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <button ng-click="closePopup();" class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                                <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#close" />
+                                </svg>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{{isUserEdit ? 'Edit User Information' : 'Create New User'}}</h2>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <div class="slds-grid botMarginCls">
+                                <div class="slds-truncate slds-align--absolute-center slds-size_1-of-2">First Name</div>
+                                <div class="slds-size_1-of-2"><input type="text" ng-model="newUser.FirstName" class="slds-input" placeholder="First Name" /></div>
+                            </div>
+                            <div class="slds-grid botMarginCls">
+                                <div class="slds-truncate slds-align--absolute-center slds-size_1-of-2">
+                                    Last Name <abbr class="slds-required" title="required"> *</abbr>
+                                </div>
+                                <div class="slds-size_1-of-2"><input type="text" ng-model="newUser.LastName" class="slds-input" placeholder="Last Name" /></div>
+                            </div>
+                            <div class="slds-grid botMarginCls">
+                                <div class="slds-truncate slds-align--absolute-center slds-size_1-of-2">
+                                    {{isUserEdit ? 'Username/Email' : 'Email'}} <abbr class="slds-required" title="required"> *</abbr>
+                                </div>
+                                <div class="slds-size_1-of-2"><input type="text" ng-model="newUser.Email" class="slds-input" placeholder="Email" /></div>
+                            </div>
+                            <div class="slds-grid botMarginCls">
+                                <div class="slds-truncate slds-align--absolute-center slds-size_1-of-2"> Phone </div>
+                                <div class="slds-size_1-of-2"><input type="text" ng-model="newUser.Phone" class="slds-input" placeholder="Phone" /></div>
+                            </div>
+                            <div class="slds-grid botMarginCls">
+                                <div class="slds-truncate slds-align--absolute-center slds-size_1-of-2"> Title </div>
+                                <div class="slds-size_1-of-2"><input type="text" ng-model="newUser.Title" class="slds-input" placeholder="Title" /></div>
+                            </div>
+                            <div class="slds-grid botMarginCls">
+                                <div class="slds-truncate slds-align--absolute-center slds-size_1-of-2">Application Access </div>                                
+                                <div class="slds-size_1-of-2">                                    
+                                    <select id="accessId" multiple="multiple" onchange="angular.element(this).scope().selectedAccess(this)">
+                                        <option ng-repeat="aces in ssoAccess" value="{{aces}}"> {{aces}} </option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <button ng-click="closePopup();" class="slds-button slds-button_neutral" type="button">
+                                <svg class="slds-button__icon" aria-hidden="true">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#clear"/>
+                                </svg> Cancel
+                            </button>                                
+                            <button ng-click="isUserEdit ? goNextStep('updateUser') : goNextStep()" class="slds-button slds-button_neutral" type="button">
+                                <svg class="slds-button__icon" aria-hidden="true">
+                                    <use ng-hide="isUserEdit" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#forward"/>
+                                    <use ng-show="isUserEdit" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#success"/>
+                                </svg> {{isUserEdit ? 'Save Changes' : 'Continue to Next Step'}}
+                            </button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>
+            <div ng-show="showAlertPopup" class="demo-only" style="height: 640px;">
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open" style="z-index: 9005 !important;">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <button ng-click="showAlertPopup=false;" class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                                <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#close" />
+                                </svg>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 class="slds-text-heading_medium slds-hyphenate">Alert</h2>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium">
+                            {{alertMessage}}
+                            <img ng-show="thumpsUpVisibility" src="{!URLFOR($Resource.SharingWizardResource, 'thumbsup.png')}" style="width: 0.9rem;margin-bottom: 0.5rem;"/>
+                            <span ng-show="additionalAlertVisibility"><br/><br/>
+                                Please note, they will not have access to specific club data until the sharing wizard has been updated.<br/><br/>
+                                Click <a href="/apex/SharingWizard">here</a> to go to Sharing Wizard.
+                            </span>
+                        </div>
+                        <footer class="slds-modal__footer">
+                            
+                            <button ng-click="refreshPage()" ng-show="pgRefresh" class="slds-button slds-button_neutral" type="button">
+                                <svg ng-hide="isDeactivate" class="slds-button__icon" aria-hidden="true">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#clear"/>
+                                </svg> OK
+                            </button>
+                            
+                            <button ng-hide="pgRefresh" ng-click="cancelFn(); showCreateUserPopup=false; newUser={};" class="slds-button slds-button_neutral" type="button">
+                                <svg ng-hide="isDeactivate" class="slds-button__icon" aria-hidden="true">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#clear"/>
+                                </svg> {{showOk ? 'OK' : 'Cancel'}}
+                            </button>
+                            <button ng-show="isNextStep && !existInactive && !existCont" ng-click="gotoThirdStep('no create')" class="slds-button slds-button_neutral" type="button">
+                                <svg class="slds-button__icon" aria-hidden="true">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#success"/>
+                                </svg> Continue
+                            </button> 
+                            <button ng-show="isNextStep && existInactive" ng-click="gotoThirdStep('react')" class="slds-button slds-button_neutral" type="button">
+                                <svg class="slds-button__icon" aria-hidden="true">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#success"/>
+                                </svg> Yes, Continue
+                            </button>
+                            <button ng-show="isNextStep && existCont" ng-click="gotoThirdStep('create')" class="slds-button slds-button_neutral" type="button">
+                                <svg class="slds-button__icon" aria-hidden="true">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#success"/>
+                                </svg> Yes, Continue
+                            </button>
+                            <button ng-hide="isDeactivate || isNextStep" ng-click="deactivateUser();" class="slds-button slds-button_neutral" type="button">
+                                <svg class="slds-button__icon" aria-hidden="true">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#success"/>
+                                </svg> Yes
+                            </button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open" style="z-index: 9002 !important;"></div>
+            </div>
+            
+            <div ng-show="showGroupPopup" class="demo-only" style="height: 640px;">
+                <div class="demo-only" style="height: 640px;">
+                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <button ng-click="showGroupPopup=false" class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                                    <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#close" />
+                                    </svg>
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                                <h2 class="slds-text-heading_medium slds-hyphenate">Select Group</h2>
+                            </header>
+                            <div class="slds-modal__content slds-p-around_medium">
+                                <div ng-bind-html="renderAsHTML()"/>
+                                <div ng-show="showErrorMessage" class="slds-grid slds-align--absolute-center" style="color: red;margin-top: 0.5rem;"> 
+                                    Please select at least one group for this user.
+                                </div>
+                                <div class="slds-align--absolute-center" style="margin-top: 1rem;"> 
+                                    <select id="groupId" multiple="multiple" onchange="angular.element(this).scope().selectedValues(this)">
+                                        <option ng-repeat="grp in groups" value="{{grp.Id}}">{{grp.Name}}</option>
+                                    </select> 
+                                </div>
+                            </div>
+                            <footer class="slds-modal__footer">
+                                <button ng-click="showGroupPopup=false" class="slds-button slds-button_neutral" type="button">
+                                    <svg ng-hide="isDeactivate" class="slds-button__icon" aria-hidden="true">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#clear"/>
+                                    </svg> Cancel
+                                </button>
+                                <button ng-click="createUser('GO');" class="slds-button slds-button_neutral" type="button">
+                                    <svg class="slds-button__icon" aria-hidden="true">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#success"/>
+                                    </svg> {{isExistUser ? 'Add to Groups' : (isExistConFlag ? 'Save &amp; Done' : reactOrCreate == 'react' ? 'Reactivate User' : 'Create User')}}
+                                </button>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </div>
+            </div>
+            <div ng-show="resetPswPopup" class="demo-only" style="height: 640px;">
+                <div class="demo-only" style="height: 640px;">
+                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container">
+                            <header class="slds-modal__header">
+                                <button ng-click="resetPswPopup=false" class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                                    <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#close" />
+                                    </svg>
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                                <h2 class="slds-text-heading_medium slds-hyphenate">Alert</h2>
+                            </header>
+                            <div class="slds-modal__content slds-p-around_medium">
+                                Are you sure you want to reset the password for {{resetUser.Name}}?
+                            </div>
+                            <footer class="slds-modal__footer">
+                                <button ng-click="resetPswPopup=false" class="slds-button slds-button_neutral" type="button">
+                                    <svg class="slds-button__icon" aria-hidden="true">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#clear"/>
+                                    </svg> Cancel
+                                </button>
+                                <button ng-click="confirmResetPassword();" class="slds-button slds-button_neutral" type="button">
+                                    <svg class="slds-button__icon" aria-hidden="true">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#success"/>
+                                    </svg> Reset Password
+                                </button>
+                            </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                </div>
+            </div>
+            
+            <div ng-show="showErrAlert" style="height: 640px;">
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open" style="z-index: 9005 !important;">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <h2 class="slds-text-heading_medium slds-hyphenate">Alert</h2>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium">{{errMsg}}</div>
+                        <footer class="slds-modal__footer">
+                            <button ng-click="showErrAlert=false" class="slds-button slds-button_neutral" type="button"> Ok </button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open" style="z-index: 9002 !important;"></div>
+            </div>
+       </div>
+       
+       <script>
+           var cnt=0;
+           var underscore = angular.module('underscore', []);
+            underscore.factory('_', ['$window', function($window) {
+                return $window._;
+            }]);
+            Visualforce.remoting.timeout = 120000;
+            var app = angular.module('app',['underscore']);
+            app.filter('startFrom', function() {
+                return function(input, start) {
+                    start = +start; 
+                    if(input) return input.slice(start);
+                }
+            });            
+            app.controller('appCtrl', function($scope,$timeout,_,$sce) {
+                
+                var usersOriginal = [];
+                $scope.showCreateUserPopup = false;
+                $scope.showAlertPopup = false;
+                $scope.showGroupPopup = false;
+                $scope.alertMessage = '';
+                $scope.thumpsUpVisibility = false;
+                $scope.additionalAlertVisibility = false;
+                $scope.users = [];
+                $scope.Math = window.Math;
+                $scope.pageSize = 15;
+                $scope.currentPage = 0;
+                $scope.sort = {};
+                $scope.newUser = {};
+                $scope.existingContact = {};
+                $scope.banUser = {};
+                $scope.resetUser = {};
+                $scope.isNextStep = false;
+                $scope.groups = [];
+                $scope.exGroupIds = [];
+                $scope.isExistCon = false;
+                $scope.selectedGroups = [];
+                $scope.types = [];
+                $scope.type;
+                $scope.ssoAccess = [];
+                $scope.groupExists = false;
+                $scope.existInactive = false;
+                $scope.reactOrCreate = '';
+                $scope.existCont = false;
+                $scope.showOk = false;
+                $scope.isExistUser = false;
+                $scope.thumpsUpVisibility = false;
+                $scope.additionalAlertVisibility = false;
+                
+                $( 'body' ).click(function(e) {
+                  
+                    if(e && ((e.srcElement && e.srcElement.className && (typeof e.srcElement.className != 'object') && e.srcElement.className.includes("inputCls")) ||
+                    (e.target && e.target.className && (typeof e.target.className != 'object') && e.target.className.includes("inputCls")))) {
+                        $(".slds-dropdown--length-5").css("display","block");
+                    } else {
+                        $(".slds-dropdown--length-5").css("display","none");
+                        $(".typeDropDown").css("display", "none");
+                    }
+                });
+                
+                $scope.newUserOriginal = {};
+                
+                $scope.closePopup = function() {
+                    $scope.showCreateUserPopup = false;
+                    $scope.newUser = {};
+                    $scope.users = angular.copy(usersOriginal);
+                }
+                
+                $scope.updateUser = function(user) {
+                    $scope.newUser = user;
+                    $scope.newUserOriginal = angular.copy(user);
+                    $scope.isUserEdit = true;
+                    $scope.showCreateUserPopup = true;
+                    
+                    $timeout(function() { 
+                        $scope.applyAccessMultiSelect(user.SSO_Access__c);
+                    });
+                }
+                
+                $scope.refreshPage = function(isFrom) {
+                    
+                    console.log('pg refresh function called:::');
+                    window.location.reload();
+                }
+                    
+                $scope.getData = function(isFrom) {
+                                        
+                    var msg = '';
+                    
+                    if(isFrom == 'insert') {
+                        msg = 'Success! An account for ' + ($scope.newUser.FirstName ? $scope.newUser.FirstName : '') + ' ' + $scope.newUser.LastName + ' has been created and added to ' + $scope.associatedGrps + '. They will be notified via email of their login credentials.'
+                        $scope.additionalAlertVisibility = true;
+                    } else if(isFrom == 'update') {
+                        msg = 'Success! You have reactivated ' + ($scope.newUser.FirstName ? $scope.newUser.FirstName : '') + ' ' + $scope.newUser.LastName + ' and associated them to ' + $scope.associatedGrps + '. They will be notified via email of their login credentials. '
+                    } else if(isFrom == 'indUpdate') {
+                        msg = 'Success! ' + ($scope.newUser.FirstName ? $scope.newUser.FirstName : '') + ' ' + $scope.newUser.LastName + ' has been updated.';
+                    }
+                    
+                    Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.UserManagementController.getData}',function(result, event) {
+                        if(event.status && result) {
+                            console.log(':::Main Result:::', result);
+                            $scope.users = result
+                            usersOriginal = angular.copy(result);
+                            
+                            if(msg != '') {
+                                $scope.showAlertPopup = true;
+                                $scope.isDeactivate = true;
+                                $scope.alertMessage = msg;
+                                $scope.thumpsUpVisibility = true;
+                                $scope.pgRefresh = (isFrom == 'insert');
+                                $scope.showOk = true;
+                            }
+                        }
+                        $(".modal").hide();
+                        $scope.$apply();
+                    });
+                }
+                $scope.getData('init');
+                                
+                $scope.getUserSsoAccess = function() {
+                    
+                    Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.UserManagementController.returnUserSSOAccess}',function(result, event) {
+                    
+                        if(event.status && result) {
+                            $scope.ssoAccess = result;
+                        }
+                    });
+                }
+                $scope.getUserSsoAccess();
+                
+                $scope.selectedValues = function(elem) {
+                    $scope.selectedGroups = [];
+                    angular.forEach($(elem).val(),function(rel){
+                        $scope.selectedGroups.push(rel);
+                    });
+                    $scope.buildMultiPickListName();
+                }
+                
+                $scope.gotoThirdStep = function(stepFor) {
+                    
+                    $(".modal").show();
+                    $scope.reactOrCreate = stepFor;
+                    $scope.thumpsUpVisibility = false;
+                    $scope.additionalAlertVisibility = false;
+                    $scope.isDirectThirdStep = (stepFor == 'react');
+                    
+                    var exConId = '';
+                    if($scope.existingContact && $scope.existingContact.Id) {
+                        exConId = $scope.existingContact.Id;
+                    }
+                    
+                    Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.UserManagementController.getGroups}',exConId, $scope.reactOrCreate, function(result, event) {
+                        if(event.status && result) {
+                            console.log('groups result::::', result);
+                            $scope.groups = result.groups;
+                            $scope.exGroupIds = result.exGroupIds;
+                            
+                            $timeout(function() { 
+                                $scope.applyMultiSelect();
+                                $scope.showCreateUserPopup = false;
+                                $scope.showAlertPopup = false;
+                                $scope.showGroupPopup = true;
+                                $scope.selectedGroups = [];
+                            });
+                        } else {
+                            $scope.showErrAlert = true;
+                            $scope.errMsg = 'Error while get Groups.'
+                        }
+                        $scope.$apply();
+                        $(".modal").hide();
+                    });
+                }
+                
+                $scope.banUserFn = function(user) {
+                    $scope.cancelFn();
+                    $scope.thumpsUpVisibility = false;
+                    $scope.additionalAlertVisibility = false;
+                    $scope.banUser = user;
+                    $scope.showAlertPopup = true;
+                    $scope.showOk = false;
+                    $scope.alertMessage = 'Are you sure you want to remove ' + user.Name + ' from Franchise Management and associated applications?'                   
+                }
+                
+                $scope.addNewUser = function() {  
+                    $scope.isUserEdit = false; 
+                    $scope.thumpsUpVisibility = false;   
+                    $scope.additionalAlertVisibility = false;              
+                    $scope.newUser = {};
+                    $scope.type = '';
+                    $scope.showCreateUserPopup = true;
+                    $scope.types = ['Club Staff', 'Franchisee', 'Marketing', 'Operations']; 
+                    
+                    $timeout(function() { 
+                        $scope.applyAccessMultiSelect();
+                    });
+                } 
+                
+                $scope.resetPassword = function(user) {
+                    $scope.thumpsUpVisibility = false;
+                    $scope.additionalAlertVisibility = false;
+                    $scope.resetUser = user;
+                    $scope.resetPswPopup = true;
+                }        
+                
+                $scope.confirmResetPassword = function() {
+                    
+                    $scope.resetPswPopup = false;
+                    $scope.thumpsUpVisibility = false;
+                    $scope.additionalAlertVisibility = false;
+                    
+                    if($scope.resetUser) {
+                        Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.UserManagementController.resetPassword}',$scope.resetUser.Id,function(result, event) {
+                            
+                            if(event.status && result) {
+                                if(result.retStr == 'SUCCESS') {
+                                    $scope.showOk = true;
+                                    $scope.alertMessage = 'Success! A reset password link has been sent to ' + result.user.Email + '.';
+                                    $scope.thumpsUpVisibility = true;
+                                } else { 
+                                    $scope.alertMessage = result; 
+                                }
+                            } else {
+                                $scope.alertMessage = 'Reset password failed';
+                            }
+                            $scope.showAlertPopup = true;
+                            $scope.isDeactivate = true;
+                            $(".modal").hide();
+                            $scope.$apply();
+                        });
+                    }
+                }        
+                
+                $scope.deactivateUser = function() {
+                    
+                    $scope.cancelFn();
+                    $scope.thumpsUpVisibility = false;
+                    $scope.additionalAlertVisibility = false;
+                    
+                    if($scope.banUser) {
+                        $(".modal").show();
+                        Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.UserManagementController.deactivateUser}',$scope.banUser.Id,function(result, event) {
+                            
+                            $scope.showAlertPopup = true;
+                            if(event.status && result) {
+                                if(result == 'SUCCESS') {
+                                    $scope.showOk = true;
+                                    $scope.thumpsUpVisibility = true;
+                                    $scope.alertMessage = 'Success! You have removed ' + $scope.banUser.Name + ' from Franchise Management and any associated applications.';
+                                    $scope.getData(); 
+                                } else { 
+                                    $scope.alertMessage = result; 
+                                }
+                            } else {
+                                $scope.alertMessage = 'Deactivation failed';
+                            }
+                            $scope.isDeactivate = true;
+                            $(".modal").hide();
+                            $scope.$apply();
+                        });
+                    }
+                }
+                
+                $scope.createUser = function(isFrom) {
+                    
+                    var existConStr = '';
+                    $scope.thumpsUpVisibility = false;
+                    $scope.additionalAlertVisibility = false;
+                    var reactorCreateVal;
+                    if($scope.existingContact && $scope.existingContact.Id) {
+                        existConStr = JSON.stringify($scope.existingContact);
+                    }
+                    
+                    if($scope.reactOrCreate == 'no react') {
+                        existConStr = '';
+                    }
+                    
+                    if($scope.reactOrCreate == 'con create') {
+                        existConStr = '';
+                        $scope.reactOrCreate = 'create';
+                    }
+                    
+                    if(isFrom == 'GO' && $scope.selectedGroups.length == 0 && !$scope.groupExists) {
+                        $scope.showErrorMessage = true;
+                    } else if($scope.newUser && $scope.newUser.Email) {
+                        
+                        $(".modal").show();
+                        
+                        $scope.cancelFn();
+                    
+                        if(!$scope.type) {
+                            $scope.type = 'club';
+                        }                                                
+                        $scope.reactOrCreate = $scope.reactOrCreate != '' && $scope.reactOrCreate ? $scope.reactOrCreate : 'create';
+                        
+                        Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.UserManagementController.createUser}',JSON.stringify($scope.newUser),
+                            existConStr, $scope.selectedGroups, $scope.type, $scope.selectedSsos, $scope.reactOrCreate, function(result, event) {
+                            
+                            if(event.status) {
+                            
+                                $scope.showAlertPopup = true;
+                                $scope.isDeactivate = true;
+                                console.log('result: ', result);
+                                
+                                var arr = result.split("@");
+                                
+                                result = arr[0];
+                                $scope.associatedGrps = arr[1];
+                                
+                                if(result == 'SUCCESS' || result == 'UPDATE') {
+                                    $(".modal").show();
+                                    $scope.showAlertPopup = false;
+                                    $scope.isDeactivate = false;
+                                    
+                                    var updateInsert = result == 'SUCCESS' ? 'insert' : 'update';
+                                    $scope.getData(updateInsert);
+                                } else if(result == 'GOONLY') {
+                                    $scope.getData('init');
+                                    $scope.alertMessage = 'Success! ' + ($scope.newUser.FirstName ? $scope.newUser.FirstName : '') + ' ' + $scope.newUser.LastName + ' has been updated and added to ' + arr[1] + '.';
+                                    $scope.additionalAlertVisibility = true;
+                                    $scope.pgRefresh = true;
+                                    $scope.thumpsUpVisibility = true;
+                                } else if(result == 'GOONLYNOTADDED') {
+                                    $scope.alertMessage = 'Thank you for confirming the group assignment for ' + ($scope.newUser.FirstName ? $scope.newUser.FirstName : '') + ' ' + $scope.newUser.LastName + '.';
+                                    $scope.showOk = true;
+                                    $scope.thumpsUpVisibility = true;
+                                } else {
+                                    $scope.alertMessage = result;
+                                    $scope.showOk = true;
+                                }
+                            } else {
+                                $scope.showErrAlert = true;
+                                $scope.errMsg = 'Operation failed.';
+                            }
+                            $(".modal").hide();
+                            $scope.$apply();
+                        });
+                    }
+                }
+                
+                $scope.goNextStep = function(isFrom) {
+                    
+                    console.log(':::goNextStep:::', isFrom);
+                    
+                    $scope.showErrorMessage = false;
+                    $scope.existInactive = false;
+                    $scope.existCont = false;
+                    $scope.existingContact = {};
+                    $scope.showErrAlert = false;
+                    $scope.errMsg = '';
+                    $scope.isNextStep = false;
+                    $scope.existCont = false;
+                    $scope.isExistUser = false;
+                    $scope.thirdStepAlertMsg = '';
+                    $scope.thumpsUpVisibility = false;
+                    $scope.additionalAlertVisibility = false;
+                    $scope.groupExists = false;
+                    var titleArr = ["club manager", "general manager", "manager", "assistant club manager"];
+                    
+                    $scope.showOk = false;
+                    
+                    var emailRegEx = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+                                        
+                    if($scope.newUser) {
+                    
+                        var newUserTitle = $scope.newUser.Title ? (($scope.newUser.Title).trim()).toUpperCase() : '';
+                        var orginalTitle = $scope.newUserOriginal.Title ? ($scope.newUserOriginal.Title).trim() : '';
+                        newUserTitle = newUserTitle != '' ? newUserTitle.toLowerCase() : '';
+                        orginalTitle = orginalTitle != '' ? orginalTitle.toLowerCase() : '';
+                        
+                        if(!$scope.newUser.LastName || $scope.newUser.LastName == '') {
+                            $scope.showErrAlert = true;
+                            $scope.errMsg = 'Last name should not be empty';
+                        } else if(!$scope.newUser.Email || $scope.newUser.Email == '') {
+                            $scope.showErrAlert = true;
+                            $scope.errMsg = 'Email address should not be empty';
+                        } else if(emailRegEx.test($scope.newUser.Email) == false) {
+                            $scope.showErrAlert = true;
+                            $scope.errMsg = 'Please enter valid email address';
+                        } else if($scope.newUser.Phone && $scope.newUser.Phone.match(/\d/g).length !== 10) {
+                            $scope.showErrAlert = true;
+                            $scope.errMsg = 'Please enter valid phone number';
+                        } else if(newUserTitle != '' && _.contains(titleArr, newUserTitle) && 
+                                (!isFrom || (isFrom == 'updateUser' && newUserTitle != orginalTitle))) {
+                            $scope.showErrAlert = true;
+                            $scope.errMsg = 'Club Manager accounts must be set up under the club assigned email address. Please contact your Franchise Business Coach for assistance.';
+                        } else {
+                            
+                            $(".modal").show();
+                            
+                            if(isFrom == 'updateUser') {
+                                                            
+                                var ssoAccess = '';
+                                $scope.showCreateUserPopup = false;
+                                
+                                if($scope.selectedSsos.length > 0) {
+                                    for(var f=0; f<$scope.selectedSsos.length; f++) {
+                                        ssoAccess += (ssoAccess == '' ? $scope.selectedSsos[f] : (';' + $scope.selectedSsos[f]));
+                                    }
+                                }
+                                $scope.newUser.SSO_Access__c = ssoAccess;
+                                Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.UserManagementController.updateUser}', JSON.stringify($scope.newUser), function(result, event) {
+                                                                                                            
+                                    if(event.status) {
+                                        if(result == 'SUCCESS') {
+                                            $scope.getData('indUpdate');
+                                        } else {
+                                            $scope.showErrAlert = true;
+                                            $scope.errMsg = result;
+                                            $scope.revertUser();
+                                        }
+                                    } else {
+                                        $scope.showErrAlert = true;
+                                        $scope.revertUser();
+                                        $scope.errMsg = 'Operation failed.';
+                                    }
+                                    $(".modal").hide();
+                                    $scope.$apply();
+                                });
+                            } else {
+                            
+                                Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.UserManagementController.checkExistingContact}',$scope.newUser.Email,
+                                    function(result, event) {
+                                    
+                                    if(event.status) {
+                                        $scope.showAlertPopup = true;
+                                        $scope.isNextStep = true;
+                                        
+                                        if(result) {
+                                        
+                                            $scope.groupExists = result.groupExist;
+                                            
+                                            if(result.retStr == 'EXIST') {
+                                                $scope.isExistUser = true;
+                                                $scope.alertMessage = result.user.Name + ' already exists. Please select any groups you want to add them to.';
+                                                $scope.existingContact = result.con;
+                                                $scope.newUser.Id = result.user.Id;
+                                                $scope.existInactive = false;
+                                                $scope.thirdStepAlertMsg = 'Please select the group(s) ' + result.user.Name + ' should be assigned to. <br/><br/>If a group is pre-selected, this user is already associated with the group. Select additional group(s) or confirm existing association by clicking Add to Groups.';
+                                            } else if(result.retStr == 'EXIST-INACTIVE') { 
+                                                
+                                                console.log('existing user');
+                                                $scope.newUser.Id = result.user.Id;
+                                                $scope.existingContact = result.con;
+                                                $scope.existInactive = true;
+                                                $scope.showAlertPopup = false;
+                                                $scope.gotoThirdStep('react');
+                                                $scope.thirdStepAlertMsg = result.user.Name + ' is currently an inactive user. Please select the group(s) they should be assigned to. <br/><br/>If a group is pre-selected, this user is already associated with the group. Select additional group(s) or confirm existing association by clicking Reactivate User.';
+                                            } else if(result.con) {
+                                                
+                                                $scope.existInactive = false;
+                                                $scope.existingContact = result.con;
+                                                $scope.existCont = true;
+                                                $scope.alertMessage = 'The email ' + result.con.Email + ' is already associated to ' + result.con.Name + '. Is this the user you are looking for? ';
+                                                $scope.thirdStepAlertMsg += 'Please select the groups that ' + ($scope.newUser.FirstName ? $scope.newUser.FirstName : '') + ' ' + $scope.newUser.LastName + ' should be added to. <br/><br/>If a group is pre-selected, this user is already associated with the group. Select additional group(s) or confirm existing association by clicking Create User.';
+                                            } else {
+                                                $scope.showAlertPopup = false;
+                                                $scope.showErrAlert = true;
+                                                $scope.errMsg = result.retStr;
+                                            }
+                                        } else {
+                                            $scope.showAlertPopup = false;
+                                            $scope.thirdStepAlertMsg = 'Please select the groups that ' + ($scope.newUser.FirstName ? $scope.newUser.FirstName : '') + ' ' + $scope.newUser.LastName + ' should be added to.';
+                                            $scope.gotoThirdStep('create');
+                                        }
+                                    } else {
+                                        $scope.showErrAlert = true;
+                                        $scope.errMsg = 'Operation failed.';
+                                    }
+                                    $(".modal").hide();
+                                    $scope.$apply();
+                                });
+                            }
+                        }
+                    }
+                }
+                
+                $scope.renderAsHTML = function() {
+                    return $sce.trustAsHtml($scope.thirdStepAlertMsg);
+                }
+                
+                $scope.revertUser = function() {
+                
+                    if($scope.newUserOriginal) {
+                    
+                        var index = $scope.users.findIndex(i => i.Id === $scope.newUserOriginal.Id);
+                        
+                        if(index < $scope.users.length) {
+                            $scope.users.splice(index, 1);
+                            $scope.users.push($scope.newUserOriginal);
+                        }
+                    }
+                }
+                
+                $scope.changeSortColoum = function(sortCol) {
+                    
+                    if(sortCol && sortCol != "") {
+                        var sort = $scope.sort;
+                        if($scope.sort && $scope.sort.column == sortCol) {
+                            $scope.sort.descending = !$scope.sort.descending;
+                        } else {
+                            $scope.sort.column = sortCol;
+                            $scope.sort.descending = false;
+                        }
+                    }
+                }
+                                           
+                $scope.cancelFn = function() {
+                    $scope.isDeactivate = false;
+                    $scope.showAlertPopup = false;
+                    $scope.isNextStep = false;
+                    $scope.existingContact = {};
+                    $scope.showGroupPopup = false;
+                }
+               
+                $scope.paginationFunction = function(direction) {
+                    if(direction == 'pre') {
+                        $scope.currentPage--;
+                    } else if(direction == 'next') {
+                        $scope.currentPage++;
+                    }
+                }
+                
+                $scope.applyMultiSelect = function() {
+                    
+                    $('#groupId').multiselect('destroy');
+                    
+                    $('#groupId').multiselect({
+                        includeSelectAllOption: true,
+                        enableCaseInsensitiveFiltering: true,
+                        buttonClass: 'slds-button slds-button--neutral pickBtnCls adaBtnCls',
+                        buttonText: function(options, select) {
+                                                        
+                            if($scope.exGroupIds && $scope.groups && $scope.exGroupIds.length > 0 && $scope.groups.length > 0) {
+                                var cnt1 = 0;
+                                var plus = " + ";
+                                var label = "";
+                                for(var x=0; x<$scope.exGroupIds.length; x++) {
+                                    for(var y=0; y<$scope.groups.length; y++) {
+                                        if($scope.exGroupIds[x] == $scope.groups[y].Id) {
+                                            if(label == "") { 
+                                                label = $scope.groups[y].Name; 
+                                            }
+                                            cnt1++;
+                                        }
+                                    }
+                                }
+                                
+                                if(options.length > 0) {
+                                    options.each(function(k) {
+                                        if(k == 0 && label == "") { label = $(this).text(); }
+                                        cnt1++
+                                    });
+                                }
+                                return cnt1 > 1 ? (label + ' ' + plus + ' ' + (cnt1-1)) : label; 
+                            } else if (options.length === 0) {
+                                return 'None selected';
+                            }
+                            else if (options.length > 0) {
+                                var label = '';
+                                var plus = "+";
+                                options.each(function(k) {
+                                    if(k == 0) { label = $(this).text(); }
+                                });
+                                label += (options.length > 1 ? ' ' + plus + ' ' + (options.length-1) : '')
+                                return label;
+                            }
+                        },
+                        onSelectAll: function() {
+                            if($scope.exGroupIds && $scope.groups && $scope.exGroupIds.length > 0 && $scope.exGroupIds.length == $scope.groups.length) {
+                                $timeout(function() { var plus = " + "; $(".multiselect-selected-text").html($(".multiselect-selected-text").html()) });
+                            }
+                        },
+                        onDeselectAll: function() {
+                                                        
+                            var html = ''
+                                        
+                            if($scope.exGroupIds && $scope.groups && $scope.exGroupIds.length > 0 && $scope.groups.length > 0) {
+                                var cnt1 = 0;
+                                var plus = " + ";
+                                for(var x=0; x<$scope.exGroupIds.length; x++) {
+                                    for(var y=0; y<$scope.groups.length; y++) {
+                                        if($scope.exGroupIds[x] == $scope.groups[y].Id) {
+                                            html = html == '' ? $scope.groups[y].Name : ($scope.groups[y].Name + plus + (cnt1)); 
+                                            cnt1++;
+                                        }
+                                    }
+                                }
+                                html == '' ? 'None Selected' : html; 
+                                $timeout(function() { $(".multiselect-selected-text").html(html); });
+                            }
+                        }
+                    });                    
+                    
+                    $('#groupId').multiselect('deselect', $scope.selectedGroups);
+                    $scope.selectedGroups = [];
+                                          
+                    $(".multiselect").click(function(e) {
+                        
+                        $(".dropdown-menu").css("top", "");
+                        $(".dropdown-menu").css("bottom", "");
+                                                
+                        var tar = e.target;
+                        var dim = tar.getBoundingClientRect();
+                        var posX = dim.left-325, posY = dim.top + 35;
+                        
+                        if(tar.nodeName == 'SPAN') {
+                            posX = posX - 50.35; posY = posY - 8; 
+                        } else if(tar.tagName == 'use' || tar.nodeName == 'svg' || tar.nodeName == 'b' || tar.nodeName == 'B') {
+                            posX = posX - 144; posY = posY - 12; 
+                        }
+                        $(".dropdown-menu").css("left", posX);
+                        $(".dropdown-menu").css("top", posY);
+                        
+                        $timeout(function() { 
+                            var opened = $(this).parent().hasClass("open");
+                            if (!opened) {
+                                $('.btn-group').addClass('open');
+                            } else {
+                                $('.btn-group').removeClass('open');
+                            }
+                        });
+                    });
+                    
+                    $(".caret").each(function() {   
+                        $(this).remove();
+                    });
+                    
+                    $('.multiselect-selected-text').each(function() {   
+                        $('<b class="caret"/>').insertAfter(this);
+                    });
+                    
+                    $(".checkbox").addClass("slds-lookup__item-action slds-lookup__item-action--label");
+                    $(".multiselect-search").addClass("slds-input");
+                    var downArrow = '<svg class="slds-button__icon slds-button__icon slds-float_right" style="margin-top: 0.5rem;" aria-hidden="true">';
+                    downArrow += '<use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#down"></use>';
+                    downArrow += '</svg>';
+                    $( ".caret" ).html('');
+                    $( ".caret" ).append(downArrow);
+                    
+                    $('input[type=checkbox]').each(function() {
+                        if(!($(this).hasClass("sldsCheck"))) {
+                            $(this).attr("id", cnt);
+                            $(this).addClass("sldsCheck");
+                            var pick = '<span class="slds-checkbox" style="margin-right:0.5rem;"></span>';
+                            var pick1 = '<label class="slds-checkbox__label" for="'+cnt+'"><span class="slds-checkbox--faux"></span></label></span>';
+                            $(this).wrap(pick);
+                            $(pick1).insertAfter(this);
+                            if(_.contains($scope.exGroupIds, $(this)[0].value)) {
+                                $(this).attr("disabled", "disabled");
+                                $(this).prop('checked', true);
+                                $scope.selectedGroups.push($(this)[0].value);
+                            }
+                            cnt++;
+                        }
+                    }); 
+                    
+                    var html = ''
+                                        
+                    if($scope.selectedGroups && $scope.groups && $scope.selectedGroups.length > 0 && $scope.groups.length > 0) {
+                        var cnt1 = 0;
+                        var plus = " + ";
+                        for(var x=0; x<$scope.selectedGroups.length; x++) {
+                            for(var y=0; y<$scope.groups.length; y++) {
+                                if($scope.selectedGroups[x] == $scope.groups[y].Id) {
+                                    html = html == '' ? $scope.groups[y].Name : ($scope.groups[y].Name + plus + (cnt1)); 
+                                    cnt1++;
+                                }
+                            }
+                        }
+                        html == '' ? 'None Selected' : html; 
+                        
+                        $(".multiselect-selected-text").html(html);
+                    }
+                }
+                
+                $scope.showDropdown = function(typ, elem) {
+                    
+                    $(".typeLine").each(function(){
+                        
+                        if($(this).find('span').find('span').text() == $scope.type) {
+                            $(this).addClass('slds-is-selected');
+                        } else {
+                            $(this).removeClass('slds-is-selected');
+                        }
+                    });
+                    
+                    if(typ) $scope.type = typ;
+                    $(".typeDropDown").css("display", "block");
+                }
+                
+                $scope.buildMultiPickListName = function() {
+                    
+                    $('input[type=checkbox]').each(function() {
+                        if(!($(this).hasClass("sldsCheck"))) {
+                            
+                            if(_.contains($scope.exGroupIds, $(this)[0].value)) {
+                               
+                                $scope.selectedGroups.push($(this)[0].value);
+                            }
+                        }
+                    }); 
+                    
+                    var html = ''
+                                        
+                    if($scope.selectedGroups && $scope.groups && $scope.selectedGroups.length > 0 && $scope.groups.length > 0) {
+                        var cnt1 = 0;
+                        var plus = " + ";
+                        for(var x=0; x<$scope.selectedGroups.length; x++) {
+                            for(var y=0; y<$scope.groups.length; y++) {
+                                if($scope.selectedGroups[x] == $scope.groups[y].Id) {
+                                    html = html == '' ? $scope.groups[y].Name : ($scope.groups[y].Name + plus + (cnt1)); 
+                                    cnt1++;
+                                }
+                            }
+                        }
+                        html == '' ? 'None Selected' : html; 
+                        
+                        $(".multiselect-selected-text").html(html);
+                    }
+                }
+                
+                $scope.selectedSsos = [];
+                $scope.selectedAccess = function(elem) {
+                    $scope.selectedSsos = [];
+                    angular.forEach($(elem).val(),function(rel){
+                        $scope.selectedSsos.push(rel);
+                    });
+                }
+                
+                $scope.applyAccessMultiSelect = function(ssoAccess) {
+                    
+                    $('#accessId').multiselect('destroy');
+                    
+                    $('#accessId').multiselect({
+                        includeSelectAllOption: true,
+                        enableCaseInsensitiveFiltering: true,
+                        buttonClass: 'slds-button slds-button--neutral pickBtnCls adaBtnCls',
+                        buttonText: function(options, select) {
+                            
+                            if (options.length === 0) {
+                                return 'None selected';
+                            }
+                            else if (options.length > 0) {
+                                var label = '';
+                                var plus = "+";
+                                options.each(function(k) {
+                                    if(k == 0) { label = $(this).text(); }
+                                });
+                                label += (options.length > 1 ? ' ' + plus + ' ' + (options.length-1) : '')
+                                return label;
+                            }
+                        }
+                    });                     
+                    
+                    $('#accessId').multiselect('deselect', $scope.ssoAccess);
+                    
+                    if(ssoAccess && ssoAccess != '') {
+                        
+                        var access = ssoAccess.split(";");
+                        var finalSSO = [];
+                        
+                        for(var g=0; g<access.length; g++) {
+                            finalSSO.push(access[g].trim());
+                        }
+                        $('#accessId').multiselect('select', finalSSO);
+                        $scope.selectedSsos = finalSSO;
+                    }
+                                          
+                    $(".multiselect").click(function(e) {
+                        
+                        $(".dropdown-menu").css("top", "");
+                        $(".dropdown-menu").css("bottom", "");                        
+                        
+                        var tar = e.target;
+                        var dim = tar.getBoundingClientRect();
+                        var posX = dim.left-325, posY = dim.top + 35;
+                        if(tar.nodeName == 'SPAN') {
+                            posX = posX - 50.35; posY = posY - 8; 
+                        } else if(tar.tagName == 'use' || tar.nodeName == 'svg' || tar.nodeName == 'b' || tar.nodeName == 'B') {
+                            posX = posX - 144; posY = posY - 12; 
+                        }
+                        $(".dropdown-menu").css("left", posX);
+                        $(".dropdown-menu").css("top", posY);
+                        
+                        $timeout(function() { 
+                            var opened = $(this).parent().hasClass("open");
+                            if (!opened) {
+                                $('.btn-group').addClass('open');
+                            } else {
+                                $('.btn-group').removeClass('open');
+                            }
+                        });
+                    });
+                    
+                    $(".caret").each(function() {   
+                        $(this).remove();
+                    });
+                    
+                    $('.multiselect-selected-text').each(function() {   
+                        $('<b class="caret"/>').insertAfter(this);
+                    });
+                    
+                    $(".checkbox").addClass("slds-lookup__item-action slds-lookup__item-action--label");
+                    $(".multiselect-search").addClass("slds-input");
+                    var downArrow = '<svg class="slds-button__icon slds-button__icon slds-float_right" style="margin-top: 0.5rem;" aria-hidden="true">';
+                    downArrow += '<use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#down"></use>';
+                    downArrow += '</svg>';
+                    $( ".caret" ).html('');
+                    $( ".caret" ).append(downArrow);
+                    
+                    $('input[type=checkbox]').each(function() {
+                        if(!($(this).hasClass("sldsCheck"))) {
+                            $(this).attr("id", cnt);
+                            $(this).addClass("sldsCheck");
+                            var pick = '<span class="slds-checkbox" style="margin-right:0.5rem;"></span>';
+                            var pick1 = '<label class="slds-checkbox__label" for="'+cnt+'"><span class="slds-checkbox--faux"></span></label></span>';
+                            $(this).wrap(pick);
+                            $(pick1).insertAfter(this);
+                            if(_.contains($scope.exGroupIds, $(this)[0].value)) {
+                                $(this).attr("disabled", "disabled");
+                                $(this).prop('checked', true);
+                            }
+                            cnt++;
+                        }
+                    }); 
+                }
+                
+                $(".profile-button").click(function(e) {
+                    
+                    $(this).find(".dropdown-menu").removeAttr("style");
+                    if($('.profile-button').hasClass("open")) {
+                        $('.profile-button').removeClass('open');
+                    } else {
+                        $('.profile-button').addClass('open');
+                    }
+                });
+                
+                $(".slds-picklist__input").click(function(e) {
+                    
+                    $timeout(function() {
+                        $(".typeDropDown").css("top", "");
+                        $(".typeDropDown").css("bottom", "");
+                        
+                        var tar = e.target;
+                        var dim = tar.getBoundingClientRect();
+                        
+                        var posX = dim.left-325, posY = dim.top + 35;                    
+                        
+                        if(tar.nodeName == 'INPUT') {
+                            posX = posX - 32; posY = posY - 3; 
+                        } else if(tar.tagName == 'use' || tar.nodeName == 'svg' || tar.nodeName == 'b' || tar.nodeName == 'B') {
+                            posX = posX - 245; posY = posY - 12;
+                            $(".typeDropDown").css("display", "block"); 
+                        }
+                        
+                        $(".typeDropDown").css("left", posX);
+                        $(".typeDropDown").css("top", posY);
+                    }, 0);
+                });
+                
+                $('.caret').removeClass("caret");  
+            });
+                
+            $(".slds").show();
+       </script>
+       
+       <style>
+           
+           html {
+               background-image: url('{!URLFOR($Resource.SharingWizardResource, 'backgroundImg.png')}') !important; 
+               background-size: cover;
+           }
+           .slds-table { 
+                background-image: url('{!URLFOR($Resource.SharingWizardResource, 'backgroundImg.png')}') !important; 
+                background-size: cover;
+           } 
+           th {
+               cursor: pointer;
+               color: #16325c !important;
+           }
+           div, span, button {
+                font-family: Rockwell, "Courier Bold", Courier, Georgia, Times, "Times New Roman", serif !important;
+            }
+           .slds-card {
+               margin: 0.5rem;
+           }
+           .slds-button {
+               color: #951180 !important;
+           }
+           .botMarginCls {
+               margin-bottom: 0.5rem;
+           }
+           .iconBtn {
+               padding: 0.125rem !important;
+               background-color: rgba(0,0,0,0) !important;
+           }
+           .slds-scope .slds-card {
+               background: #951180;;
+           }
+           .slds-card__body {
+               margin: 0rem 0.5rem;
+           }
+           .pickBtnCls {
+                color: #16325c !important;
+                font-weight: normal;
+                font-size: .8125rem;
+                min-width: 10rem;
+                max-width: 100%;
+                white-space: nowrap;
+                overflow: hidden;
+                padding: 0rem 0.5rem;
+            }
+            .slds-theme--error{
+                color: #fff;
+                background-color: rgb(149, 17, 128) !important;
+            }
+            .helpTextCls {
+                padding: 0.3rem 1rem;
+                border: 1px solid black !important;
+                border-radius: 15px;
+                color: white;
+            }
+            .bPageHeader span,a {
+                font-family: Arial,Helvetica,sans-serif !important;
+            }
+            .bPageHeader .phHeader td.right {       
+                width:initial;      
+            }
+            .bPageHeader, .sidebarCell {
+                font-size:0.75rem;
+                font-family: Arial,Helvetica,sans-serif !important;
+            }
+            .slds-scope .slds-checkbox [type=checkbox]:checked+.slds-checkbox--faux:after, .slds-scope .slds-checkbox [type=checkbox]:checked+.slds-checkbox__label .slds-checkbox--faux:after, .slds-scope .slds-checkbox [type=checkbox]:checked+.slds-checkbox__label .slds-checkbox_faux:after, .slds-scope .slds-checkbox [type=checkbox]:checked+.slds-checkbox_faux:after, .slds-scope .slds-checkbox [type=checkbox]:checked~.slds-checkbox--faux:after, .slds-scope .slds-checkbox [type=checkbox]:checked~.slds-checkbox_faux:after {
+                border-bottom: 2px solid #77227b;
+                border-left: 2px solid #77227b;
+            }
+            .slds-scope .slds-table--cell-buffer tr>td:last-child, .slds-scope .slds-table--cell-buffer tr>th:last-child, .slds-scope .slds-table_cell-buffer tr>td:last-child, .slds-scope .slds-table_cell-buffer tr>th:last-child {
+                padding-right: 1rem !important;
+            }
+            .slds-scope .slds-table--cell-buffer tr>td:first-child, .slds-scope .slds-table--cell-buffer tr>th:first-child, .slds-scope .slds-table_cell-buffer tr>td:first-child, .slds-scope .slds-table_cell-buffer tr>th:first-child {
+                padding-left: 1rem !important;
+            }
+       </style>
+   </html>
+</apex:page>

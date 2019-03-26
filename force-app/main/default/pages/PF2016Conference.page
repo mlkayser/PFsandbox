@@ -1,0 +1,412 @@
+<apex:page docType="html-5.0" title="2016 Conference | Planet Fitness Franchise Community" label="PF2016Conference" name="PF2016Conference" showHeader="true" sidebar="false" standardStylesheets="false">
+    <style>
+        .slideshow-container {
+            max-width: 1000px;
+            position: relative;
+            margin: auto;
+        }
+
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            margin-top: -22px;
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+        }
+
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .prev:hover, .next:hover {
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .text {
+            color: #f2f2f2;
+            font-size: 15px;
+            padding: 8px 12px;
+            position: absolute;
+            bottom: 8px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .numbertext {
+            color: #f2f2f2;
+            font-size: 12px;
+            padding: 8px 12px;
+            position: absolute;
+            top: 0;
+        }
+
+        .dot {
+            cursor:pointer;
+            height: 13px;
+            width: 13px;
+            margin: 0 2px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.6s ease;
+        }
+
+        .active, .dot:hover {
+            background-color: #717171;
+        }
+
+        .fade {
+            -webkit-animation-name: fade;
+            -webkit-animation-duration: 1.5s;
+            animation-name: fade;
+            animation-duration: 1.5s;
+        }
+
+        @-webkit-keyframes fade {
+            from {opacity: .4} 
+            to {opacity: 1}
+        }
+
+        @keyframes fade {
+            from {opacity: .4} 
+            to {opacity: 1}
+        }
+    </style>
+
+    
+    
+    <div style="height:750px; margin-top:50px;">
+    
+        <div class="slideshow-container">
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/000.jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/01.jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/1 Day (2).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/1 Day (3).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/1 Day (4).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/1 Day (5).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/1 Day (6).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/1 Day (7).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/1 Day (9).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/1 Day (10).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/1 Day (11).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/1 Day (12).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/1 Day (13).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/1 Day (14).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/1 Day (15).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/1 Day (16).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/1 Day (17).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/1 Day (18).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/1 Day (19).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/1 day.jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/1.jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/2 Day (2).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/2 Day (3).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/2 Day (4).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/2 Day (5).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/2 Day (6).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/2 Day (7).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/2 Day (8).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/2 Day (9).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/2 Day (10).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/2 Day (11).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/2 Day (12).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/2 Day (13).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/2 Day (14).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/2 Day (15).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/2 Day (16).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/2 Day (17).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/2 Day (18).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/2 Day (19).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/2 Day (20).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/2 Day .jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/2 day.jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/3 day.jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Atlantis.jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/breakout (2).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Breakout.jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/pirate (2).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/pirate (3).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/pirate (4).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/pirate (5).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/pirate (6).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/pirate (7).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/pirate (8).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/pirate (9).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/pirate (10).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/pirate (11).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/pirate (12).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/pirate (13).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/pirate (14).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/pirate (15).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/pirate (16).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/pirate (17).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Pirate Party (2).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Pirate Party (3).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Pirate Party (4).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Pirate Party.jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Pirate.jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/pireate.jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/White  (2).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (2).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (3).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (4).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (5).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (6).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (7).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (8).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (9).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (10).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (11).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (12).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (13).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (14).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (15).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (16).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (17).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (18).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (19).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (20).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (21).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (22).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (23).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (24).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (25).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (26).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (27).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (28).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (29).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (30).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (31).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white (32).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/White .jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/white p.jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/White Party (4).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/White Party (5).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/White Party (6).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/White Party (7).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/White Party (8).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/White Party.jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/White.jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/whitep .jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/whiteparty.jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Y Awards (2).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Y Awards (3).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Y Awards (4).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Y Awards (5).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Y Awards (6).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Y Awards (7).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Y Awards (8).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Y Awards (9).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Y Awards (10).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Y Awards (11).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Y Awards (12).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Y Awards (13).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Y Awards (14).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Y Awards (15).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Y Awards (16).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Y Awards (17).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Y Awards (18).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Y Awards (19).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Y Awards (20).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Y Awards (21).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Y Awards.jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/y awawrds.jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Yawards (2).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Yawards (3).jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Yawards.jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Za Lun.jpg" style="width:100%"/></div>
+<div class="mySlides fade"><img src="http://app.planetfitness.com/salesforce/assets/photos/Za Lunch.jpg" style="width:100%"/></div>
+
+
+
+
+
+
+
+  <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+  <a class="next" onclick="plusSlides(1)">&#10095;</a>
+</div>
+<br/>
+
+<div style="text-align:center">
+  <span class="dot" onclick="currentSlide(1)"></span> 
+  <span class="dot" onclick="currentSlide(2)"></span> 
+  <span class="dot" onclick="currentSlide(3)"></span> 
+  <span class="dot" onclick="currentSlide(4)"></span> 
+  <span class="dot" onclick="currentSlide(5)"></span> 
+  <span class="dot" onclick="currentSlide(6)"></span> 
+  <span class="dot" onclick="currentSlide(7)"></span> 
+  <span class="dot" onclick="currentSlide(8)"></span> 
+  <span class="dot" onclick="currentSlide(9)"></span> 
+  <span class="dot" onclick="currentSlide(10)"></span> 
+  <span class="dot" onclick="currentSlide(11)"></span> 
+  <span class="dot" onclick="currentSlide(12)"></span> 
+  <span class="dot" onclick="currentSlide(13)"></span> 
+  <span class="dot" onclick="currentSlide(14)"></span> 
+  <span class="dot" onclick="currentSlide(15)"></span> 
+  <span class="dot" onclick="currentSlide(16)"></span> 
+  <span class="dot" onclick="currentSlide(17)"></span> 
+  <span class="dot" onclick="currentSlide(18)"></span> 
+  <span class="dot" onclick="currentSlide(19)"></span> 
+  <span class="dot" onclick="currentSlide(20)"></span> 
+  <span class="dot" onclick="currentSlide(21)"></span> 
+  <span class="dot" onclick="currentSlide(22)"></span> 
+  <span class="dot" onclick="currentSlide(23)"></span> 
+  <span class="dot" onclick="currentSlide(24)"></span> 
+  <span class="dot" onclick="currentSlide(25)"></span> 
+  <span class="dot" onclick="currentSlide(26)"></span> 
+  <span class="dot" onclick="currentSlide(27)"></span> 
+  <span class="dot" onclick="currentSlide(28)"></span> 
+  <span class="dot" onclick="currentSlide(29)"></span> 
+  <span class="dot" onclick="currentSlide(30)"></span> 
+  <span class="dot" onclick="currentSlide(31)"></span> 
+  <span class="dot" onclick="currentSlide(32)"></span> 
+  <span class="dot" onclick="currentSlide(33)"></span> 
+  <span class="dot" onclick="currentSlide(34)"></span> 
+  <span class="dot" onclick="currentSlide(35)"></span> 
+  <span class="dot" onclick="currentSlide(36)"></span> 
+  <span class="dot" onclick="currentSlide(37)"></span> 
+  <span class="dot" onclick="currentSlide(38)"></span> 
+  <span class="dot" onclick="currentSlide(39)"></span> 
+  <span class="dot" onclick="currentSlide(40)"></span> 
+  <span class="dot" onclick="currentSlide(41)"></span>
+  <span class="dot" onclick="currentSlide(42)"></span> 
+  <span class="dot" onclick="currentSlide(43)"></span> 
+  <span class="dot" onclick="currentSlide(44)"></span> 
+  <span class="dot" onclick="currentSlide(45)"></span> 
+  <span class="dot" onclick="currentSlide(46)"></span> 
+  <span class="dot" onclick="currentSlide(47)"></span> 
+  <span class="dot" onclick="currentSlide(48)"></span> 
+  <span class="dot" onclick="currentSlide(49)"></span> 
+    <br/>
+  <span class="dot" onclick="currentSlide(50)"></span> 
+  <span class="dot" onclick="currentSlide(51)"></span> 
+  <span class="dot" onclick="currentSlide(52)"></span> 
+  <span class="dot" onclick="currentSlide(53)"></span> 
+  <span class="dot" onclick="currentSlide(54)"></span> 
+  <span class="dot" onclick="currentSlide(55)"></span> 
+  <span class="dot" onclick="currentSlide(56)"></span> 
+  <span class="dot" onclick="currentSlide(57)"></span> 
+  <span class="dot" onclick="currentSlide(58)"></span> 
+  <span class="dot" onclick="currentSlide(59)"></span> 
+  <span class="dot" onclick="currentSlide(60)"></span> 
+  <span class="dot" onclick="currentSlide(61)"></span> 
+  <span class="dot" onclick="currentSlide(62)"></span> 
+  <span class="dot" onclick="currentSlide(63)"></span> 
+  <span class="dot" onclick="currentSlide(64)"></span> 
+  <span class="dot" onclick="currentSlide(65)"></span> 
+  <span class="dot" onclick="currentSlide(66)"></span> 
+  <span class="dot" onclick="currentSlide(67)"></span> 
+  <span class="dot" onclick="currentSlide(68)"></span> 
+  <span class="dot" onclick="currentSlide(69)"></span> 
+  <span class="dot" onclick="currentSlide(70)"></span> 
+  <span class="dot" onclick="currentSlide(71)"></span> 
+  <span class="dot" onclick="currentSlide(72)"></span> 
+  <span class="dot" onclick="currentSlide(73)"></span> 
+  <span class="dot" onclick="currentSlide(74)"></span> 
+  <span class="dot" onclick="currentSlide(75)"></span> 
+  <span class="dot" onclick="currentSlide(76)"></span> 
+  <span class="dot" onclick="currentSlide(77)"></span> 
+  <span class="dot" onclick="currentSlide(78)"></span> 
+  <span class="dot" onclick="currentSlide(79)"></span> 
+  <span class="dot" onclick="currentSlide(80)"></span> 
+  <span class="dot" onclick="currentSlide(81)"></span> 
+  <span class="dot" onclick="currentSlide(82)"></span> 
+  <span class="dot" onclick="currentSlide(83)"></span> 
+  <span class="dot" onclick="currentSlide(84)"></span> 
+  <span class="dot" onclick="currentSlide(85)"></span> 
+  <span class="dot" onclick="currentSlide(86)"></span> 
+  <span class="dot" onclick="currentSlide(87)"></span> 
+  <span class="dot" onclick="currentSlide(88)"></span> 
+  <span class="dot" onclick="currentSlide(89)"></span> 
+  <span class="dot" onclick="currentSlide(90)"></span> 
+  <span class="dot" onclick="currentSlide(91)"></span> 
+  <span class="dot" onclick="currentSlide(92)"></span> 
+  <span class="dot" onclick="currentSlide(93)"></span> 
+  <span class="dot" onclick="currentSlide(94)"></span> 
+  <span class="dot" onclick="currentSlide(95)"></span> 
+  <span class="dot" onclick="currentSlide(96)"></span> 
+  <span class="dot" onclick="currentSlide(97)"></span> 
+  <span class="dot" onclick="currentSlide(98)"></span> 
+  <br/>
+  <span class="dot" onclick="currentSlide(99)"></span> 
+  <span class="dot" onclick="currentSlide(100)"></span> 
+  <span class="dot" onclick="currentSlide(101)"></span> 
+  <span class="dot" onclick="currentSlide(102)"></span> 
+  <span class="dot" onclick="currentSlide(103)"></span> 
+  <span class="dot" onclick="currentSlide(104)"></span> 
+  <span class="dot" onclick="currentSlide(105)"></span> 
+  <span class="dot" onclick="currentSlide(106)"></span> 
+  <span class="dot" onclick="currentSlide(107)"></span> 
+  <span class="dot" onclick="currentSlide(108)"></span> 
+  <span class="dot" onclick="currentSlide(109)"></span> 
+  <span class="dot" onclick="currentSlide(110)"></span> 
+  <span class="dot" onclick="currentSlide(111)"></span> 
+  <span class="dot" onclick="currentSlide(112)"></span> 
+  <span class="dot" onclick="currentSlide(113)"></span> 
+  <span class="dot" onclick="currentSlide(114)"></span> 
+  <span class="dot" onclick="currentSlide(115)"></span> 
+  <span class="dot" onclick="currentSlide(116)"></span> 
+  <span class="dot" onclick="currentSlide(117)"></span> 
+  <span class="dot" onclick="currentSlide(118)"></span> 
+  <span class="dot" onclick="currentSlide(119)"></span> 
+  <span class="dot" onclick="currentSlide(120)"></span> 
+  <span class="dot" onclick="currentSlide(121)"></span> 
+  <span class="dot" onclick="currentSlide(122)"></span> 
+  <span class="dot" onclick="currentSlide(123)"></span> 
+  <span class="dot" onclick="currentSlide(124)"></span> 
+  <span class="dot" onclick="currentSlide(125)"></span> 
+  <span class="dot" onclick="currentSlide(126)"></span> 
+  <span class="dot" onclick="currentSlide(127)"></span> 
+  <span class="dot" onclick="currentSlide(128)"></span> 
+  <span class="dot" onclick="currentSlide(129)"></span> 
+  <span class="dot" onclick="currentSlide(130)"></span> 
+  <span class="dot" onclick="currentSlide(131)"></span> 
+  <span class="dot" onclick="currentSlide(132)"></span> 
+  <span class="dot" onclick="currentSlide(133)"></span> 
+  <span class="dot" onclick="currentSlide(134)"></span> 
+  <span class="dot" onclick="currentSlide(135)"></span> 
+  <span class="dot" onclick="currentSlide(136)"></span> 
+  <span class="dot" onclick="currentSlide(137)"></span> 
+  <span class="dot" onclick="currentSlide(138)"></span> 
+</div>
+    
+    </div>
+    
+<script>
+var slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("dot");
+  if (n > slides.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";  
+  }
+  for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";  
+  dots[slideIndex-1].className += " active";
+}
+</script>    
+    
+</apex:page>

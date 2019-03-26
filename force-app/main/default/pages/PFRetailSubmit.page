@@ -1,0 +1,44 @@
+<apex:page controller="PFRetailSubmitController" docType="html-5.0" title="Retail | Submit New Product | Planet Fitness Franchise Community" label="PFRetailSubmit" name="PFRetailSubmit" showHeader="true" sidebar="false" standardStylesheets="false"> 
+    <div class="no-sf-style page-body page-retail">
+    <div class="container">
+        <apex:form >
+        <div style="width:100%; padding:10px; background-color:#952d98;">
+            <span style="color:white; font-size:18px; font-weight:bold;">Check if Product Exists Before Submitting New Item</span>
+            <div style="height:10px;"></div>
+            <span style="color:white; font-size:12px;">Enter Barcode:</span>
+            <br/>
+            <apex:inputText value="{!searchstring}" label="Input" style="border-radius: 5px; padding: 11px; margin-right:10px;"/>   
+            <apex:commandButton value="Lookup Barcode" action="{!search}" style="border-radius: 5px; padding: 10px; margin-right:10px;"/>   
+            <span style="color:white; font-size:16px;">{!errors} {!mybarcode} {!mystatus} {!myproductname}</span><br/><br/>
+        <div style="width:100%; text-align:right; font-size:11px; font-style:italic; color:white;">
+            What if my barcode doesn't match the search results product?  Please resubmit that product for review.            
+        </div>
+            </div>
+        
+        
+            <ol class="breadcrumb">
+              <li><a href="/apex/PFHomepage">Home</a></li>
+              <li><a href="/apex/PFRetail">Retail</a></li>
+                <li>Submit New Product</li>
+            </ol>
+            
+    </apex:form>
+        <div style="text-align:center; padding-left:10px; padding-right:10px; font-size:16px;">
+            Planet Fitness is continuously looking to add new merchandise to the current product assortment. A new product recommendation can be submitted below.  
+            <br/>
+            <strong>Before submitting a new item, please use the lookup tool above to see if the product already exisit or has been previously submitted.</strong>
+        </div>
+        
+        <div style="text-align:center;">
+            <div style=" width:500px; display:inline-block; vertical-align: top;">
+                <apex:iframe src="https://www.tfaforms.com/450190?userid={!$User.Id}" width="500px"/>
+            </div>
+            <div style="background-color:#e5e5e5; padding:15px; display:inline-block; vertical-align:top; margin-top:40px; border-radius:5px;">
+                <apex:image value="http://app.planetfitness.com/salesforce/assets/barcode_UPC-A.png" width="200" style="margin-top:10px;" />
+                <br/><br/>
+                <span style="font-size:12px;"><i>When entering barcodes, please include the first<br/>and last digit, and omit any spaces.</i></span>
+            </div>
+        </div>
+        </div>
+    </div>
+</apex:page>

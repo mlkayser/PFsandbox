@@ -1,0 +1,22 @@
+<apex:page standardController="Account" extensions="PFAcountViewRedirectController"  
+
+action="{!IF( $Site.SiteType != null && !is_vendor,
+urlFor('/apex/PFClubDetail', Account.Id ,  [id = Account.Id  , nooverride=1,retURL=''], true ), 
+IF( $Site.SiteType != null, 
+urlFor('/apex/PFVendorView', Account.Id ,  [id = Account.Id  , nooverride=0,retURL=''], false ), 
+urlFor($Action.Account.View, Account.Id ,  [id = Account.Id  , nooverride=1,retURL=''], true )
+)) }"  />
+
+<!-- 
+PFCC-3003  (9/08/2015) Andres Di Geronimo-Stenberg (Magnet360)
+If the Account is access on the Community and it is not a Vendor, it should take 
+the user to the ClubDeails page. Otherwise , should take the user to the Account
+Detail's page
+-->
+
+<!--
+(9/21/2015) Bryan Anderson (Magnet 360)
+Redirect logic was updated to display a Visualforce page, PFVendorView, to display the Vendor details without the Chatter Feed component.
+-->
+
+<!--/apex:page-->

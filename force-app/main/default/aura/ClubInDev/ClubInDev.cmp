@@ -1,0 +1,375 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global"
+                controller="FRM3_ClubsController">
+    
+    <aura:attribute name="devClubs" type="object[]" />
+    <aura:attribute name="presale" type="object[]" />
+    <aura:attribute name="activeDev" type="object[]" />
+    <aura:attribute name="sitePlanning" type="object[]" />
+    <aura:attribute name="siteSelection" type="object[]" />
+    <aura:attribute name="nRows" type="Integer" default=""/>
+    <aura:attribute name="isHomePage" type="Boolean" />
+    <aura:handler name="init" value="{!this}" action="{!c.loadClubs}"/>
+    
+    <aura:if isTrue="{!v.isHomePage}">
+        <lightning:card aura:id="site-selection" iconName="utility:custom_apps" title="Clubs in Development">
+            <table class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal">    
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="slds-text-title_caps" scope="col">
+                            <div class="slds-truncate" title="Location">Location</div>
+                        </th>
+                        <th class="slds-text-title_caps" scope="col">
+                            <div class="slds-truncate" title="Status">Status</div>
+                        </th>
+                        <th class="slds-text-title_caps" scope="col">
+                            <div class="slds-truncate" title="Equipment Status">Equipment Status</div>
+                        </th>
+                        <th class="slds-text-title_caps" scope="col">
+                            <div class="slds-truncate" title="Online Presale Date">Online Presale Date</div>
+                        </th>
+                        <th class="slds-text-title_caps" scope="col">
+                            <div class="slds-truncate" title="Physical Presale Date">Physical Presale Date</div>
+                        </th>
+                        <th class="slds-text-title_caps" scope="col">
+                            <div class="slds-truncate" title="Open Date">Open Date</div>
+                        </th>
+                        <th class="slds-text-title_caps" scope="col">
+                            <div class="slds-truncate" title="Build Phase">Build Phase</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.devClubs}" var="club" end="{!v.nRows}">
+                        <tr class="slds-hint-parent">
+                            <th data-label="Location" scope="row">
+                                <div class="slds-truncate" title="Location">
+                                    <lightning:button variant="base" label="{!club.clubObj.Name}" title="{!club.clubObj.Id}" onclick="{! c.gotoDetail }"/>
+                                </div>
+                            </th>
+                            <td data-label="Status">
+                                <div class="slds-truncate" title="Status">{!club.clubObj.Status__c}</div>
+                            </td>
+                            <td data-label="Equipment Status">
+                                <div class="slds-truncate" title="Equipment Status">{!club.equipmentStatus}</div>
+                            </td>
+                            <td data-label="Online Presale Date">
+                                <div class="slds-truncate" title="Online Presale Date">
+                                    <lightning:formattedDateTime value="{!club.onlinePresaleDate}" />
+                                </div>
+                            </td>
+                            <td data-label="Physical Presale Date">
+                                <div class="slds-truncate" title="Physical Presale Date">
+                                    <lightning:formattedDateTime value="{!club.physicalPresaleDate}" />
+                                </div>
+                            </td>
+                            <td data-label="Open Date">
+                                <div class="slds-truncate" title="Open Date">
+                                    <lightning:formattedDateTime value="{!club.projectedOpenDate}" />
+                                </div>
+                            </td>
+                            <td data-label="Build Phase">
+                                <div class="slds-truncate" title="Build Phase">{!club.buildPhase}</div>
+                            </td>
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>
+            <aura:if isTrue="{!and(v.isHomePage, v.devClubs.length > 5)}">
+                <lightning:button label="View all Clubs in Development" title="View all clubs" onclick="{! c.gotoMyClubs }"/>
+            </aura:if>
+        </lightning:card>
+        <aura:set attribute="else">
+            <lightning:accordion aura:id="accordion" allowMultipleSectionsOpen="true">
+                <aura:if isTrue="{!v.presale.length > 0}">            
+                    <lightning:accordionSection name="Presale" label="Clubs in Development – Presale">
+                        <lightning:card aura:id="presale" iconName="utility:custom_apps" title="Clubs in Development – Presale">
+                            <table class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal">              
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Location">Location</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Status">Status</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Equipment Status">Equipment Status</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Online Presale Date">Online Presale Date</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Physical Presale Date">Physical Presale Date</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Open Date">Open Date</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Build Phase">Build Phase</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <aura:iteration items="{!v.presale}" var="club" end="{!v.nRows}">
+                                        <tr class="slds-hint-parent">
+                                            <th data-label="Location" scope="row">
+                                                <div class="slds-truncate" title="Location">
+                                                    <lightning:button variant="base" label="{!club.clubObj.Name}" onclick="{! c.gotoDetail }"
+                                                                      title="{!'id=' + club.clubObj.Id + '&amp;status=' + club.clubObj.Status__c}" />
+                                                </div>
+                                            </th>
+                                            <td data-label="Status">
+                                                <div class="slds-truncate" title="Status">{!club.clubObj.Status__c}</div>
+                                            </td>
+                                            <td data-label="Equipment Status">
+                                                <div class="slds-truncate" title="Equipment Status">{!club.equipmentStatus}</div>
+                                            </td>
+                                            <td data-label="Online Presale Date">
+                                                <div class="slds-truncate" title="Online Presale Date">
+                                                    <lightning:formattedDateTime value="{!club.onlinePresaleDate}" />
+                                                </div>
+                                            </td>
+                                            <td data-label="Physical Presale Date">
+                                                <div class="slds-truncate" title="Physical Presale Date">
+                                                    <lightning:formattedDateTime value="{!club.physicalPresaleDate}" />
+                                                </div>
+                                            </td>
+                                            <td data-label="Open Date">
+                                                <div class="slds-truncate" title="Open Date">
+                                                    <lightning:formattedDateTime value="{!club.projectedOpenDate}" />
+                                                </div>
+                                            </td>
+                                            <td data-label="Build Phase">
+                                                <div class="slds-truncate" title="Build Phase">{!club.buildPhase}</div>
+                                            </td>
+                                        </tr>
+                                    </aura:iteration>
+                                </tbody>
+                            </table>
+                            <aura:if isTrue="{!and(v.isHomePage, v.presale.length > 5)}">
+                                <lightning:button label="View all Presale Clubs" title="View all clubs" onclick="{! c.gotoMyClubs }"/>
+                            </aura:if>
+                        </lightning:card>
+                    </lightning:accordionSection>
+                </aura:if>
+                <aura:if isTrue="{!v.siteSelection.length > 0}">
+                    <lightning:accordionSection name="Site Selection" label="Clubs in Development – Site Selection">
+                        <lightning:card aura:id="site-selection" iconName="utility:custom_apps" title="Clubs in Development – Site Selection">
+                            <table class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal">    
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Location">Location</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Status">Status</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Equipment Status">Equipment Status</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Online Presale Date">Online Presale Date</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Physical Presale Date">Physical Presale Date</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Open Date">Open Date</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Build Phase">Build Phase</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <aura:iteration items="{!v.siteSelection}" var="club" end="{!v.nRows}">
+                                        <tr class="slds-hint-parent">
+                                            <th data-label="Location" scope="row">
+                                                <div class="slds-truncate" title="Location">
+                                                    <lightning:button variant="base" label="{!club.clubObj.Name}" onclick="{! c.gotoDetail }"
+                                                                      title="{!'id=' + club.clubObj.Id + '&amp;status=' + club.clubObj.Status__c}" />
+                                                </div>
+                                            </th>
+                                            <td data-label="Status">
+                                                <div class="slds-truncate" title="Status">{!club.clubObj.Status__c}</div>
+                                            </td>
+                                            <td data-label="Equipment Status">
+                                                <div class="slds-truncate" title="Equipment Status">{!club.equipmentStatus}</div>
+                                            </td>
+                                            <td data-label="Online Presale Date">
+                                                <div class="slds-truncate" title="Online Presale Date">
+                                                    <lightning:formattedDateTime value="{!club.onlinePresaleDate}" />
+                                                </div>
+                                            </td>
+                                            <td data-label="Physical Presale Date">
+                                                <div class="slds-truncate" title="Physical Presale Date">
+                                                    <lightning:formattedDateTime value="{!club.physicalPresaleDate}" />
+                                                </div>
+                                            </td>
+                                            <td data-label="Open Date">
+                                                <div class="slds-truncate" title="Open Date">
+                                                    <lightning:formattedDateTime value="{!club.projectedOpenDate}" />
+                                                </div>
+                                            </td>
+                                            <td data-label="Build Phase">
+                                                <div class="slds-truncate" title="Build Phase">{!club.buildPhase}</div>
+                                            </td>
+                                        </tr>
+                                    </aura:iteration>
+                                </tbody>
+                            </table>
+                            <aura:if isTrue="{!and(v.isHomePage, v.siteSelection.length > 5)}">
+                                <lightning:button label="View all Site Selection Clubs" title="View all clubs" onclick="{! c.gotoMyClubs }"/>
+                            </aura:if>
+                        </lightning:card>
+                    </lightning:accordionSection>
+                </aura:if>
+                <aura:if isTrue="{!v.sitePlanning.length > 0}">    
+                    <lightning:accordionSection name="Site Planning" label="Clubs in Development – Site Planning">         
+                        <lightning:card aura:id="site-planning" iconName="utility:custom_apps" title="Clubs in Development – Site Planning">
+                            <table class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal">    
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Location">Location</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Status">Status</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Equipment Status">Equipment Status</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Online Presale Date">Online Presale Date</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Physical Presale Date">Physical Presale Date</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Open Date">Open Date</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Build Phase">Build Phase</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <aura:iteration items="{!v.sitePlanning}" var="club" end="{!v.nRows}">
+                                        <tr class="slds-hint-parent">
+                                            <th data-label="Location" scope="row">
+                                                <div class="slds-truncate" title="Location">
+                                                    <lightning:button variant="base" label="{!club.clubObj.Name}" onclick="{! c.gotoDetail }"
+                                                                      title="{!'id=' + club.clubObj.Id + '&amp;status=' + club.clubObj.Status__c}" />
+                                                </div>
+                                            </th>
+                                            <td data-label="Status">
+                                                <div class="slds-truncate" title="Status">{!club.clubObj.Status__c}</div>
+                                            </td>
+                                            <td data-label="Equipment Status">
+                                                <div class="slds-truncate" title="Equipment Status">{!club.equipmentStatus}</div>
+                                            </td>
+                                            <td data-label="Online Presale Date">
+                                                <div class="slds-truncate" title="Online Presale Date">
+                                                    <lightning:formattedDateTime value="{!club.onlinePresaleDate}" />
+                                                </div>
+                                            </td>
+                                            <td data-label="Physical Presale Date">
+                                                <div class="slds-truncate" title="Physical Presale Date">
+                                                    <lightning:formattedDateTime value="{!club.physicalPresaleDate}" />
+                                                </div>
+                                            </td>
+                                            <td data-label="Open Date">
+                                                <div class="slds-truncate" title="Open Date">
+                                                    <lightning:formattedDateTime value="{!club.projectedOpenDate}" />
+                                                </div>
+                                            </td>
+                                            <td data-label="Build Phase">
+                                                <div class="slds-truncate" title="Build Phase">{!club.buildPhase}</div>
+                                            </td>
+                                        </tr>
+                                    </aura:iteration>
+                                </tbody>
+                            </table>
+                            <aura:if isTrue="{!and(v.isHomePage, v.sitePlanning.length > 5)}">
+                                <lightning:button label="View all Site Planning Clubs" title="View all clubs" onclick="{! c.gotoMyClubs }"/>
+                            </aura:if>
+                        </lightning:card>
+                    </lightning:accordionSection>           
+                </aura:if>
+                <aura:if isTrue="{!v.activeDev.length > 0}">        
+                    <lightning:accordionSection name="Active Development" label="Clubs in Development – Active Development">
+                        <lightning:card aura:id="active-development" iconName="utility:custom_apps" title="Clubs in Development – Active Development">
+                            <table class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal">    
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Location">Location</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Status">Status</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Equipment Status">Equipment Status</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Online Presale Date">Online Presale Date</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Physical Presale Date">Physical Presale Date</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Open Date">Open Date</div>
+                                        </th>
+                                        <th class="slds-text-title_caps" scope="col">
+                                            <div class="slds-truncate" title="Build Phase">Build Phase</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <aura:iteration items="{!v.activeDev}" var="club" end="{!v.nRows}">
+                                        <tr class="slds-hint-parent">
+                                            <th data-label="Location" scope="row">
+                                                <div class="slds-truncate" title="Location">
+                                                    <lightning:button variant="base" label="{!club.clubObj.Name}" onclick="{! c.gotoDetail }"
+                                                                      title="{!'id=' + club.clubObj.Id + '&amp;status=' + club.clubObj.Status__c}" />
+                                                </div>
+                                            </th>
+                                            <td data-label="Status">
+                                                <div class="slds-truncate" title="Status">{!club.clubObj.Status__c}</div>
+                                            </td>
+                                            <td data-label="Equipment Status">
+                                                <div class="slds-truncate" title="Equipment Status">{!club.equipmentStatus}</div>
+                                            </td>
+                                            <td data-label="Online Presale Date">
+                                                <div class="slds-truncate" title="Online Presale Date">
+                                                    <lightning:formattedDateTime value="{!club.onlinePresaleDate}" />
+                                                </div>
+                                            </td>
+                                            <td data-label="Physical Presale Date">
+                                                <div class="slds-truncate" title="Physical Presale Date">
+                                                    <lightning:formattedDateTime value="{!club.physicalPresaleDate}" />
+                                                </div>
+                                            </td>
+                                            <td data-label="Open Date">
+                                                <div class="slds-truncate" title="Open Date">
+                                                    <lightning:formattedDateTime value="{!club.projectedOpenDate}" />
+                                                </div>
+                                            </td>
+                                            <td data-label="Build Phase">
+                                                <div class="slds-truncate" title="Build Phase">{!club.buildPhase}</div>
+                                            </td>
+                                        </tr>
+                                    </aura:iteration>
+                                </tbody>
+                            </table>
+                            <aura:if isTrue="{!and(v.isHomePage, v.activeDevelopment.length > 5)}">
+                                <lightning:button label="View all Active Development Clubs" title="View all clubs" onclick="{! c.gotoMyClubs }"/>
+                            </aura:if>
+                        </lightning:card>
+                    </lightning:accordionSection>
+                    </aura:if>     
+                </lightning:accordion>
+            </aura:set>
+        </aura:if>
+    
+    </aura:component>

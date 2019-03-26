@@ -1,0 +1,430 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global"
+                controller="FRM3_ClubDetailController">
+    
+    <aura:handler name="init" value="{!this}" action="{!c.loadData}"/>
+    <aura:attribute name="realEstate" type="Object" />
+    <aura:attribute name="franchiseAgreement" type="Object" />
+    <aura:attribute name="design" type="Object" />
+    <aura:attribute name="permitting" type="Object" />
+    <aura:attribute name="construction" type="Object" />
+    <aura:attribute name="equipment" type="Object" />
+    <aura:attribute name="preOpening" type="Object" />
+    <aura:attribute name="preSale" type="Object" />
+    
+    <h2 class="slds-text-heading_large slds-m-top_x-large">My Club Status</h2>    
+    <lightning:card title="Real Estate Milestone" iconName="utility:stage">
+        <lightning:layout>
+            <lightning:layoutItem padding="around-small" size="2">
+                <img src="http://app.planetfitness.com/salesforce/assets/re_icon.png" style="width:80%" />
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small">
+                <p>
+                    Use the buttons below to submit sites you’d like considered for this proposed location, 
+                    as well as monitor progress on PFHQ approval. 
+                    The Landlord Work letter provides expected construction and design specifications for 
+                    which the site should comply.  
+                    At this point you should reach out to your assigned Real Estate Director so they can work 
+                    with you to ensure the site selection process proceeds smoothly.    
+                    Visit “My Sites” to upload your Letter of Intent, draft lease and fully executed lease to 
+                    the correct site.<br/><br/>
+                    Once your site has been preliminary approved you should reach out to your assigned Pre 
+                    Opening Project Manager. They will help guide you through the remaining Milestones.
+                </p>
+                
+                <ul class="slds-button-group-row slds-m-top_x-large">
+                    <li class="slds-button-group-item">
+                        <lightning:button variant="neutral" label="Submit A Site" onclick="{!c.submitSite}" 
+                                          title="{!v.realEstate.projectId}"/>
+                    </li>
+                    <li class="slds-button-group-item">
+                        <lightning:button variant="neutral" label="View Workletter" onclick="{!c.viewWorkLetter}"/>
+                    </li>
+                    <li class="slds-button-group-item">
+                        <lightning:button variant="neutral" label="View All Sites" onclick="{!c.gotoPage}" 
+                                		  title="my-sites"/>
+                    </li>
+                </ul>
+            </lightning:layoutItem>
+        </lightning:layout>
+        
+        <div class="slds-card__body_inner slds-m-top_x-large slds-p-top_small slds-p-bottom_small" style="background-color:#F9F9F9">
+            <div class="status slds-text-align_center">
+                <aura:iteration items="{!v.realEstate.options}" var="opt" indexVar="index">
+                    <span class="slds-m-right_small">
+                        <input type="checkbox" id="{!opt}" value="{!opt}" 
+                               checked="{!v.realEstate.statNum > index  ? 'checked' : ''}" />
+                        <label class="slds-checkbox__label" for="{!opt}">
+                            <span class="slds-checkbox_faux"></span>
+                            <span class="slds-form-element__label"> {!opt}</span>
+                        </label>
+                    </span>
+                </aura:iteration>
+            </div>            
+            <div class="progress-bar">
+                <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small" id="progress-bar">
+                    <span>Real Estate Milestone</span>
+                    <span aria-hidden="true">
+                        <strong><ui:outputText value="{!((v.realEstate.progress)-mod((v.realEstate.progress),1))}"/>% Complete</strong>
+                    </span>
+                </div>
+                <div class="slds-progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{!v.realEstate.progress}" aria-labelledby="progress-bar-label-id-2" role="progressbar">
+                    <span class="slds-progress-bar__value slds-progress-bar__value_success" style="{!'width:' + v.realEstate.progress + '%'}">
+                        <span class="slds-assistive-text">Progress: <ui:outputText value="{!((v.realEstate.progress)-mod((v.realEstate.progress),1))}"/>%</span>
+                    </span>
+                </div>
+            </div>   
+        </div>
+    </lightning:card>
+    <lightning:card title="Franchise Agreement Milestone" iconName="utility:stage">
+        <lightning:layout>
+            <lightning:layoutItem padding="around-small" size="2">
+                <img src="http://app.planetfitness.com/salesforce/assets/fa_icon.png" style="width:80%" />
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small">
+                <p>
+                    Once LOI is signed and your lease is being reviewed by your attorney, the next step will 
+                    be to have a preliminary layout of the club created and a Franchise Agreement drafted 
+                    and signed. Use the buttons below to download and submit the preliminary information 
+                    form (“Prelim”) which is required to request a franchise agreement.
+                </p>
+                
+                <ul class="slds-button-group-row slds-m-top_x-large">
+                    <li class="slds-button-group-item">
+                        <lightning:button variant="neutral" label="Submit Prelim" onclick="{! c.submitPrelim}" 
+                                          title="{!v.realEstate.projectId}"/>
+                    </li>
+                    <li class="slds-button-group-item">
+                        <button class="slds-button slds-button_neutral" onclick="{! c.downloadDoc}">
+                            Download Prelim
+                        </button>
+                    </li>
+                </ul>
+            </lightning:layoutItem>
+        </lightning:layout>
+        
+        <div class="slds-card__body_inner slds-m-top_x-large slds-p-top_small slds-p-bottom_small" style="background-color:#F9F9F9">
+            <div class="status slds-text-align_center">
+                <aura:iteration items="{!v.franchiseAgreement.options}" var="opt" indexVar="index">
+                    <span class="slds-m-right_small">
+                        <input type="checkbox" id="{!opt}" value="{!opt}" 
+                               checked="{!v.franchiseAgreement.statNum > index  ? 'checked' : ''}" />
+                        <label class="slds-checkbox__label" for="{!opt}">
+                            <span class="slds-checkbox_faux"></span>
+                            <span class="slds-form-element__label"> {!opt}</span>
+                        </label>
+                    </span>
+                </aura:iteration>
+            </div>            
+            <div class="progress-bar">
+                <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small" id="progress-bar">
+                    <span>Franchise Agreement Milestone</span>
+                    <span aria-hidden="true">
+                        <strong><ui:outputText value="{!((v.franchiseAgreement.progress)-mod((v.franchiseAgreement.progress),1))}"/>% Complete</strong>
+                    </span>
+                </div>
+                <div class="slds-progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{!v.franchiseAgreement.progress}" aria-labelledby="progress-bar-label-id-2" role="progressbar">
+                    <span class="slds-progress-bar__value slds-progress-bar__value_success" style="{!'width:' + v.franchiseAgreement.progress + '%'}">
+                        <span class="slds-assistive-text">Progress: <ui:outputText value="{!((v.franchiseAgreement.progress)-mod((v.franchiseAgreement.progress),1))}"/>%</span>
+                    </span>
+                </div>
+            </div>   
+        </div>
+    </lightning:card>
+    <lightning:card title="Design Milestone" iconName="utility:stage">
+        <lightning:layout>
+            <lightning:layoutItem padding="around-small" size="2">
+                <img src="http://app.planetfitness.com/salesforce/assets/design_icon.png" style="width:80%" />
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small">
+                <p>
+                    This milestone tracks progress in the approval of your site design so that you’re fully 
+                    prepared to move to the permitting phase.  Please use the buttons below to submit your 
+                    schematics and construction documents.
+                </p>
+                
+                <ul class="slds-button-group-row slds-m-top_x-large">
+                    <li class="slds-button-group-item">
+                        <lightning:button variant="neutral" label="Submit Construction Docs" onclick="{! c.submitDocument}" 
+                                          title="{!v.realEstate.projectId}"/>
+                    </li>
+                    <li class="slds-button-group-item">
+                        <lightning:button variant="neutral" label="Submit Schematics" onclick="{! c.submitDocument}" 
+                                          title="{!v.realEstate.projectId}"/>
+                    </li>
+                </ul>
+            </lightning:layoutItem>
+        </lightning:layout>
+        
+        <div class="slds-card__body_inner slds-m-top_x-large slds-p-top_small slds-p-bottom_small" style="background-color:#F9F9F9">
+            <div class="status slds-text-align_center">
+                <aura:iteration items="{!v.design.options}" var="opt" indexVar="index">
+                    <span class="slds-m-right_small">
+                        <input type="checkbox" id="{!opt}" value="{!opt}" 
+                               checked="{!v.design.statNum > index  ? 'checked' : ''}" />
+                        <label class="slds-checkbox__label" for="{!opt}">
+                            <span class="slds-checkbox_faux"></span>
+                            <span class="slds-form-element__label"> {!opt}</span>
+                        </label>
+                    </span>
+                </aura:iteration>
+            </div>            
+            <div class="progress-bar">
+                <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small" id="progress-bar">
+                    <span>Design Milestone</span>
+                    <span aria-hidden="true">
+                        <strong><ui:outputText value="{!((v.design.progress)-mod((v.design.progress),1))}"/>% Complete</strong>
+                    </span>
+                </div>
+                <div class="slds-progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{!v.design.progress}" aria-labelledby="progress-bar-label-id-2" role="progressbar">
+                    <span class="slds-progress-bar__value slds-progress-bar__value_success" style="{!'width:' + v.design.progress + '%'}">
+                        <span class="slds-assistive-text">Progress: <ui:outputText value="{!((v.design.progress)-mod((v.design.progress),1))}"/>%</span>
+                    </span>
+                </div>
+            </div>   
+        </div>
+    </lightning:card>
+    <lightning:card title="Permitting Milestone" iconName="utility:stage">
+        <lightning:layout>
+            <lightning:layoutItem padding="around-small" size="2">
+                <img src="http://app.planetfitness.com/salesforce/assets/permit_icon.png" style="width:80%" />
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small">
+                <p>
+                    Permitting progress is tracked here and can be one of the most time consuming phases as 
+                    you wait for government officials to approve you for construction.  While waiting for 
+                    permits this is a good opportunity to work with your PFHQ Construction Director to 
+                    review bids and proposals.
+                </p>                
+            </lightning:layoutItem>
+        </lightning:layout>
+        
+        <div class="slds-card__body_inner slds-m-top_x-large slds-p-top_small slds-p-bottom_small" style="background-color:#F9F9F9">
+            <div class="status slds-text-align_center">
+                <aura:iteration items="{!v.permitting.options}" var="opt" indexVar="index">
+                    <span class="slds-m-right_small">
+                        <input type="checkbox" id="{!opt}" value="{!opt}" 
+                               checked="{!v.permitting.statNum > index  ? 'checked' : ''}" />
+                        <label class="slds-checkbox__label" for="{!opt}">
+                            <span class="slds-checkbox_faux"></span>
+                            <span class="slds-form-element__label"> {!opt}</span>
+                        </label>
+                    </span>
+                </aura:iteration>
+            </div>            
+            <div class="progress-bar">
+                <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small" id="progress-bar">
+                    <span>Permitting Milestone</span>
+                    <span aria-hidden="true">
+                        <strong><ui:outputText value="{!((v.permitting.progress)-mod((v.permitting.progress),1))}"/>% Complete</strong>
+                    </span>
+                </div>
+                <div class="slds-progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{!v.permitting.progress}" aria-labelledby="progress-bar-label-id-2" role="progressbar">
+                    <span class="slds-progress-bar__value slds-progress-bar__value_success" style="{!'width:' + v.permitting.progress + '%'}">
+                        <span class="slds-assistive-text">Progress: <ui:outputText value="{!((v.permitting.progress)-mod((v.permitting.progress),1))}"/>%</span>
+                    </span>
+                </div>
+            </div>   
+        </div>
+    </lightning:card>
+    <lightning:card title="Construction Milestone" iconName="utility:stage">
+        <lightning:layout>
+            <lightning:layoutItem padding="around-small" size="2">
+                <img src="http://app.planetfitness.com/salesforce/assets/con_icon.png" style="width:80%" />
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small">
+                <p>
+                    Moving through this phase will require close coordination with you assigned PFHQ 
+                    Construction Director.  Use the button below to upload your Construction Schedule.
+                </p>  
+                <ul class="slds-button-group-row slds-m-top_x-large">
+                    <li class="slds-button-group-item">
+                        <lightning:button variant="neutral" label="Submit Schedule" onclick="{! c.submitDocument}" 
+                                          title="{!v.realEstate.projectId}"/>
+                    </li>
+                </ul>
+            </lightning:layoutItem>
+        </lightning:layout>
+        
+        <div class="slds-card__body_inner slds-m-top_x-large slds-p-top_small slds-p-bottom_small" style="background-color:#F9F9F9">
+            <div class="status slds-text-align_center">
+                <aura:iteration items="{!v.construction.options}" var="opt" indexVar="index">
+                    <span class="slds-m-right_small">
+                        <input type="checkbox" id="{!opt}" value="{!opt}" 
+                               checked="{!v.construction.statNum > index  ? 'checked' : ''}" />
+                        <label class="slds-checkbox__label" for="{!opt}">
+                            <span class="slds-checkbox_faux"></span>
+                            <span class="slds-form-element__label"> {!opt}</span>
+                        </label>
+                    </span>
+                </aura:iteration>
+            </div>            
+            <div class="progress-bar">
+                <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small" id="progress-bar">
+                    <span>Construction Milestone</span>
+                    <span aria-hidden="true">
+                        <strong>
+                            <ui:outputText value="{!((v.construction.progress)-mod((v.construction.progress),1))}"/>% Complete
+                        </strong>
+                    </span>
+                </div>
+                <div class="slds-progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{!v.construction.progress}" aria-labelledby="progress-bar-label-id-2" role="progressbar">
+                    <span class="slds-progress-bar__value slds-progress-bar__value_success" style="{!'width:' + v.construction.progress + '%'}">
+                        <span class="slds-assistive-text">Progress: <ui:outputText value="{!((v.construction.progress)-mod((v.construction.progress),1))}"/>%</span>
+                    </span>
+                </div>
+            </div>   
+        </div>
+    </lightning:card>
+    <lightning:card title="Equipment Milestone" iconName="utility:stage">
+        <lightning:layout>
+            <lightning:layoutItem padding="around-small" size="2">
+                <img src="http://app.planetfitness.com/salesforce/assets/equip_icon.png" style="width:80%" />
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small">
+                <p>
+                    This milestone tracks initial contact with the PFHQ equipment team and then the process 
+                    from quote to placement. Work with your PFHQ equipment coordinator for more information.
+                </p>
+            </lightning:layoutItem>
+        </lightning:layout>
+        
+        <div class="slds-card__body_inner slds-m-top_x-large slds-p-top_small slds-p-bottom_small" style="background-color:#F9F9F9">
+            <div class="status slds-text-align_center">
+                <aura:iteration items="{!v.equipment.options}" var="opt" indexVar="index">
+                    <span class="slds-m-right_small">
+                        <input type="checkbox" id="{!opt}" value="{!opt}" 
+                               checked="{!v.equipment.statNum > index  ? 'checked' : ''}" />
+                        <label class="slds-checkbox__label" for="{!opt}">
+                            <span class="slds-checkbox_faux"></span>
+                            <span class="slds-form-element__label"> {!opt}</span>
+                        </label>
+                    </span>
+                </aura:iteration>
+            </div>            
+            <div class="progress-bar">
+                <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small" id="progress-bar">
+                    <span>Equipment Milestone</span>
+                    <span aria-hidden="true">
+                        <strong><ui:outputText value="{!((v.equipment.progress)-mod((v.equipment.progress),1))}"/>% Complete</strong>
+                    </span>
+                </div>
+                <div class="slds-progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{!v.equipment.progress}" aria-labelledby="progress-bar-label-id-2" role="progressbar">
+                    <span class="slds-progress-bar__value slds-progress-bar__value_success" style="{!'width:' + v.equipment.progress + '%'}">
+                        <span class="slds-assistive-text">Progress: <ui:outputText value="{!((v.equipment.progress)-mod((v.equipment.progress),1))}"/>%</span>
+                    </span>
+                </div>
+            </div>   
+        </div>
+    </lightning:card>
+    <lightning:card title="Pre-Opening Milestone" iconName="utility:stage">
+        <lightning:layout>
+            <lightning:layoutItem padding="around-small" size="2">
+                <img src="http://app.planetfitness.com/salesforce/assets/pre_icon.png" style="width:80%" />
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small">
+                <p>
+                    Steps to complete this milestone include training your staff and preparing your presale 
+                    marketing plan.  There are also follow up tasks to track the success of your first year of 
+                    operations that will continue to be tracked here.
+                </p>
+                
+                <ul class="slds-button-group-row slds-m-top_x-large">
+                    <li class="slds-button-group-item">
+                        <button class="slds-button slds-button_neutral" onclick="{! c.viewArticle}" id="Presale-and-Grand-Opening-Resources-2">
+                            Pre-Opening Resources
+                        </button>
+                    </li>
+                    <li class="slds-button-group-item">
+                        <button class="slds-button slds-button_neutral" onclick="{! c.viewArticle}" id="Planet-Fitness-Operations-Manual-2">
+                            Operations Manual
+                        </button>
+                    </li>
+                    <li class="slds-button-group-item">
+                        <button class="slds-button slds-button_neutral" onclick="{! c.viewArticle}" id="Means-and-Methods-Design-Guide-2">
+                            Means and Methods
+                        </button>
+                    </li>
+                </ul>
+            </lightning:layoutItem>
+        </lightning:layout>
+        
+        <div class="slds-card__body_inner slds-m-top_x-large slds-p-top_small slds-p-bottom_small" style="background-color:#F9F9F9">
+            <div class="status slds-text-align_center">
+                <aura:iteration items="{!v.preOpening.options}" var="opt" indexVar="index">
+                    <span class="slds-m-right_small">
+                        <input type="checkbox" id="{!opt}" value="{!opt}" 
+                               checked="{!v.preOpening.statNum > index  ? 'checked' : ''}" />
+                        <label class="slds-checkbox__label" for="{!opt}">
+                            <span class="slds-checkbox_faux"></span>
+                            <span class="slds-form-element__label"> {!opt}</span>
+                        </label>
+                    </span>
+                </aura:iteration>
+            </div>            
+            <div class="progress-bar">
+                <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small" id="progress-bar">
+                    <span>Pre-Opening Milestone</span>
+                    <span aria-hidden="true">
+                        <strong><ui:outputText value="{!((v.preOpening.progress)-mod((v.preOpening.progress),1))}"/>% Complete</strong>
+                    </span>
+                </div>
+                <div class="slds-progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{!v.preOpening.progress}" aria-labelledby="progress-bar-label-id-2" role="progressbar">
+                    <span class="slds-progress-bar__value slds-progress-bar__value_success" style="{!'width:' + v.preOpening.progress + '%'}">
+                        <span class="slds-assistive-text">Progress: <ui:outputText value="{!((v.preOpening.progress)-mod((v.preOpening.progress),1))}"/>%</span>
+                    </span>
+                </div>
+            </div>   
+        </div>
+    </lightning:card>
+    <lightning:card title="Pre-Sale Milestone" iconName="utility:stage">
+        <lightning:layout>
+            <lightning:layoutItem padding="around-small" size="2">
+                <img src="http://app.planetfitness.com/salesforce/assets/sale_icon.png" style="width:80%" />
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small">
+                <p>
+                    Use the buttons below to establish your online and physical presale dates, and update 
+                    them as changes occur.
+                </p>
+                
+                <ul class="slds-button-group-row slds-m-top_x-large">
+                    <li class="slds-button-group-item">
+                        <lightning:button variant="neutral" label="Update Projected Opening date" onclick="{! c.submitDate}" 
+                                          title="{!v.realEstate.projectId}"/>
+                    </li>
+                </ul>
+            </lightning:layoutItem>
+        </lightning:layout>
+        
+        <div class="slds-card__body_inner slds-m-top_x-large slds-p-top_small slds-p-bottom_small" style="background-color:#F9F9F9">
+            <div class="status slds-text-align_center">
+                <aura:iteration items="{!v.preSale.options}" var="opt" indexVar="index">
+                    <span class="slds-m-right_small">
+                        <input type="checkbox" id="{!opt}" value="{!opt}" 
+                               checked="{!v.preSale.statNum > index ? 'checked' : ''}" />
+                        <label class="slds-checkbox__label" for="{!opt}">
+                            <span class="slds-checkbox_faux"></span>
+                            <span class="slds-form-element__label"> {!opt}</span>
+                        </label>
+                    </span>
+                </aura:iteration>
+            </div>            
+            <div class="progress-bar">
+                <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small" id="progress-bar">
+                    <span>Pre-Opening Milestone</span>
+                    <span aria-hidden="true">
+                        <strong><ui:outputText value="{!((v.preSale.progress)-mod((v.preSale.progress),1))}"/>% Complete</strong>
+                    </span>
+                </div>
+                <div class="slds-progress-bar" aria-valuemin="0" aria-valuemax="100" 
+                     aria-valuenow="{!v.preSale.progress}" aria-labelledby="progress-bar-label-id-2" role="progressbar">
+                    <span class="slds-progress-bar__value slds-progress-bar__value_success" 
+                          style="{!'width:' + v.preSale.progress + '%'}">
+                        <span class="slds-assistive-text">Progress: <ui:outputText value="{!((v.preSale.progress)-mod((v.preSale.progress),1))}"/>%</span>
+                    </span>
+                </div>
+            </div>   
+        </div>
+    </lightning:card>
+    
+</aura:component>

@@ -1,0 +1,9 @@
+<apex:page docType="html-5.0" title="{!Account.Name}" label="PFVendorView" name="PFVendorView" standardController="Account" showHeader="true" sidebar="false" standardStylesheets="false">
+	<div class="no-sf-style page-body page-site-request">
+	 	<div class="container">
+			<div class="sites-listview-container">
+				<apex:detail showChatter="false" subject="{!Account.Id}" />
+			</div>
+	 	</div>
+	</div>
+</apex:page>

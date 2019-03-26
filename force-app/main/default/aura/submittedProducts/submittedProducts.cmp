@@ -1,0 +1,43 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global"
+                controller="FRM3_ProductController" >
+
+    <!--aura:handler name="init" value="{!this}" action="{!c.getProducts}"/-->
+    <aura:attribute name="products" type="object[]" />
+	
+    <article>
+        <lightning:card iconName="utility:favorite" title="My Submitted Products" class="slds-is-open">
+            <table class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal">    
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="slds-text-title_caps" scope="col">
+                            <div class="slds-truncate" title="Name">Name</div>
+                        </th>
+                        <th class="slds-text-title_caps" scope="col">
+                            <div class="slds-truncate" title="Category">Category</div>
+                        </th>
+                        <th class="slds-text-title_caps" scope="col">
+                            <div class="slds-truncate" title="Subcategory">Subcategory</div>
+                        </th>
+                        <th class="slds-text-title_caps" scope="col">
+                            <div class="slds-truncate" title="Barcode">Barcode</div>
+                        </th>
+                        <th class="slds-text-title_caps" scope="col">
+                            <div class="slds-truncate" title="MSRP">MSRP</div>
+                        </th>
+                        <th class="slds-text-title_caps" scope="col">
+                            <div class="slds-truncate" title="Status">Status</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.products}" var="prod">
+                        <tr class="slds-hint-parent">
+                            <td data-label="Name" scope="row">{!prod.Name}</td>
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>
+        </lightning:card>	            
+    </article>
+        
+</aura:component>

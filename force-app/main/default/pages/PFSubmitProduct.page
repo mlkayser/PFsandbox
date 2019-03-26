@@ -1,0 +1,42 @@
+<apex:page controller="PFSubmitProductController" docType="html-5.0" title="Submit A Product | Planet Fitness Franchise Community" label="PFSubmitProduct" name="PFSubmitProduct" showHeader="true" sidebar="false" standardStylesheets="false">
+
+
+  
+    <div class="no-sf-style page-body page-product-request">
+        <div class="container">
+            <div class="jumbotron">
+                <div class="row">
+                    <div class="col-md-6 page-description">
+                        <h1>Submit A Product</h1>
+                        <p>Here is where you can submit products to the PF Retail Committee. These items will be reviewed by the team at Corporate and will show updates on the request status. All approved or denied items can be viewed on the Retail page along with other important in-club information.</p>
+                    </div>
+                    <div class="col-md-6 page-description-image hidden-xs hidden-sm">
+                        <img class="img-responsive" src="/resource/CommunityAssets/img/retail-page-banner.jpg"/>
+                    </div>
+                </div>
+            </div>
+            <ol class="breadcrumb">
+              <li><a href="/apex/PFHomepage">Home</a></li>
+              <li>Submit A Product</li>
+            </ol>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="main-section">
+                        <p class="section-title">My Submitted Products</p>
+                        <a href="/pfretailsubmit" class="btn btn-pf">Submit a New Product</a>
+                    </div>
+                </div>
+            </div>
+            <div class="sites-listview-container">
+                <apex:dataTable value="{!retailproduct}" var="r" style="width:100%;" width="100%">
+                    <apex:column headerValue="Name" value="{!r.Name}"/>
+                    <apex:column headerValue="Category" value="{!r.Category__c}"/>
+                    <apex:column headerValue="SubCategory" value="{!r.Subcategory__c}"/>
+                    <apex:column headerValue="Barcode" value="{!r.Barcode__c}"/>
+                    <apex:column headerValue="MSRP" value="{!r.MSRP__c}"/>
+                    <apex:column headerValue="Status" value="{!r.Status__c}"/>
+                </apex:dataTable>
+            </div>
+        </div>
+    </div>
+</apex:page>

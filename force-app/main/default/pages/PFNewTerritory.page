@@ -1,0 +1,26 @@
+<apex:page >
+    <div class="no-sf-style page-body page-retail">
+        <div class="container">
+            <div class="jumbotron">
+                <div class="row">
+                    <div class="col-md-6 page-description">
+                        <h1>Request New Territory</h1>
+                        <p>Thank you for considering franchise opportunities with Planet Fitness. This form will alert our Franchise Sales team that you have interest in a new location.</p>   	
+                    </div>
+                    <div class="col-md-6 page-description-image hidden-xs hidden-sm">
+                        <img class="img-responsive" src="https://app.planetfitness.com/salesforce/assets/trainer_banner.jpg"/>
+                    </div>
+                </div>
+            </div>
+
+            <ol class="breadcrumb">
+              <li><a href="/apex/PFHomepage">Home</a></li>
+              <li>Request New Territory</li>
+            </ol>
+            
+            <div>
+                <apex:iframe src="https://www.tfaforms.com/428843?userid={!$User.Id}" scrolling="true" frameborder="false"/>
+            </div>
+        </div>
+    </div>
+</apex:page>

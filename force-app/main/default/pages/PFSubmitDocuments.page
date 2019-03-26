@@ -1,0 +1,11 @@
+<apex:page >
+      
+    <center>
+		<iframe id="myiframe" src="https://www.tfaforms.com/4616650" width="800" height="700" frameborder="0" scrolling="no"></iframe>
+    </center>
+   
+    <script language="javascript">
+    	var iframe = document.getElementById('myiframe');
+        iframe.src = iframe.src + window.location.search;
+	</script>
+</apex:page>

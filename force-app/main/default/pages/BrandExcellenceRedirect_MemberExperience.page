@@ -1,0 +1,32 @@
+<!--
+ - Created by SBenner on 9/6/18.
+ -->
+
+<apex:page id="BrandExcellenceRedirect" showHeader="false" standardStylesheets="false" sidebar="false"
+           applyHtmlTag="false" applyBodyTag="false" docType="html-5.0" standardController="Brand_Excellence__c" recordSetVar="bes" extensions="BrandExcellence_ControllerMobile">
+    <script src="/soap/ajax/41.0/connection.js" type="text/javascript"></script>
+    <script src="/soap/ajax/41.0/apex.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        var __sfdcSessionId = '{!GETSESSIONID()}';
+        var redirectURL = '{!endpoint}';
+    </script>
+    <script type="text/javascript">
+
+
+        function redirection(){
+            if(sforce.one != null){
+                sforce.one.navigateToURL(redirectURL);
+            }else{
+                window.location = redirectURL;
+            }
+
+        };
+    </script>
+    <body onload="redirection()">
+    Redirecting...
+    {!endpoint}
+
+
+    </body>
+</apex:page>

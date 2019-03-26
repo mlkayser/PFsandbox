@@ -1,0 +1,62 @@
+<apex:page id="PFVoteAlert" controller="PFVoteController">
+    <apex:includescript value="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"/>
+    <!--<apex:includescript value="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"/>-->
+    <apex:includescript value="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js"/>
+    <script language="JavaScript">
+        angular.module('pfVoteAlertApp', [])
+        .factory('ApexController', ['$q', '$rootScope', function($q, $rootScope) {
+            var ApexController = {};
+
+            // Get List of Active Polls
+            ApexController.getActivePolls = function() {
+                var deferred = $q.defer();
+                Visualforce.remoting.Manager.invokeAction(
+                        '{!$RemoteAction.PFVoteController.getActivePolls}',
+                        function(result, event) {
+                            $rootScope.$apply(function() {
+                                if (event.status) {
+                                    deferred.resolve(result);
+                                } else {
+                                    deferred.reject(event);
+                                }
+                            })
+                        },
+                        { buffer: true, escape: true, timeout: 30000 }
+                );
+
+                return deferred.promise;
+            };
+
+            return ApexController;
+        }])
+        .controller('pfVoteAlertController', ['$scope', 'ApexController', function ($scope, $ApexController) {
+            $scope.activePolls = [];
+
+            $scope.getPolls = function() {
+                var promise = $ApexController.getActivePolls();
+                promise
+                        .then(function(result) {
+                            $scope.activePolls = result;
+                        })
+                        .catch(function(err) {
+                            console.log('getActivePolls failed with ' + err);
+                        });
+            };
+
+            $scope.activePolls = $scope.getPolls();
+        }]);
+    </script>
+    <div class="avs" ng-app="pfVoteAlertApp">
+        <div ng-controller="pfVoteAlertController">
+            <div id="alertdiv" class="alert alert-warning" role="alert" ng-show="activePolls.length > 0">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <!--<ul>-->
+                    <!--<li >-->
+                        <p ng-repeat="p in activePolls" class="section-title"><strong>We need your input on the {{p.Name}}!!</strong> Please <a href="/apex/PFVote?pollId={{p.Id}}">Click Here</a> to cast your vote.</p>
+                    <!--</li>-->
+                <!--</ul>-->
+                <!--<p class="section-title"><strong>We need your input!</strong> Please <a href="/apex/PFVoteTest">Click Here</a> to vote on an upcoming change.</p>-->
+            </div>
+        </div>
+    </div>
+</apex:page>

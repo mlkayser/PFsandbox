@@ -1,0 +1,56 @@
+<apex:page docType="html-5.0" title="Events | Planet Fitness Franchise Community" label="PFEvents" name="PFEvents" showHeader="true" sidebar="false" standardStylesheets="false">
+    <div class="no-sf-style page-test">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Upcoming Events</h1>
+                </div>
+                <div class="col-md-12">
+                    <div class="listview">
+
+                        <div class="col-md-12" id="no-more-tables">
+                            <table class="col-md-12 table-striped table-condensed cf">
+                                <thead class="cf">
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Event Title</th>
+                                        <th>Description</th>
+                                        <th>Created By</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td data-title="Date">July 20, 2015</td>
+                                        <td data-title="Event Title">Event title test</td>
+                                        <td data-title="Description">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.</td>
+                                        <td data-title="Created By">Brett Hammond</td>
+                                    </tr>
+                                    <tr>
+                                        <td data-title="Date">July 20, 2015</td>
+                                        <td data-title="Event Title">Event title test</td>
+                                        <td data-title="Description">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.</td>
+                                        <td data-title="Created By">Brett Hammond</td>
+                                    </tr>
+                                    <tr>
+                                        <td data-title="Date">July 20, 2015</td>
+                                        <td data-title="Event Title">Event title test</td>
+                                        <td data-title="Description">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.</td>
+                                        <td data-title="Created By">Brett Hammond</td>
+                                    </tr>
+                                    <tr>
+                                        <td data-title="Date">July 20, 2015</td>
+                                        <td data-title="Event Title">Event title test</td>
+                                        <td data-title="Description">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.</td>
+                                        <td data-title="Created By">Brett Hammond</td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</apex:page>

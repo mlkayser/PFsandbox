@@ -1,0 +1,388 @@
+<!--
+ - Created by JLinn on 6/5/18.
+ -->
+
+<apex:page id="BrandExcellenceMobileUpload" standardController="Brand_Excellence__c"
+           extensions="BrandExcellenceMobileUpload" showHeader="false" standardStylesheets="false" sidebar="false"
+           applyHtmlTag="false" applyBodyTag="false" docType="html-5.0">
+
+    <apex:slds />
+    <script type="text/javascript">
+
+        function goBack() {
+            if((typeof sforce != 'undefined') && sforce && (!!sforce.one)){
+                sforce.one.navigateToSObject('{!recordId}');
+            }
+            window.location.href = '{!URLFOR($Action.Brand_Excellence__c.View, recordId)}';
+
+        }
+    
+    	function setTotalPictures(numberOfPictures){
+        	var totalFiles = document.getElementById('totalFiles');
+            totalFiles.innerText = numberOfPictures;
+        }
+
+        function incrementCounter(){
+            var cancelButton = document.getElementById('cancelButton');
+            var submitButton = document.getElementById('submitButton');
+            var spiner = document.getElementById('spinner');
+            var numberOfPictures = document.getElementById('totalFiles').innerText * 1;
+
+
+            var initialCount = document.getElementById('counter').innerText * 1;
+            document.getElementById('counter').innerText = String(initialCount + 1);
+
+
+            document.getElementById('result').innerText =
+                String(document.getElementById('counter').innerText * 1) + ' / ' + numberOfPictures;
+
+            
+            numberOfPictures = document.getElementById('totalFiles').innerText * 1;
+            
+            if(initialCount+1 === numberOfPictures){
+                filesCompleted();
+            }
+        }
+    
+    	function writeOutStatusMessage(currentCount, totalCount){
+        	document.getElementById('result').innerText =
+                currentCount + ' / ' + totalCount;
+        }
+    
+    	function filesCompleted(){
+            var cancelButton = document.getElementById('cancelButton');
+            var submitButton = document.getElementById('submitButton');
+            var spiner = document.getElementById('spinner');
+
+            
+        	spiner.hidden = true;
+            cancelButton.hidden = false;
+            submitButton.hidden = false;
+            document.getElementById('result').innerText = 'Upload Complete!';
+        }
+
+
+        function doSubmit() {
+            //Create an array of the files in each input
+
+            //Get the list of metadata records
+            var categories = [];
+             categories = {!pictureCategoriesOnly};
+             var stringCategories = [];
+             stringCategories = {!pictureCategoriesStringOnly};
+             console.log('***Examining the Categories structure***');
+             console.log(stringCategories);
+
+            var allFiles = [];
+            var totalFileNumber = 0;
+
+            //Loop through that collection and Get Element by ID all the files
+            console.log('***Creating initial allFile Array***');
+            for(var k = 0; k < categories.length; k++){
+                console.log('k = ' + k);
+
+                console.log(categories[k].id);
+                console.log(stringCategories[k]);
+
+                console.log(document.getElementById(categories[k].id).files);
+                if(document.getElementById(categories[k].id).files.length > 0){
+                    totalFileNumber += document.getElementById(categories[k].id).files.length;
+                    allFiles.push({
+                        fileList: document.getElementById(categories[k].id).files,
+                        fileCategory: stringCategories[k]
+                    });
+                }
+            }
+            console.log('***The All Files Array:');
+            console.log(allFiles);
+            // var files = document.getElementById('filesInput').files;
+                //TODO: Add the files to a single Array of Objects, to include the metadata info for naming etc.
+
+
+
+            console.log('This size of allFiles: ' + allFiles.length);
+            if (allFiles.length === 0){
+                alert('You have not selected any photos to upload!');
+                return;
+            }
+            
+            setTotalPictures(totalFileNumber);
+
+            var spiner = document.getElementById('spinner');
+            spiner.hidden = false;
+
+            var result = document.getElementById('result');
+            result.hidden = false;
+            
+            var cancelButton = document.getElementById('cancelButton');
+            var submitButton = document.getElementById('submitButton');
+
+            cancelButton.hidden = true;
+            submitButton.hidden = true;
+
+
+
+
+
+
+            for(var i = 0; i < allFiles.length; i++){
+                for(var j = 0; j < allFiles[i].fileList.length; j++){
+
+                    console.log('Name of the file: ' + allFiles[i].fileList[j].name);
+                    console.log('Category: ' + allFiles[i].fileCategory);
+                    console.log('***Examining the Blob***');
+                    //console.log(files[i].slice(0,files[i].size,files[i].type));
+                    console.log(allFiles[i][j]);
+
+                    (function(theFile, i, j, saveName){
+                        console.log('what is in the iife');
+                        console.log(theFile);
+                        var fileReader = new FileReader();
+                        fileReader.onloadend = function(evt){
+                            if(evt.target.readyState === FileReader.DONE){
+                                console.log('The Value of j: ' + j);
+                                console.log(theFile.name);
+                                console.log(fileReader.result);
+
+                                BrandExcellenceMobileUpload.uploadPhotosRemote(
+                                    fileReader.result, theFile.name, saveName + ' - ' + (j + 1), '{!recordId}', function(res, event){
+                                        if(event.status){
+                                            incrementCounter();
+                                        }
+
+                                    },
+                                    { buffer: false, escape: true, timeout: 120000 });
+                            }
+                        };
+
+                        fileReader.readAsDataURL(theFile);
+                    })(allFiles[i].fileList[j],i, j, allFiles[i].fileCategory);
+                }
+            }
+        }
+    </script>
+
+    <div class="slds-scope">
+    <div class="uploadFileDiv">
+
+
+        <div class="demo-only" style="width: 300px;">
+            <div class="slds-page-header slds-page-header_vertical">
+                <div class="slds-grid slds-grid_vertical">
+                    <div>
+                        <div class="slds-media slds-no-space slds-has-divider_bottom-space slds-media_center">
+                            <div class="slds-media__body">
+                                <h1 class="slds-page-header__title slds-align-middle">{!surveyRecordType} - Picture Uploads</h1>
+                                <h2>{!brandExcellence.Name}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-media slds-no-space slds-has-divider_bottom-space slds-media_center">
+                    <apex:image url="{!$Resource.logo}" styleClass="center"/>
+                </div>
+
+                <div class="slds-media slds-no-space slds-has-divider_bottom-space slds-media_center">
+                <ul class="slds-list_vertical-space-medium slds-m-left_xx-small">
+
+
+                    <apex:repeat value="{!pictureCategories}" var="category">
+                        <li class="slds-item">
+                            <div class="slds-text-title slds-truncate slds-m-bottom_xx-small" title="Field 7">{!category.MasterLabel}</div>
+                            <div class="slds-text-body_regular" title="Description">
+                                <input type="file" multiple="multiple" accept="image/*"
+                                       title="Club Info and Metrics" id="{!category.DeveloperName}"/>
+                            </div>
+                        </li>
+                    </apex:repeat>
+
+                </ul>
+                </div>
+                <p>
+                    <input type="button" title="Upload" value="Upload" id="submitButton"
+                           onclick="doSubmit()" class="slds-button slds-button--brand"/>
+                    <input type="button" title="Back" value="Back" id="cancelButton"
+                           onclick="goBack()" class="slds-button slds-button--neutral"/>
+                </p>
+
+
+
+                <div class="sk-folding-cube" id="spinner" hidden="true">
+                    <div class="sk-cube1 sk-cube"></div>
+                    <div class="sk-cube2 sk-cube"></div>
+                    <div class="sk-cube4 sk-cube"></div>
+                    <div class="sk-cube3 sk-cube"></div>
+                </div>
+
+                
+                <div id="result" class="center resultArea" hidden="true"></div>
+                <div id="completionStatus"></div>
+                <div id="counter" hidden="true">0</div>
+                <div id="totalFiles" hidden="true">0</div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+    </div>
+    </div>
+
+    <style>
+        body{
+            background: url(//www.tfaforms.com/theme-editor/images/dots.png) repeat rgba(149, 45, 152, 1.0);
+        }
+        
+        .resultArea{
+        	border: solid 2px black;
+        	margin: 10px;
+        	padding: 3px;
+        	
+        }
+
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+        }
+
+        .uploadFileDiv {
+            /*border: black 2px solid;*/
+            padding: 2px;
+            width: fit-content;
+            margin: auto;
+        }
+
+
+        .sk-folding-cube {
+            margin: 20px auto;
+            width: 40px;
+            height: 40px;
+            position: relative;
+            -webkit-transform: rotateZ(45deg);
+            transform: rotateZ(45deg);
+        }
+
+        .sk-folding-cube .sk-cube {
+            float: left;
+            width: 50%;
+            height: 50%;
+            position: relative;
+            -webkit-transform: scale(1.1);
+            -ms-transform: scale(1.1);
+            transform: scale(1.1);
+        }
+        .sk-folding-cube .sk-cube:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #333;
+            -webkit-animation: sk-foldCubeAngle 2.4s infinite linear both;
+            animation: sk-foldCubeAngle 2.4s infinite linear both;
+            -webkit-transform-origin: 100% 100%;
+            -ms-transform-origin: 100% 100%;
+            transform-origin: 100% 100%;
+        }
+        .sk-folding-cube .sk-cube2 {
+            -webkit-transform: scale(1.1) rotateZ(90deg);
+            transform: scale(1.1) rotateZ(90deg);
+        }
+        .sk-folding-cube .sk-cube3 {
+            -webkit-transform: scale(1.1) rotateZ(180deg);
+            transform: scale(1.1) rotateZ(180deg);
+        }
+        .sk-folding-cube .sk-cube4 {
+            -webkit-transform: scale(1.1) rotateZ(270deg);
+            transform: scale(1.1) rotateZ(270deg);
+        }
+        .sk-folding-cube .sk-cube2:before {
+            -webkit-animation-delay: 0.3s;
+            animation-delay: 0.3s;
+        }
+        .sk-folding-cube .sk-cube3:before {
+            -webkit-animation-delay: 0.6s;
+            animation-delay: 0.6s;
+        }
+        .sk-folding-cube .sk-cube4:before {
+            -webkit-animation-delay: 0.9s;
+            animation-delay: 0.9s;
+        }
+        @-webkit-keyframes sk-foldCubeAngle {
+            0%, 10% {
+                -webkit-transform: perspective(140px) rotateX(-180deg);
+                transform: perspective(140px) rotateX(-180deg);
+                opacity: 0;
+            } 25%, 75% {
+                  -webkit-transform: perspective(140px) rotateX(0deg);
+                  transform: perspective(140px) rotateX(0deg);
+                  opacity: 1;
+              } 90%, 100% {
+                    -webkit-transform: perspective(140px) rotateY(180deg);
+                    transform: perspective(140px) rotateY(180deg);
+                    opacity: 0;
+                }
+        }
+
+        @keyframes sk-foldCubeAngle {
+            0%, 10% {
+                -webkit-transform: perspective(140px) rotateX(-180deg);
+                transform: perspective(140px) rotateX(-180deg);
+                opacity: 0;
+            } 25%, 75% {
+                  -webkit-transform: perspective(140px) rotateX(0deg);
+                  transform: perspective(140px) rotateX(0deg);
+                  opacity: 1;
+              } 90%, 100% {
+                    -webkit-transform: perspective(140px) rotateY(180deg);
+                    transform: perspective(140px) rotateY(180deg);
+                    opacity: 0;
+                }
+        }
+    </style>
+</apex:page>
+
+
+<!--&lt;!&ndash;TODO: Render this only if it is a Operations form (not tour)&ndash;&gt;-->
+
+
+<!--<input type="file" multiple="multiple" title="Club Info and Metrics" id="filesInput"/>-->
+<!--<h2>Exterior Photos</h2>-->
+<!--<input type="file" multiple="multiple" title="Exterior Photos"/>-->
+<!--<h2>Gym Floor</h2>-->
+<!--<input type="file" multiple="multiple" title="Gym Floor"/>-->
+<!--<h2>Club Info and Metrics</h2>-->
+<!--<input type="file" multiple="multiple" title="Gym Floor"/>-->
+<!--<h2>People</h2>-->
+<!--<input type="file" multiple="multiple" title="Gym Floor"/>-->
+<!--<h2>Systems</h2>-->
+<!--<input type="file" multiple="multiple" title="Gym Floor"/>-->
+<!--<h2>Front Desk</h2>-->
+<!--<input type="file" multiple="multiple" title="Gym Floor"/>-->
+<!--<h2>Exterior and Entrance</h2>-->
+<!--<input type="file" multiple="multiple" title="Gym Floor"/>-->
+<!--<h2>Interior Signage</h2>-->
+<!--<input type="file" multiple="multiple" title="Gym Floor"/>-->
+<!--<h2>Gym Floor</h2>-->
+<!--<input type="file" multiple="multiple" title="Gym Floor"/>-->
+<!--<h2>Cardio</h2>-->
+<!--<input type="file" multiple="multiple" title="Gym Floor"/>-->
+<!--<h2>Strength</h2>-->
+<!--<input type="file" multiple="multiple" title="Gym Floor"/>-->
+<!--<h2>Locker Rooms</h2>-->
+<!--<input type="file" multiple="multiple" title="Gym Floor"/>-->
+<!--<h2>Black Card Spa</h2>-->
+<!--<input type="file" multiple="multiple" title="Gym Floor"/>-->
+<!--<h2>Atmosphere</h2>-->
+<!--<input type="file" multiple="multiple" title="Gym Floor"/>-->
+
+<!--&lt;!&ndash;ToDO: render this only if it is for the tour form&ndash;&gt;-->
+<!--<h2>Tour</h2>-->
+<!--<input type="file" multiple="multiple" title="Tour Form"/>-->

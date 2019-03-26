@@ -1,0 +1,23 @@
+<apex:component layout="none" controller="PFTermsAndConditionsController" allowDML="true">
+	<div class="modal fade" id="termsModal" tabindex="-1" role="dialog" aria-labelledby="termsModalLabel">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="termsModalLabel">Terms and Conditions</h4>
+				</div>
+				<div class="modal-body">
+					<apex:outputText escape="false" value="{!termsContent[0].Content__c}" />
+				</div>
+				<div class="modal-footer">
+					<apex:form >
+						<apex:commandButton styleclass="btn btn-primary" action="{!updateTermsAcceptance}" value="Accept"/>
+					</apex:form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+	var termsAccepted = {!areTermsAccepted} && {!IF(ISBLANK(termsAcceptedDateTime), false, termsContent[0].LastPublishedDate < termsAcceptedDateTime)};
+	</script>
+</apex:component>

@@ -1,0 +1,13 @@
+<apex:page docType="html-5.0" title="Chatter | Planet Fitness Franchise Community" label="PFChatter" name="PFChatter" showHeader="true" sidebar="false" standardStylesheets="false">
+	<div class="no-sf-style page-chatter">
+	 	<div class="container">
+	 		<div class="row">
+	 			<div class="col-md-12">
+	 				<div class="main-section">
+			 			<p class="section-title">Chatter</p>
+			 		</div>
+			 	</div>
+ 			</div>
+	 	</div>
+	</div>
+</apex:page>

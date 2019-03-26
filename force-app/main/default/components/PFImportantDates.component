@@ -1,0 +1,14 @@
+<apex:component controller="PFImportantDatesController" >
+    <p class="section-title"><i class="fa fa-calendar"></i> Important Dates</p>
+    <ul>
+        <apex:repeat value="{!recentEvents}" var="recentEvent" rendered="{!recentEvents!=null && recentEvents.size > 0}" >
+        	<li><a href="/{!recentEvent.ID}"><i class="fa fa-calendar-o"></i> 
+            <apex:outputText value="{0,date,MMM.dd }">
+                   <apex:param value="{!recentEvent.Event_Date__c}" />
+            </apex:outputText>
+            - {!recentEvent.Name} ></a></li>
+        </apex:repeat>
+
+        <a href="/apex/PFEvents" class="btn btn-pf" style="margin-top: 20px">VIEW MORE</a>
+    </ul>
+</apex:component>

@@ -1,0 +1,13 @@
+<apex:page standardController="Project__c" extensions="PFProjectDetailsController"  
+
+action="{!if( $Site.SiteType != null ,
+urlFor('/apex/PFClubDetail', club_id , [id = club_id  , nooverride=1,retURL=''], true ), 
+urlFor($Action.Project__c.View, Project__c.Id, [nooverride=1,retURL=''], true)) }"  >
+
+<!-- 
+PFCC-2857  (9/08/2015) Andres Di Geronimo-Stenberg (Magnet360)
+If the Project is access on the Community, it should take the user to the 
+ClubDeails page. Otherwise , should take the user to the View page of the Project 
+-->
+
+</apex:page>

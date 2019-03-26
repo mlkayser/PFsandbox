@@ -1,0 +1,24 @@
+<!-- Brett Hammond - this is a testing page for list views - this will not be used in the community and can be deleted -->
+<apex:page docType="html-5.0" title="Projects | Planet Fitness Franchise Community" label="PFProjects" name="PFProjects" showHeader="true" sidebar="false" standardStylesheets="false" standardController="Project__c">
+	<div class="no-sf-style page-test">
+	 	<div class="container">
+	 		<div class="row">
+	 			<div class="col-md-12">
+	 				<h1>Submit a site</h1>
+	 			</div>
+	 			<div class="col-md-12">
+
+				  	<div class="listview">
+
+
+				  		<apex:listViews type="Sites__c"/>
+
+
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</apex:page>

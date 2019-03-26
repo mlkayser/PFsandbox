@@ -1,0 +1,386 @@
+<apex:page controller="PFVoteController" docType="html-5.0"
+           title="Cast Your Vote! | Planet Fitness Franchise Community" label="pfVote"
+           name="pfVote"
+           showHeader="true" sidebar="false" standardStylesheets="false">
+    <head>
+        <apex:remoteObjects >
+            <apex:remoteObjectModel name="PollResult__c" jsShorthand="PollResult" fields="Name,Id">
+                <apex:remoteObjectField name="Poll__c" jsShorthand="Poll"/>
+                <apex:remoteObjectField name="Club__c" jsShorthand="Club"/>
+                <apex:remoteObjectField name="Poll_Answer__c" jsShorthand="PollAnswer"/>
+            </apex:remoteObjectModel>
+        </apex:remoteObjects>
+        <apex:includescript value="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"/>
+        <apex:includescript value="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"/>
+        <apex:includescript value="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js"/>
+        <script language="JavaScript">
+            angular.module('pfVoteApp', [])
+                    .factory('ApexController', ['$q', '$rootScope', function($q, $rootScope) {
+                        var ApexController = {};
+
+                        // Get List of Active Polls
+                        ApexController.getPoll = function(pollId) {
+                            var deferred = $q.defer();
+                            Visualforce.remoting.Manager.invokeAction(
+                                    '{!$RemoteAction.PFVoteController.getPoll}',
+                                    pollId,
+                                    function(result, event) {
+                                        $rootScope.$apply(function() {
+                                            if (event.status) {
+                                                deferred.resolve(result);
+                                            } else {
+                                                deferred.reject(event);
+                                            }
+                                        })
+                                    },
+                                    { buffer: true, escape: true, timeout: 30000 }
+                            );
+
+                            return deferred.promise;
+                        };
+
+                        // Get List of Poll Options
+                        ApexController.getPollOptions = function(pollId) {
+                            var deferred = $q.defer();
+                            Visualforce.remoting.Manager.invokeAction(
+                                    '{!$RemoteAction.PFVoteController.getPollOptions}',
+                                    pollId,
+                                    function(result, event) {
+                                        $rootScope.$apply(function() {
+                                            if (event.status) {
+                                                deferred.resolve(result);
+                                            } else {
+                                                deferred.reject(event);
+                                            }
+                                        })
+                                    },
+                                    { buffer: true, escape: true, timeout: 30000 }
+                            );
+
+                            return deferred.promise;
+                        };
+
+                        // Get List of Clubs
+                        ApexController.getClubs = function() {
+                            var deferred = $q.defer();
+                            Visualforce.remoting.Manager.invokeAction(
+                                    '{!$RemoteAction.PFVoteController.getClubs}',
+                                    function(result, event) {
+                                        $rootScope.$apply(function() {
+                                            if (event.status) {
+                                                deferred.resolve(result);
+                                            } else {
+                                                deferred.reject(event);
+                                            }
+                                        })
+                                    },
+                                    { buffer: true, escape: true, timeout: 30000 }
+                            );
+
+                            return deferred.promise;
+                        };
+
+                        // Insert the Poll Result record
+                        ApexController.insertPollResultRecord = function(record) {
+                            var deferred = $q.defer();
+                            record.create(function (err, records, event) {
+                                if (event.status && records.length > 0) {
+                                    deferred.resolve(records);
+                                } else {
+                                    deferred.reject(event);
+                                }
+                            });
+
+                            return deferred.promise;
+                        };
+
+                        return ApexController;
+                    }])
+                    .controller('pfVoteController', ['$scope', 'ApexController', function ($scope, $ApexController) {
+                        $scope.selectedPoll = [];
+                        $scope.pollOptions = [];
+                        $scope.clubs = [];
+                        $scope.pollResults = [];
+                        $scope.selections = [];
+
+                        $scope.getPoll = function(pollId) {
+                            var promise = $ApexController.getPoll(pollId);
+                            promise
+                                    .then(function(result) {
+                                        $scope.selectedPoll = result;
+                                        angular.forEach(result, function(res) {
+                                            $scope.getPollOptions(pollId);
+                                        });
+                                    })
+                                    .catch(function(err) {
+                                        console.log('getActivePolls failed with ' + err);
+                                    });
+                        };
+
+                        $scope.getPollOptions = function(pollId) {
+                            var promise = $ApexController.getPollOptions(pollId);
+                            promise
+                                    .then(function(result) {
+                                        $scope.pollOptions = result;
+                                    })
+                                    .catch(function(err) {
+                                        console.log('getPollOptions failed with ' + err);
+                                    });
+                        };
+
+                        $scope.getClubs = function() {
+                            var promise = $ApexController.getClubs();
+                            promise
+                                    .then(function(result) {
+                                        $scope.clubs = result;
+                                    })
+                                    .catch(function(err) {
+                                        console.log('getClubs failed with ' + err);
+                                    });
+                        };
+
+                        $scope.toggleSelectAllFor = function(option) {
+                            angular.forEach($scope.pollOptions, function(opt) {
+                                if(opt.Name === option) {
+                                    angular.forEach($scope.clubs, function(c) {
+                                        $scope.selections[c.Id] = opt.Id;
+                                    });
+                                }
+                            });
+                        };
+
+                        $scope.allClubsVoted = function() {
+                            var ret = true;
+                            angular.forEach($scope.clubs, function(c) {
+                                if($scope.selections[c.Id] === undefined)
+                                    ret = false;
+                            });
+                            return ret;
+                        };
+
+                        $scope.confirmVote = function () {
+                            if(!$scope.allClubsVoted()) {
+                                $('#confirmMissingClubVotes').modal();
+                            } else {
+                                $('#voteQuestionPanel')[0].style.display = 'none';
+                                $('#voteQuestionReviewPanel')[0].style.display = 'block';
+                                $('html, body').animate({
+                                    scrollTop: $('#voteQuestionReviewPanel').offset().top-1000
+                                }, 1000);
+                            }
+                        };
+
+                        $scope.confirmPartialVote = function () {
+                            $('#voteQuestionPanel')[0].style.display = 'none';
+                            $('#voteQuestionReviewPanel')[0].style.display = 'block';
+                            $('html, body').animate({
+                                scrollTop: $('#voteQuestionReviewPanel').offset().top-1000
+                            }, 1000);
+                        };
+
+                        $scope.processVotes = function() {
+                            $("input:radio").each(function(){
+                                var arr = $(this).attr('id').split('-');
+                                if($scope.selections[arr[2]] === undefined) { // Also include empty votes
+                                    $scope.selections[arr[2]] = null;
+                                    $scope.pollResults.push(createPollResult(arr[1], arr[2], null));
+                                }
+                                if($(this).is(':checked')) {
+                                    $scope.pollResults.push(createPollResult(arr[1], arr[2], $(this).attr('value')));
+                                }
+                            });
+                            console.log($scope.pollResults);
+                            $scope.saveToSalesforce();
+                        };
+
+                        $scope.saveToSalesforce = function() {
+                            // Put the records in scope for later processing
+                            var allPromises = [];
+                            for (var i = 0; i < $scope.pollResults.length; i++) {
+                                var pr = $scope.pollResults[i];
+                                var promise = $ApexController.insertPollResultRecord(pr);
+                                promise.then(function(record) {
+                                    console.log('Record created = ' + record);
+                                })
+                                .catch(function(err) {
+                                    console.log('Error when trying to save to Salesforce.  Error Message = ' + JSON.stringify(err));
+                                });
+                                allPromises.push(promise);
+                            }
+                            // Show Success Pane
+                            Promise.all(allPromises).then(function() {
+                                console.log('All upserts done!'); // Show visually
+                                voteCompleted();
+                            });
+                        };
+
+                        var pollId = getUrlParameter('pollId');
+                        $scope.selectedPoll = $scope.getPoll(pollId);
+                        $scope.clubs = $scope.getClubs();
+                    }]);
+
+            function getUrlParameter(name) {
+                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+                var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+                var results = regex.exec(location.search);
+                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+            }
+
+            function voteCompleted() {
+                $('#voteQuestionReviewPanel')[0].style.display = 'none';
+                $('#voteResultPanel')[0].style.display = 'block';
+                $('#voteButton')[0].style.display = 'block';
+            }
+
+            function createPollResult(pollId, clubId, answerId) {
+                return new SObjectModel.PollResult({
+                    Poll__c: pollId,
+                    Club__c: clubId,
+                    Poll_Answer__c: answerId
+                });
+            }
+        </script>
+    </head>
+    <body>
+    <div class="avs" ng-app="pfVoteApp">
+        <div ng-controller="pfVoteController">
+            <div class="no-sf-style page-body page-retail">
+                <div class="container">
+                    <div class="jumbotron">
+                        <div class="row">
+                            <div class="col-md-6 page-description">
+                                <h1>Cast your Vote!</h1>
+                                <p>Cast your vote for the upcoming changes!</p>
+                            </div>
+                            <div class="col-md-6 page-description-image hidden-xs hidden-sm">
+                                <img class="img-responsive" src="/resource/CommunityAssets/img/retail-banner.jpg"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <ol class="breadcrumb">
+                                        <li><a href="/apex/PFHomepage">Home</a></li>
+                                        <li>Cast your Vote</li>
+                                    </ol>
+                                    <div class="" id="voteQuestionPanel">
+                                        <div>
+                                            <h3>
+                                                {{selectedPoll.Name}} - {{selectedPoll.Question__c}}
+                                            </h3>
+                                        </div>
+                                        <div class="main-section">
+                                            <form id="voteResultsForm">
+                                                <br/>
+                                                <table class="table">
+                                                    <thead class="cf thead-custom">
+                                                    <tr>
+                                                        <th>Club</th>
+                                                        <th ng-repeat="po in pollOptions" class="text-center">{{po.Name}}<br/>(<a ng-click="toggleSelectAllFor(po.Name)">Select All</a>)</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody class="table-striped">
+                                                    <tr ng-repeat="c in clubs">
+                                                        <td>{{c.Name}}</td>
+                                                        <td ng-repeat="po in pollOptions" align="center">
+                                                            <div ng-show="selectedPoll.Poll_Type__c === 'Single Choice'">
+                                                                <input type="radio" name="Result-{{selectedPoll.Id}}-{{c.Id}}" id="Result-{{selectedPoll.Id}}-{{c.Id}}" ng-model="selections[c.Id]" value="{{po.Id}}"/>&nbsp;&nbsp;{{po.Name}}&nbsp;&nbsp;
+                                                            </div>
+                                                            <div ng-show="selectedPoll.Poll_Type__c === 'Multiple Choice'">
+                                                                <input type="checkbox" name="Result-{{selectedPoll.Id}}-{{c.Id}}" id="Result-{{selectedPoll.Id}}-{{c.Id}}" value="{{po.Id}}"/>&nbsp;&nbsp;{{po.Name}}&nbsp;&nbsp;
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </form>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <button type="button" class="btn btn-success btn" ng-click="confirmVote()" id="voteButton">
+                                                <span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;Vote
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="" id="voteQuestionReviewPanel" style="display: none;">
+                                        <div class="panel-heading">
+                                            <h3>
+                                                REVIEW AND CONFIRM YOUR VOTE - {{selectedPoll.Name}} - {{selectedPoll.Question__c}}
+                                            </h3>
+                                            <br/><br/><h4>Please review your vote results below before submitting.  If the votes are correct, click the <b>Cast Vote</b> button.  If they're not correct, click <b>Clear Vote</b>.</h4>
+                                        </div>
+                                        <div class="panel-body">
+                                            <br/>
+                                            <table class="table">
+                                                <thead class="cf thead-custom">
+                                                <tr>
+                                                    <th>Club</th>
+                                                    <th ng-repeat="po in pollOptions" class="text-center">{{po.Name}}</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody class="table-striped">
+                                                <tr ng-repeat="c in clubs">
+                                                    <td>{{c.Name}}</td>
+                                                    <td ng-repeat="po in pollOptions" align="center">
+                                                        <div ng-show="selectedPoll.Poll_Type__c === 'Single Choice' && selections[c.Id] === po.Id">
+                                                            {{po.Name}}
+                                                        </div>
+                                                        <div ng-show="selectedPoll.Poll_Type__c === 'Multiple Choice' && selections[c.Id] === po.Id">
+                                                            {{po.Name}}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <button type="button" class="btn btn-success btn" ng-click="processVotes()">
+                                                <span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;Cast Vote
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn" onclick="window.location.reload()">
+                                                <span class="glyphicon glyphicon glyphicon-repeat"></span>&nbsp;&nbsp;Clear Vote
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-primary" id="voteResultPanel" style="display: none;">
+                                        <div class="panel-body">
+                                            <h3>Thank you for your vote!  Every vote counts!</h3>
+                                        </div>
+                                        <div class="panel-footer">
+                                            <button type="button" class="btn" onclick="window.location.href='/'">
+                                                Return to Home Page
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!-- Successful Save Modal -->
+                                    <div class="modal fade" id="confirmMissingClubVotes" tabindex="-1" role="dialog" aria-labelledby="successfulSaveLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="successfulSaveLabel">Club Votes Missing</h4>
+                                                    <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body" style="font-size:16px;">
+                                                    You did not provide a vote for each Club, do you wish to continue?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary" ng-click="confirmPartialVote()" data-dismiss="modal">Yes</button>
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+</apex:page>

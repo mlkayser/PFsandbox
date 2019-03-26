@@ -1,0 +1,15 @@
+<apex:page >
+  <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    
+    <script>
+   
+        if (window.top.location.href.indexOf("fm-planetfitness") > -1) {
+
+        parent.document.location.href = "https://fm-planetfitness.force.com/apex/PFHomepage";
+        };
+        
+
+ 
+    </script>
+    
+</apex:page>

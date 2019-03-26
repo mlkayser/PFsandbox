@@ -1,0 +1,37 @@
+<apex:component >
+<!--apex:component controller="PFRetailController" >
+  <div class="row">
+                    <div class="col-md-12">
+                        <div class="main-section">
+                            <p class="section-title">Fusion Retail Barcodes</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12" id="no-more-tables">
+                        <table class="col-md-12 table-striped table-condensed cf">
+                            <thead class="cf thead-custom">
+                                <tr>
+                                    <th>Document Name</th>
+                                    <th>Document Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                 <apex:repeat value="{!FusionRetailBarcodes}" var="bar_code">
+                                    <tr>
+                                        <td data-title="Document Name">
+                                            <apex:outputLink value="/{!bar_code.KnowledgeArticleId}" >
+                                                {!bar_code.Title} 
+                                            </apex:outputLink>
+                                        </td>
+                                        <td data-title="Document Description">{!bar_code.Summary__c}</td>
+                                    </tr>
+                                 </apex:repeat>
+                            </tbody>
+                        </table>
+                    </div>
+                </div-->
+                <!-- not used <div class="more-clubs-link-container">
+                    <apex:outputLink styleClass="more-clubs-link" value="#">View More Barcodes ></apex:outputLink>
+                </div> -->
+</apex:component>

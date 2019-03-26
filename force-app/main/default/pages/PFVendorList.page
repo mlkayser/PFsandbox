@@ -1,0 +1,31 @@
+<apex:page controller="PFVendorListController" docType="html-5.0" title="Vendor List | Planet Fitness Franchise Community" label="PFVendorList" name="PFVendorList" showHeader="true" sidebar="false" standardStylesheets="false">
+	<div class="no-sf-style page-body page-vendor-list">
+	 	<div class="container">
+	 		<div class="jumbotron">
+		        <div class="row">
+		        	<div class="col-md-6 page-description">
+		        		<h1>Vendor List</h1>
+		        		<p>Welcome to Vendor Management! Below is a complete list of vendors approved by Planet Fitness. These vendors offer all products and services necessary to open and operate your clubs. For more information please contact our Vendor Management Specialist, Steve Fairhurst (Steve.Fairhurst@pfhq.com)</p>
+		        	</div>
+		        	<div class="col-md-6 page-description-image hidden-xs hidden-sm">
+		        		<img class="img-responsive" src="/resource/CommunityAssets/img/vendor-banner.jpg"/>
+		        	</div>
+		        </div>
+	      	</div>
+	      	<ol class="breadcrumb">
+			  <li><a href="/apex/PFHomepage">Home</a></li>
+			  <li>Vendor List</li>
+ 			</ol>
+	  		<div class="row">
+	 			<div class="col-md-12">
+	 				<div class="main-section">
+			 			<p class="section-title">Vendor List</p>
+			 		</div>
+			 	</div>
+			</div>
+			<div class="sites-listview-container">
+				<apex:enhancedList type="Account" customizable="false" height="400" listId="{!list_view}" />
+			</div>
+	 	</div>
+	</div>
+</apex:page>

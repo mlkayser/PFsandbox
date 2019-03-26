@@ -1,0 +1,9 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+
+    <aura:handler name="init" value="{!this}" action="{!c.getQuery}"/>
+	<aura:attribute name="query" type="String" />
+	<center>
+        <iframe id="myiframe" src="{!'https://www.tfaforms.com/4711073' + v.query}" allowfullscreen="yes" frameborder="0" scrolling="yes" height="500"></iframe>
+    </center>
+    
+</aura:component>

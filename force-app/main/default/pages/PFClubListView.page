@@ -1,0 +1,149 @@
+<apex:page controller="PFClubListViewController">
+    <apex:outputPanel id="resultsContainer">
+        <apex:form >
+            <apex:pageBlock >
+            	<apex:pageBlockTable value="{!Records}" var="myClub" rendered="{!Records.size != 0}">
+                	<apex:column >
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!doQuery}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="ShippingCity" />Location
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'ShippingCity'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}"/>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputText >{!myClub['ShippingCity']}, {!myClub['ShippingState']}</apex:outputText>
+                    </apex:column>
+                    
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!doQuery}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="Status__c" />Status
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'Status__c'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}"/>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputText value="{!myClub['Status__c']}"   />
+                    </apex:column>
+                    
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!doQuery}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="Status__c" />Gross EFT
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'Status__c'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}"/>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputText value="40"   />
+                    </apex:column>
+                    
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!doQuery}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="Status__c" />Projects
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'Status__c'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}"/>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputText value="5"   />
+                    </apex:column>
+                    
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!doQuery}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="ShippingCity" />Location
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'ShippingCity'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}"/>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputText value="50"   />
+                    </apex:column>
+                    
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!doQuery}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="Status__c" />Open Cases
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'Status__c'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}"/>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputText value="70"   />
+                    </apex:column>
+                    
+                </apex:pageBlockTable>
+            	<apex:outputText rendered="{!records.size == 0}" >No Record To Display</apex:outputText>
+            </apex:pageBlock>
+            <apex:outputPanel layout="block" style="float: left; width: 40%;" >
+                    Records Per Page:&nbsp;
+                    <apex:selectList value="{!numberOfRecsPerPage}" size="1" styleClass="no_records_select" style="height:26px !important;">
+                        <apex:selectOption itemLabel="10" itemValue="10" />
+                        <apex:selectOption itemLabel="25" itemValue="25" />
+                        <apex:selectOption itemLabel="50" itemValue="50" />
+                        <apex:selectOption itemLabel="100" itemValue="100" />
+                        <apex:selectOption itemLabel="200" itemValue="200" />
+                    </apex:selectList>
+                    <apex:actionSupport event="onchange" action="{!doQuery}" reRender="resultsContainer" status="searchStaus"  oncomplete="initJS();" />
+                    
+                </apex:outputPanel>
+                
+                <apex:outputPanel layout="block" style="float: right; width: 59.5%;" >
+                    
+                    <div class="paginator">
+                        <span class="prevNextLinks">
+                            <apex:outputPanel rendered="{!hasPreviousPage}" layout="block" style="float: left;">
+                                <span class="prevNext">
+                                    <apex:commandLink action="{!jumpToPage}" reRender="resultsContainer" status="searchStaus"  oncomplete="initJS();">
+                                        <apex:param name="currPageNum" assignTo="{!currPageNum}" value="{!1}" />
+                                        <img alt="First Page" class="first" src="/s.gif" />
+                                    </apex:commandLink>
+                                </span> <!-- @Ends GoToFirstPage -->
+                                
+                                <span class="prevNext">
+                                    <apex:commandLink action="{!jumpToPage}" reRender="resultsContainer" status="searchStaus"  oncomplete="initJS();">
+                                        <apex:param name="currPageNum" assignTo="{!currPageNum}" value="{!currPageNumInt - 1}" />
+                                        <img alt="Previous" class="prev" src="/s.gif" />Previous
+                                    </apex:commandLink>
+                                </span> <!-- @Ends Previous Page -->
+                            </apex:outputPanel>
+                            
+                            <apex:outputPanel rendered="{!NOT(hasPreviousPage)}" layout="block" style="float: left;">
+                                <span class="prevNext">
+                                    <img alt="First Page" class="firstoff" src="/s.gif" />
+                                </span> <!-- @Ends GoToFirstPage -->
+                                
+                                <span class="prevNext">
+                                    <img alt="Previous" class="prevoff" src="/s.gif" />Previous
+                                </span> <!-- @Ends Previous Page -->
+                            </apex:outputPanel> <!-- @Ends If Not hasPrevious -->
+                            
+                            <apex:outputPanel rendered="{!hasNextPage}" layout="block" style="float: left;">
+                                <span class="prevNext">
+                                    <apex:commandLink action="{!jumpToPage}" reRender="resultsContainer" status="searchStaus"  oncomplete="initJS();">
+                                        <apex:param name="currPageNum" assignTo="{!currPageNum}" value="{!currPageNumInt + 1}" />
+                                        Next<img class="next" alt="Next" title="Next" src="/s.gif" />
+                                    </apex:commandLink>
+                                </span> <!-- @Ends Next page -->
+                                
+                                <span class="prevNext">
+                                    <apex:commandLink action="{!jumpToPage}" reRender="resultsContainer" status="searchStaus"  oncomplete="initJS();">
+                                        <apex:param name="currPageNum" assignTo="{!currPageNum}" value="{!numberOfPages}" /> <img alt="Last Page" class="last" src="/s.gif" />
+                                    </apex:commandLink>
+                                </span> <!-- @Ends GoToLast page -->
+                            </apex:outputPanel> <!-- @Ends ifHasNextPage -->
+                            
+                            <apex:outputPanel rendered="{!NOT(hasNextPage)}" layout="block" style="float: left;">
+                                <span class="prevNext">
+                                    Next<img class="nextoff" alt="Next" title="Next" src="/s.gif" />
+                                </span> <!-- @Ends Next page -->
+                                
+                                <span class="prevNext">
+                                    <img alt="Last Page" class="lastoff" src="/s.gif" />
+                                </span> <!-- @Ends GoToLast page -->
+                            </apex:outputPanel> <!-- @Ends ifNotHasNextPage -->
+                            
+                        </span>
+                    </div>
+                    
+                    <apex:outputPanel layout="block" style="float: right;">
+                        &nbsp;<apex:inputText value="{!currPageNum}" style="width: 2em; height:26px !important;" styleClass="page_no_input" />
+                        <apex:actionSupport event="onkeydown" status="searchStaus" onsubmit="if ( event.keyCode != 13 ) {return;} else{event.preventDefault();}"
+                                            action="{!jumpToPage}" reRender="resultsContainer"  oncomplete="initJS();setCheckBoxes();" />
+                        Of {!numberOfPages}
+                    </apex:outputPanel>
+                </apex:outputPanel>
+        </apex:form>
+    </apex:outputPanel>
+</apex:page>

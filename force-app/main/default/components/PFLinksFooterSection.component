@@ -1,0 +1,63 @@
+<apex:component controller="PFLinksFooterSectionController">
+    <!-- Links Section -->
+    <div class="links-section">
+        <div class="container">
+            <div class="row">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <c:PFImportantDates />
+                            </div>
+                            <div class="col-md-4">
+                                <p class="section-title"><i class="fa fa-bookmark"></i> Links</p>
+                                <ul>
+                                    <li><a href="/PFVendorList">Vendor List</a></li>
+                                    <li><a href="/PFMySites">My Sites</a></li>
+                                    <li><a href="/apex/PFNewTerritory">Request a New Territory</a></li>
+                                    <li><a href="/apex/PFExistingTerritory">Request a Project for Existing Territory</a></li>
+                                </ul>
+
+                                <!--apex:outputPanel rendered="{!$User.Email == 'manuela.lkayser@gmail.com'}" >
+                                    <br/>
+                                    <a href="https://full2-fm-planetfitness.cs26.force.com/idp/login?app=0sp210000004CCg" class="btn btn-pf" style="margin-top: 20px">SHAREPOINT</a>
+                                    <br/>
+                                </apex:outputPanel-->
+
+                                <apex:outputPanel >
+                                    <br/>
+                                    <a href="https://sandbox-fm-planetfitness.cs40.force.com/idp/login?app=0sp0a0000000OIk" class="btn btn-pf" style="margin-top: 20px">MATRIX DEV</a>
+                                    <br/>
+                                </apex:outputPanel> 
+
+                                <apex:outputPanel rendered="{!isSharingAccess}">
+                                    <a href="/apex/SharingWizard" class="btn btn-pf" style="margin-top: 20px">SHARING ACCESS</a>
+                                </apex:outputPanel>    
+
+                                <apex:outputPanel rendered="{!isCognosUser}">
+                                    <br/>
+                                    <a href="https://sandbox-fm-planetfitness.cs40.force.com/idp/login?app=0sp0a0000000OHD" class="btn btn-pf" style="margin-top: 20px">FRANCHISEE REPORTING DEV</a>
+                                    <!--a href="https://fm-planetfitness.force.com/idp/login?app=0sp0a0000000OHD" class="btn btn-pf" style="margin-top: 20px">FRANCHISEE REPORTING</a-->
+                                </apex:outputPanel>
+
+                                <apex:outputPanel rendered="{!isEmailMarketingUser}">
+                                    <br/>
+                                    <a href="https://fm-planetfitness.force.com/idp/login?app=0sp0a000000XbWm" class="btn btn-pf" style="margin-top: 20px">EMAIL MARKETING</a>
+                                </apex:outputPanel>
+
+                                <apex:outputPanel rendered="{!isMarketingSpendUser}">
+                                    <br/>
+                                    <a href="/apex/PFMarketingSpendStatus" class="btn btn-pf" style="margin-top: 20px">MARKETING SPEND SUBMISSION</a>
+                                </apex:outputPanel>
+
+                            </div>
+                            <div class="col-md-4">
+                                <c:PFJudgementFreePress />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>  
+    </div>
+</apex:component>

@@ -1,0 +1,36 @@
+<apex:component >
+<div class="row">
+                    <div class="col-md-12">
+                        <div class="main-section">
+                            <p class="section-title">Approved Items</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12" id="no-more-tables">
+                        <table class="col-md-12 table-striped table-condensed cf">
+                            <thead class="cf">
+                                <tr>
+                                    <th>Brand Name</th>
+                                    <th>Description</th>
+                                    <th>Barcode</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- <apex:repeat value="" var=""> -->
+                                    <tr>
+                                        <td data-title="Brand Name">Aloe There</td>
+                                        <td data-title="Description">8.5 oz Bottle</td>
+                                        <td data-title="Barcode">33442323446</td>
+                                        <td data-title="Status">APPROVED</td>
+                                    </tr>
+                                <!-- </apex:repeat> -->                             
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="more-clubs-link-container">
+                    <apex:outputLink styleClass="more-clubs-link" value="#">View More Items ></apex:outputLink>
+                </div>
+</apex:component>

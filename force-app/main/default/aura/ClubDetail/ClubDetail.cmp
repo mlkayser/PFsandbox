@@ -1,0 +1,28 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+    
+    <aura:handler name="init" value="{!this}" action="{!c.getClubStatus}"/>
+    <aura:attribute name="status" type="String" />
+    
+    <!--
+	Account Share Records
+    <aura:attribute name="settings" type="Community_Settings__c" />
+    <aura:attribute name="contacts" type="Contact[]" />    
+    <c:AccountShareRecordsCmpnt />
+	-->
+    
+	<c:ClubInfo />
+    <c:ClubCorpContacts />
+    
+    <aura:if isTrue="{! and(v.status != 'Open', 
+                     		v.status != 'Dead',
+                      		v.status != 'Closed', 
+                     		v.status != 'Inactive')}">
+    	<c:ClubMilestones />
+  	</aura:if> 
+    
+    <aura:if isTrue="{!v.status == 'Open'}">
+        <c:ClubBrandExcellence />
+        <c:ClubMarketingSpend />
+    </aura:if>
+    
+</aura:component>

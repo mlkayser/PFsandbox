@@ -1,0 +1,439 @@
+<apex:page standardController="Account" extensions="PFClubDetailController" docType="html-5.0" title="My Club Details | Planet Fitness Franchise Community" label="PFClubDetail" name="PFClubDetail" showHeader="true" sidebar="false" standardStylesheets="false">
+     <apex:stylesheet value="{!$Resource.MilestoneStyles2}"/>
+    
+    <div class="no-sf-style page-body page-club-detail">
+        <div class="container" style="margin-top:-24px;">
+            
+            <img src="{!$Resource.ClubHeader}" style="width:100%;"/>
+            <ol class="breadcrumb" style="margin-bottom:25px;">
+              <li><a href="/apex/PFHomepage">Home</a></li>
+              <li><a href="/apex/PFClubs">My Clubs</a></li>
+              <li style="font-weight:normal">{!Account.Name}</li>
+            </ol>
+
+            <div class="club-information-section">
+                <div class="row">
+                    <div class="club-social" style="float:right; margin-right:30px;">
+                        <apex:outputLink target="_blank" value="{!if(Account.Facebook_URL__c!=null,Account.Facebook_URL__c,$Setup.Community_Settings__c.Facebook_URL__c )}">
+                            <apex:image url="{!URLFOR($Resource.Social_Icons, 'images/facebook_icon_sm.png')}" style="padding-left:5px;"/>
+                        </apex:outputLink>
+                        <apex:outputLink target="_blank" value="{!if(Account.Twitter_URL__c!=null,Account.Twitter_URL__c,$Setup.Community_Settings__c.Twitter_URL__c )}">
+                            <apex:image url="{!URLFOR($Resource.Social_Icons, 'images/twitter_icon_sm.png')}" style="padding-left:5px;"/>
+                        </apex:outputLink>
+                        <apex:outputLink target="_blank" value="{!if(Account.Instagram_URL__c!=null,Account.Instagram_URL__c,$Setup.Community_Settings__c.Instagram_URL__c )}">
+                            <apex:image url="{!URLFOR($Resource.Social_Icons, 'images/instagram_icon_sm.png')}" style="padding-left:5px;"/>
+                        </apex:outputLink>
+                        <apex:outputLink target="_blank" value="{!if(Account.Google_Plus_URL__c!=null,Account.Google_Plus_URL__c,$Setup.Community_Settings__c.Google_Plus_URL__c )}">
+                            <apex:image url="{!URLFOR($Resource.Social_Icons, 'images/googleplus_icon_sm.png')}" style="padding-left:5px;"/>
+                        </apex:outputLink>
+                        <apex:outputLink target="_blank" value="{!Account.Website}">
+                            <apex:image url="{!URLFOR($Resource.Social_Icons, 'images/planetfitness_icon_sm.png')}" style="padding-left:5px;"/>
+                        </apex:outputLink>
+                    </div>
+                    <div style="display: inline-block; vertical-align:top;">
+                        <apex:outputPanel rendered="{!photo_id = null }">
+                            <img src="{!$Resource.ClubInDevLogo3}" style="width:225px; margin-left:10px; border-radius:5px;"/>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!photo_id != null }">
+                            <apex:image style="width:225px; margin-left:10px;" url="/servlet/servlet.FileDownload?file={!photo_id}"/>  
+                        </apex:outputPanel>                     
+                    </div>
+                    <div style="display: inline-block; vertical-align:top; margin-left:10px;">
+                        <div class="ClubTitle">{!Account.Name}</div>
+                        <apex:outputPanel rendered="{!Account.ShippingStreet != null}">
+                            <div class="ClubAddress">
+                                {!Account.ShippingStreet}<br/>
+                                {!Account.ShippingCity}, {!Account.ShippingState} {!Account.ShippingPostalCode}<br/>
+                                <i class="fa fa-phone icon-padding"></i><span style="font-weight:normal;">{!Account.Phone}</span><br/>
+                                <i class="fa fa-envelope icon-padding"></i><a href="mailto:{!clubemail}" style="font-weight:normal;">{!clubemail}</a>
+                            </div>
+                        </apex:outputPanel>
+                        <div class="ClubDetails" style="line-height:20px; display:inline-block; vertical-align:top; width:340px; padding:10px; margin-right:5px; ">
+                            <i class="fa fa-bookmark-o icon-padding"></i><b>PF Club ID:</b> {!Account.PF_Club_ID__c} &nbsp;&nbsp;<br/> 
+                            <i class="fa fa-bookmark-o icon-padding"></i><b>POS Club ID:</b> {!ABCid}<br/>
+                            <i class="fa fa-bookmark-o icon-padding"></i><b>Group:</b>&nbsp;&nbsp;{!groupfullname}<br/>
+                            <apex:outputPanel rendered="{! if(Account.Status__c != 'Open', true, false)}">
+                                <i class="fa fa-bookmark-o icon-padding"></i><b>Projected Open Date:</b>&nbsp; <apex:outputText value="{0,date,MM'/'dd'/'yyyy}" style="font-weight:normal;"><apex:param value="{!projectedopendate}"/></apex:outputText><br/>
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{! if(Account.Status__c == 'Open' && Account.Closed_Status_Reason__c == 'Relocation', true, false)}">
+                                <i class="fa fa-bookmark-o icon-padding"></i><b>Projected Relocation Open Date:</b>&nbsp; <apex:outputText value="{0,date,MM'/'dd'/'yyyy}" style="font-weight: normal;"><apex:param value="{!projectedopendate}"/></apex:outputText><br/>
+                            </apex:outputPanel>
+                            <i class="fa fa-bookmark-o icon-padding"></i><b>Opened:</b>&nbsp; <apex:outputText value="{0,date,MM'/'dd'/'yyyy}" style="font-weight:normal;"><apex:param value="{!opendate}"/></apex:outputText><br/>
+                            <!--<b>Square Footage: </b>  <apex:outputText value="{0, number, ###,##0}" style="font-weight:700;"><apex:param value="{!sqfoot}"/></apex:outputText>-->
+                        </div>                            
+                    </div>
+                </div>
+            </div>
+            
+            <p class="section-title">Corporate Contacts</p>
+            <br/>
+                <c:PFCorpContacts AccountID="{!clubInfo.id}"/>
+            <br/>
+            <br/>
+            
+            <!-- IF THE CLUB IS OPEN SHOW THIS SECTION -->
+            <apex:outputPanel rendered="{! if( Account.Status__c == 'Open', true, false)}">
+                <div class="my-group-health-section">
+                    <c:PFHomepageGroupHealth />
+                </div>
+            </apex:outputPanel>
+            
+            <!-- IF THE CLUB IS IN DEVELOPMENT SHOW THIS SECTION -->
+            <apex:outputPanel rendered="{! if((Account.Status__c != 'Open' || (Account.Status__c == 'Open' && Account.Closed_Status_Reason__c == 'Relocation')), true, false)}">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="main-section">
+                            <p class="section-title">My Club Status</p>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                            
+                            <!-- Real Estate Milestone -->
+                            <div class="milestonebox">
+                                <div class="milestontitle">Real Estate Milestone</div>
+                                <div Class="MilestoneIcon" style="padding-top:30px; margin-bottom:10px;">
+                                    <apex:image url="http://app.planetfitness.com/salesforce/assets/re_icon.png" />
+                                </div>
+                                <div class="DescriptionDiv">
+                                    Use the buttons below to track potential sites, and to submit sites you’d like formally 
+                                    considered for this proposed location. The Landlord Work letter provides expected construction 
+                                    and design specifications with which the site should comply. At this point you should reach out 
+                                    to your assigned Real Estate Director so they can work with you to ensure the site selection 
+                                    process proceeds smoothly. Visit “My Sites” to provide updates on potential sites, monitor 
+                                    progress on PFHQ approval, and upload your letter of intent, draft lease, and fully executed 
+                                    lease to the correct site page. Once your site is approved, you should reach out to your assigned 
+                                    Pre-Opening Project Manager. They will help guide you through the remaining Milestones.
+
+                                    <div class="ButtonDiv">
+                                        <!-- Track a Potential Site -->
+                                        <apex:outputLink styleClass="MilestonButtons" value="/PFTrackSite?projectid={!project_id}&userid={!$User.Id}" >Track a Potential Site</apex:outputLink>
+                                        <!-- Submit a Site -->
+                                        <apex:outputLink styleClass="MilestonButtons" value="/PFSubmitSite?projectid={!project_id}&userid={!$User.Id}" >Submit A Site</apex:outputLink>
+                                        <!-- View Workletter -->
+                                        <apex:outputLink styleClass="MilestonButtons" value="{!$Resource.WorkLetter}" target="_new" >View Workletter</apex:outputLink>
+                                        <!-- View All Sites -->
+                                        <apex:outputLink styleClass="MilestonButtons" value="/PFMySites" >View All Sites</apex:outputLink>
+                                    </div>
+                                </div>
+                                <div class="ProgressDiv">    
+                                    <apex:variable value="{!1}" var="count"/>
+                                    <table class="list" border="0" cellpadding="0" cellspacing="0" style="margin-left:auto; margin-right:auto;" > 
+                                        <tr>
+                                            <apex:repeat value="{!REStatus}" var="value">
+                                                <td style="padding:10px; font-size:12px; font-weight:bold; color:#727272;">
+                                                    <span style="color:#952d98; font-weight:bold; display:{!IF(count <= REStatNum, 'normal', 'none')};">&#10004;</span>
+                                                    <span style="font-weight:bold; display:{!IF(count > REStatNum, 'normal', 'none')};">&#10079;</span>
+                                                    {!value} 
+                                                    <apex:variable var="count" value="{!count+ 1}"/>
+                                                </td>
+                                            </apex:repeat>
+                                       </tr>
+                                    </table>
+                                    <div class="statusoutter">
+                                        <div class="statusinner">
+                                            <div class="statusbar" style="width:{!REProgress}%;"></div> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Franchise Agreement Milestone -->
+                            <div class="milestonebox">
+                                <div class="milestontitle">Franchise Agreement Milestone</div>
+                                <div Class="MilestoneIcon">
+                                    <apex:image url="http://app.planetfitness.com/salesforce/assets/fa_icon.png" />                                 
+                                </div>
+                                <div class="DescriptionDiv">
+                                    <!--Once LOI is signed and your lease is being reviewed by your attorney, the next step will be to have a preliminary layout of the club created and a Franchise Agreement drafted and signed.-->
+                                    Once LOI is signed and your lease is being reviewed by your attorney, the next step will be to have a preliminary layout of the club created and a Franchise Agreement drafted and signed. Use the buttons below to download and submit the preliminary information form (“Prelim”) which is required to request a franchise agreement.
+                                    <div class="ButtonDiv">
+                                        <!-- Submit Prelim-->
+                                        <!-- <apex:outputLink styleClass="MilestonButtons" value="/PFSubmitPrelim?projectid={!project_id}&accountid={!Account.Id}" >Submit Prelim</apex:outputLink> -->
+
+                                        <!-- Submit a Site -->
+                                        <apex:outputLink styleClass="MilestonButtons" value="/PFSubmitPrelim2?projectid={!project_id}&accountid={!Account.Id}&userid={!$User.Id}" disabled="{!VALUE(FAProgress) == 100}">Submit Prelim</apex:outputLink>   
+
+                                        <!-- Knowledge Article -->
+                                        <apex:outputLink styleClass="MilestonButtons" value="/kAF0a000000TNEn">Download Prelim</apex:outputLink> <!-- Sandbox: kaF210000004CPpEAM, Production: kAF0a000000TNEn -->
+                                    </div>
+                                </div>
+                                <div class="ProgressDiv">    
+                                    <apex:variable value="{!1}" var="count_FA"/>
+                                    <table class="list" border="0" cellpadding="0" cellspacing="0" style="margin-left:auto; margin-right:auto;" > 
+                                        <tr>
+                                            <apex:repeat value="{!FAStatus}" var="value">
+                                                <td style="padding:10px; font-size:12px; font-weight:bold; color:#727272;">
+                                                    <span style="color:#952d98; font-weight:bold; display:{!IF(count_FA <= FAStatNum, 'normal', 'none')};">&#10004;</span>
+                                                    <span style="font-weight:bold; display:{!IF(count_FA > FAStatNum, 'normal', 'none')};">&#10079;</span>
+                                                    {!value} 
+                                                    <apex:variable var="count_FA" value="{!count_FA + 1}"/>
+                                                </td>
+                                            </apex:repeat>
+                                       </tr>
+                                    </table>
+                                    
+                                    <div class="statusoutter">
+                                        <div class="statusinner">
+                                            <div class="statusbar" style="width:{!FAProgress}%;"></div> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Design Milestone -->
+                            <div class="milestonebox">
+                                <div class="milestontitle">Design Milestone</div>
+                                <div Class="MilestoneIcon">
+                                    <apex:image url="http://app.planetfitness.com/salesforce/assets/design_icon.png" />
+                                </div>
+                                <div class="DescriptionDiv" >
+                                    This milestone tracks progress in the approval of your site design so that you’re fully prepared to move to the permitting phase.  Please use the buttons below to submit your schematics and construction documents.
+                                    <div class="ButtonDiv">
+                                        <!-- Submit Construction Docs -->
+                                        <apex:outputLink styleClass="MilestonButtons" value="/PFSubmitDocuments?projectid={!project_id}" >Submit Construction Docs</apex:outputLink>
+                                        <!-- Submit Schematics -->
+                                        <apex:outputLink styleClass="MilestonButtons" value="/PFSubmitDocuments?projectid={!project_id}" >Submit Schematics</apex:outputLink>
+                                    </div>
+                                </div>
+                                <div class="ProgressDiv">    
+                                    <apex:variable value="{!1}" var="count_Des"/>
+                                    <table class="list" border="0" cellpadding="0" cellspacing="0" style="margin-left:auto; margin-right:auto;" > 
+                                        <tr>
+                                            <apex:repeat value="{!DesignStatus}" var="value">
+                                                <td style="padding:10px; font-size:12px; font-weight:bold; color:#727272;">
+                                                    <span style="color:#952d98; font-weight:bold; display:{!IF(count_Des <= DesignStatNum, 'normal', 'none')};">&#10004;</span>
+                                                    <span style="font-weight:bold; display:{!IF(count_Des > DesignStatNum, 'normal', 'none')};">&#10079;</span>
+                                                    {!value} 
+                                                    <apex:variable var="count_Des" value="{!count_Des + 1}"/>
+                                                </td>
+                                            </apex:repeat>
+                                       </tr>
+                                    </table>
+                                    <div class="statusoutter">
+                                        <div class="statusinner">
+                                            <div class="statusbar" style="width:{!DesignProgress}%;"></div> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Permitting Milestone -->
+                            <div class="milestonebox">
+                                <div class="milestontitle">Permitting Milestone</div>
+                                <div Class="MilestoneIcon">
+                                    <apex:image url="http://app.planetfitness.com/salesforce/assets/permit_icon.png" />
+                                </div>
+                                <div class="DescriptionDiv" >
+                                    Permitting progress is tracked here and can be one of the most time consuming phases as you wait for government officials to approve you for construction.  While waiting for permits this is a good opportunity to work with your PFHQ Construction Director to review bids and proposals.
+                                </div>
+                                <div class="ProgressDiv">    
+                                    <apex:variable value="{!1}" var="count_Per"/>
+                                    <table class="list" border="0" cellpadding="0" cellspacing="0" style="margin-left:auto; margin-right:auto;" > 
+                                        <tr>
+                                            <apex:repeat value="{!PermitStatus}" var="value">
+                                                <td style="padding:10px; font-size:12px; font-weight:bold; color:#727272;">
+                                                    <span style="color:#952d98; font-weight:bold; display:{!IF(count_Per <= PermitStatNum, 'normal', 'none')};">&#10004;</span>
+                                                    <span style="font-weight:bold; display:{!IF(count_Per > PermitStatNum, 'normal', 'none')};">&#10079;</span>
+                                                    {!value} 
+                                                    <apex:variable var="count_Per" value="{!count_Per + 1}"/>
+                                                </td>
+                                            </apex:repeat>
+                                       </tr>
+                                    </table>
+                                    <div class="statusoutter">
+                                        <div class="statusinner">
+                                            <div class="statusbar" style="width:{!PermitProgress}%;"></div> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Construction Milestone -->
+                            <div class="milestonebox">
+                                <div class="milestontitle">Contruction Milestone</div>
+                                <div Class="MilestoneIcon">
+                                    <apex:image url="http://app.planetfitness.com/salesforce/assets/con_icon.png" />
+                                </div>
+                                <div class="DescriptionDiv" >
+                                    Moving through this phase will require close coordination with you assigned PFHQ Construction Director.  Use the button below to upload your Construction Schedule.
+                                    <div class="ButtonDiv">
+                                        <!-- Submit Construction Schedule -->
+                                        <apex:outputLink styleClass="MilestonButtons" value="/PFSubmitDocuments?projectid={!project_id}" >Submit Construction Schedule</apex:outputLink>
+                                    </div>
+                                </div>
+                                <div class="ProgressDiv">    
+                                    <apex:variable value="{!1}" var="count_Con"/>
+                                    <table class="list" border="0" cellpadding="0" cellspacing="0" style="margin-left:auto; margin-right:auto;" > 
+                                        <tr>
+                                            <apex:repeat value="{!ConStatus}" var="value">
+                                                <td style="padding:10px; font-size:12px; font-weight:bold; color:#727272;">
+                                                    <span style="color:#952d98; font-weight:bold; display:{!IF(count_Con <= ConStatNum, 'normal', 'none')};">&#10004;</span>
+                                                    <span style="font-weight:bold; display:{!IF(count_Con > ConStatNum, 'normal', 'none')};">&#10079;</span>
+                                                    {!value} 
+                                                    <apex:variable var="count_Con" value="{!count_Con + 1}"/>
+                                                </td>
+                                            </apex:repeat>
+                                       </tr>
+                                    </table>
+                                    <div class="statusoutter">
+                                        <div class="statusinner">
+                                            <div class="statusbar" style="width:{!ConProgress}%;"></div> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Equipment Milestone -->
+                            <div class="milestonebox">
+                                <div class="milestontitle">Equipment Milestone</div>
+                                <div Class="MilestoneIcon">
+                                    <apex:image url="http://app.planetfitness.com/salesforce/assets/equip_icon.png" />
+                                </div>
+                                <div class="DescriptionDiv" >
+                                    This milestone tracks initial contact with the PFHQ equipment team and then the process from quote to placement.   Work with your PFHQ equipment coordinator for more information.
+                                </div>
+                                <div class="ProgressDiv">    
+                                    <apex:variable value="{!1}" var="count_Equip"/>
+                                    <table class="list" border="0" cellpadding="0" cellspacing="0" style="margin-left:auto; margin-right:auto;" > 
+                                        <tr>
+                                            <apex:repeat value="{!EquipStatus}" var="value">
+                                                <td style="padding:10px; font-size:12px; font-weight:bold; color:#727272;">
+                                                    <span style="color:#952d98; font-weight:bold; display:{!IF(count_Equip <= EquipStatNum, 'normal', 'none')};">&#10004;</span>
+                                                    <span style="font-weight:bold; display:{!IF(count_Equip > EquipStatNum, 'normal', 'none')};">&#10079;</span>
+                                                    {!value} 
+                                                    <apex:variable var="count_Equip" value="{!count_Equip + 1}"/>
+                                                </td>
+                                            </apex:repeat>
+                                       </tr>
+                                    </table>
+                                    <div class="statusoutter">
+                                        <div class="statusinner">
+                                            <div class="statusbar" style="width:{!EquipProgress}%;"></div> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+ 
+                             <!-- IT Milestone -->
+                            <!--div class="milestonebox">
+                                <div class="milestontitle">IT Milestone</div>
+                                <div Class="MilestoneIcon">
+                                    <apex:image url="http://app.planetfitness.com/salesforce/assets/equip_icon.png" />
+                                </div>
+                                <div class="DescriptionDiv" >
+                                    NEED TEXT
+                                </div>
+                                <div class="ProgressDiv">    
+                                    <apex:variable value="{!1}" var="count_IT"/>
+                                    <table class="list" border="0" cellpadding="0" cellspacing="0" style="margin-left:auto; margin-right:auto;" > 
+                                        <tr>
+                                            <apex:repeat value="{!ITStatus}" var="value">
+                                                <td style="padding:10px; font-size:12px; font-weight:bold; color:#727272;">
+                                                    <span style="color:#952d98; font-weight:bold; display:{!IF(count_IT <= ITStatNum, 'normal', 'none')};">&#10004;</span>
+                                                    <span style="font-weight:bold; display:{!IF(count_IT > ITStatNum, 'normal', 'none')};">&#10079;</span>
+                                                    {!value} 
+                                                    <apex:variable var="count_IT" value="{!count_IT + 1}"/>
+                                                </td>
+                                            </apex:repeat>
+                                       </tr>
+                                    </table>
+                                    <div class="statusoutter">
+                                        <div class="statusinner">
+                                            <div class="statusbar" style="width:{!EquipProgress}%;"></div> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div-->
+
+                            <!-- Pre-Opening Operations Milestone -->
+                            <div class="milestonebox">
+                                <div class="milestontitle">Pre-Opening Operations Milestone</div>
+                                <div Class="MilestoneIcon">
+                                    <apex:image url="http://app.planetfitness.com/salesforce/assets/pre_icon.png" />
+                                </div>
+                                <div class="DescriptionDiv" >
+                                    Steps to complete this milestone include training your staff and preparing your presale marketing plan.  There are also follow up tasks to track the success of your first year of operations that will continue to be tracked here.
+                                    <div class="ButtonDiv">
+                                        <!-- Presale Checklists Knowledge Article -->
+                                        <apex:outputLink styleClass="MilestonButtons" value="/kAF0a000000TNHl">Pre-Opening Resources</apex:outputLink><!-- sandbox:kaF210000004CRjEAM production: kAF0a000000TNHl -->
+                                        <!-- Operations Manual Knowledge Article -->
+                                        <apex:outputLink styleClass="MilestonButtons" value="/kAF0a000000TNJE">Operations Manual</apex:outputLink><!-- sandbox=kaF210000004CS0EAM  production=kAF0a000000TNJE -->
+                                        <!-- Means and Methods Knowledge Article -->
+                                        <apex:outputLink styleClass="MilestonButtons" value="/kAF0a000000TNDu">Means and Methods</apex:outputLink><!-- sandbox=kaF210000004CPsEAM production=kAF0a000000TNDu --> 
+                                    </div>
+                                </div>
+                                <div class="ProgressDiv">    
+                                    <apex:variable value="{!1}" var="count_Pre"/>
+                                    <table class="list" border="0" cellpadding="0" cellspacing="0" style="margin-left:auto; margin-right:auto;" > 
+                                        <tr>
+                                            <apex:repeat value="{!PreStatus}" var="value">
+                                                <td style="padding:10px; font-size:12px; font-weight:bold; color:#727272;">
+                                                    <span style="color:#952d98; font-weight:bold; display:{!IF(count_Pre <= PreStatNum, 'normal', 'none')};">&#10004;</span>
+                                                    <span style="font-weight:bold; display:{!IF(count_Pre > PreStatNum, 'normal', 'none')};">&#10079;</span>
+                                                    {!value} 
+                                                    <apex:variable var="count_Pre" value="{!count_Pre + 1}"/>
+                                                </td>
+                                            </apex:repeat>
+                                       </tr>
+                                    </table>
+                                    <div class="statusoutter">
+                                        <div class="statusinner">
+                                            <div class="statusbar" style="width:{!PreProgress}%;"></div> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Presale Milestone -->
+                            <div class="milestonebox">
+                                <div class="milestontitle">Presale Milestone</div>
+                                <div Class="MilestoneIcon">
+                                    <apex:image url="http://app.planetfitness.com/salesforce/assets/sale_icon.png" />
+                                </div>
+                                <div class="DescriptionDiv" >
+                                    Use the buttons below to establish your online and physical presale dates, and update them as changes occur.
+                                    <div class="ButtonDiv">
+                                        <!-- Update Projected Opening Date -->
+                                        <apex:outputLink styleClass="MilestonButtons" value="/PFSubmitDates?projectid={!project_id}" >Update Projected Opening Date</apex:outputLink>
+                                        <!-- Submit Physical Presale Date 
+                                        <apex:outputLink styleClass="MilestonButtons" value="/PFSubmitDates?projectid={!project_id}" >Submit Physical Presale Date</apex:outputLink> -->
+                                    </div>
+                                </div>
+                                <div class="ProgressDiv">    
+                                    <apex:variable value="{!1}" var="count_Sale"/>
+                                    <table class="list" border="0" cellpadding="0" cellspacing="0" style="margin-left:auto; margin-right:auto;" > 
+                                        <tr>
+                                            <apex:repeat value="{!SaleStatus}" var="value">
+                                                <td style="padding:10px; font-size:12px; font-weight:bold; color:#727272;">
+                                                    <span style="color:#952d98; font-weight:bold; display:{!IF(count_Sale <= SaleStatNum, 'normal', 'none')};">&#10004;</span>
+                                                    <span style="font-weight:bold; display:{!IF(count_Sale > SaleStatNum, 'normal', 'none')};">&#10079;</span>
+                                                    {!value} 
+                                                    <apex:variable var="count_Sale" value="{!count_Sale + 1}"/>
+                                                </td>
+                                            </apex:repeat>
+                                       </tr>
+                                    </table>
+                                    <div class="statusoutter">
+                                        <div class="statusinner">
+                                            <div class="statusbar" style="width:{!SaleProgress}%;"></div> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>
+           
+            <apex:outputPanel rendered="{! if( Account.Status__c == 'Open', true, false)}">
+                <c:PFLinksFooterSection />
+            </apex:outputPanel>
+            
+            <div style="clear:both;"></div>
+            
+        </div>  
+            
+    </div>
+
+</apex:page>

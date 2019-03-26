@@ -1,0 +1,33 @@
+<apex:page docType="html-5.0" title="View All Products | Planet Fitness Franchise Community" label="PFSubmitProduct" name="PFAllProducts" showHeader="true" sidebar="false" standardStylesheets="false">
+	<div class="no-sf-style page-body page-all-products">
+	 	<div class="container">
+	 		<div class="jumbotron">
+		        <div class="row">
+		        	<div class="col-md-6 page-description">
+		        		<h1>All Products</h1>
+		        		<p>This page will show you all products that were submitted to the PF Retail Committee. This will show you submissions, approved products, and non-approved products. You can submit additional products by selecting the New Retail Product button.</p>
+		        	</div>
+		        	<div class="col-md-6 page-description-image hidden-xs hidden-sm">
+		        		<img class="img-responsive" src="/resource/CommunityAssets/img/retail-page-banner.jpg"/>
+		        	</div>
+		        </div>
+	      	</div>
+
+	      	<ol class="breadcrumb">
+			  <li><a href="/apex/PFHomepage">Home</a></li>
+			  <li>All Products</li>
+ 			</ol>
+
+	  		<div class="row">
+	 			<div class="col-md-12">
+	 				<div class="main-section">
+			 			<p class="section-title">All Products</p>
+			 		</div>
+			 	</div>
+			</div>
+			<div class="sites-listview-container">
+				<apex:listViews type="Retail_Product__c" />
+			</div>
+	 	</div>
+	</div>
+</apex:page>

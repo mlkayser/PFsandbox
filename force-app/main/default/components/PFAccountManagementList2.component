@@ -1,0 +1,43 @@
+<apex:component controller="PFAccountManagementListController2">
+    <div class="col-md-12">
+	    <div class="row">
+        	<div class="col-md-12" id="no-more-tables">
+                <table class="col-md-12 table-striped table-condensed cf">
+                    <thead class="cf thead-custom">
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Account Type</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:repeat value="{!Accounts}" var="c" id="theRepeat">
+                            <tr>
+                                <td data-title="First Name">   
+                                    <apex:outputLink value="/{!c.id}" >
+                                        {!c.First_Name__c}
+                                    </apex:outputLink>
+                                </td>
+                                <td data-title="Last Name">
+                                	<apex:outputText value="{!c.Last_Name__c}" />
+                                </td>
+                                <td data-title="Email">
+                                	<apex:outputText value="{!c.Email__c}" />
+                                </td>
+                                <td data-title="Account Type">
+                                	<apex:outputText value="{!c.RecordType.Name}" />
+                                </td>
+                                <td data-title="Status Name">
+                                	<apex:outputText value="{!c.Status__c}" />
+                                </td>
+                            </tr>
+                       </apex:repeat>
+                    </tbody>
+                </table>
+              
+        	</div>
+	    </div>
+	</div>
+</apex:component>

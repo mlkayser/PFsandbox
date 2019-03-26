@@ -1,0 +1,56 @@
+.THIS body {
+    font-size:16px;
+}
+.THIS header {
+    background-color:#F8F8F8;
+    padding:2em 0;
+    vertical-align: middle;
+}
+.THIS .tagline {
+    color:#952d98;
+    font-size:2rem;
+    font-weight:bold;
+    line-height:1.5rem;
+}
+.THIS .logoContainer {
+    height:60px;
+}
+.THIS .logoContainer img {
+    height:100%;
+    width:auto;
+    margin-right:1em;
+}
+
+.THIS .tagline,
+.THIS .navigation,
+.THIS .searchRegion,
+.THIS .profileMenuRegion {
+    /*margin:auto;*/
+    margin:auto auto 0;
+}
+.THIS .searchRegion .ui-widget,
+.THIS .profileMenuRegion .ui-widget {
+    /*height:100%;*/
+}
+.THIS .navigation a {
+    /*font-family: Rockwell, 'Courier Bold', Courier, Georgia, Times, 'Times New Roman', serif;*/
+    text-transform:capitalize;
+    font-weight:bold;
+}
+
+.THIS .profileMenuRegion {
+    width:80px;
+    background-color:#952d98;
+}
+.THIS .selfServiceUserProfileMenu {
+    padding:.6em 0 .6em 0;
+} 
+.THIS .forceCommunityGlobalNavigation a {
+    padding-bottom:0;
+}
+.THIS .profileName {
+    display:none !important;
+}
+.THIS .slds-col {
+    /*outline:1px solid red;*/
+}

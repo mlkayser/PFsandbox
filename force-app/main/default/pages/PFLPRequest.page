@@ -1,0 +1,7 @@
+<apex:page docType="html-5.0" title="Landing Page Request | Planet Fitness Franchise Community" label="PFLPRequest" name="PFLPRequest" showHeader="true" sidebar="false" standardStylesheets="false">
+	<div class="no-sf-style page-body page-lprequest">
+	 	<div class="container">
+	 		Request a landing page
+	 	</div>
+	</div>
+</apex:page>

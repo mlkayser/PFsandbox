@@ -1,0 +1,37 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global"
+                controller="FRM3_ClubBrandExcellence">
+    
+    <aura:handler name="init" value="{!this}" action="{!c.loadData}"/>
+    <aura:attribute name="brandEx" type="Object[]" />
+    
+    <lightning:card title="Brand Excellence" iconName="utility:like">
+        <div class="slds-card__body_inner">
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="slds-text-title_caps" scope="col">
+                            <div class="slds-truncate" title="Survey Date">Survey Date</div>
+                        </th>
+                        <th class="slds-text-title_caps" scope="col">
+                            <div class="slds-truncate" title="Survey Type">Survey Type</div>
+                        </th>
+                        <th class="slds-text-title_caps" scope="col">
+                            <div class="slds-truncate" title="Grade">Grade</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.brandEx}" var="brand">                        
+                        <tr class="slds-hint-parent">
+                            <td data-label="Survey date">{!brand.Survey_Date__c}</td>
+                            <td data-label="Survey type">{!brand.RecordType.Name}</td>
+                            <td data-label="Survey date">{!brand.Grade__c}</td>
+                            
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>
+        </div>    
+    </lightning:card>
+    
+</aura:component>

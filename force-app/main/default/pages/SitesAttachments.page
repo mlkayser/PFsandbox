@@ -1,0 +1,31 @@
+<apex:page standardController="Sites__c" extensions="SitesAttachmentsController">
+    
+    <!--{!Sites__c.Name}-->
+<apex:form enctype="multipart/form-data">
+
+    
+    <apex:pageBlock title="Attachments">
+ 		<apex:pageBlockButtons >
+        	<apex:commandButton onclick="window.open('https://www.tfaforms.com/4607834?siteid={!thesite}');"  value="Upload Attachment" />
+        </apex:pageBlockButtons>
+
+        
+        <apex:pageblocktable value="{!allatt}" var="attach" style="">
+            <apex:column >
+            <apex:repeat value="{!attach.NotesAndAttachments}" var="a">
+            	
+                <apex:outputLink value="/servlet/servlet.FileDownload?file={!a.id}" target="_blank">{!a.Title}</apex:outputLink><br/>
+        	   
+            	
+            </apex:repeat>
+            </apex:column>
+        </apex:pageblocktable>
+        
+        
+        
+
+    </apex:pageBlock>
+     </apex:form> 
+    
+        
+</apex:page>

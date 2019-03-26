@@ -1,0 +1,90 @@
+<apex:page controller="PFFACController" sidebar="false" docType="html-5.0">
+   
+    <apex:image url="http://app.planetfitness.com/Salesforce/assets/fac%20logo.jpg" style="float:left; margin-right:50px;"/>
+    <div style="min-height:135px; padding-top:30px; font-size:16px;">
+        The purpose of the FAC is to promote constructive, open and two-way communications between all of the franchisees and the management of Planet Fitness.  The goal of the FAC is to facilitate communication and build value within the Planet Fitness franchise system; promote the interchange of ideas among and between Planet Fitness franchisees; and otherwise improve and facilitate communication between and among Planet Fitness and it’s franchisees for the purpose of improving and strengthening the System, the Planet Fitness brand, and increasing sales at Planet Fitness franchised businesses.
+
+    </div>    
+
+    <div style="float:left; width:calc(100% - 340px); min-height:500px;">
+        <table style="font-family: Arial,Helvetica,sans-serif; color:#222; width:100%;" cellspacing="0">
+        <thead style="color:#fff; background-color:#5f6062;">
+            <tr>
+                <th style="padding:10px; font-weight:bold; width:300px;">Meeting Minutes and Updates</th>
+                <th style="padding:10px; font-weight:bold;">Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <apex:repeat value="{!FACdocs_List}" var="fac" id="theRepeat">
+                <tr>
+                    <td style="padding:10px;">
+                        <apex:outputLink value="/{!fac.id}" style="color: #952d98;text-decoration: none;font-weight: bold;">
+                            {!fac.title}
+                        </apex:outputLink>
+                    </td>
+                    <td style="padding:10px;">
+                        <apex:outputText value="{!fac.summary}" escape="false" />
+                    </td>
+                </tr>
+            </apex:repeat>
+        </tbody>
+    </table>
+    </div>
+     
+    <div style="width:300px; float:right;">
+    
+    <div style="width:300px; padding:10px;border:1px solid #ddd; margin-bottom: 20px; background-color: #fff; border-radius: 4px;-webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);box-shadow: 0 1px 1px rgba(0,0,0,.05)">
+        <h3 style="color: #952d98;margin-top: 0;border-bottom: 1px solid #952d98;display: block;line-height: 24px;font-family: Rockwell, 'Courier Bold', Courier, Georgia, Times, 'Times New Roman', serif;font-size: 16px;font-style: normal;font-variant: normal;font-weight: bold;line-height: 18px;">Governing Documents</h3>
+        <table style="font-family: Arial,Helvetica,sans-serif; color:#222; width:100%;" cellspacing="0">
+        <tbody>
+            <apex:repeat value="{!FACmin_List}" var="fac" id="theMinRepeat">
+                <tr>
+                    <td style="padding:10px;">
+                        <apex:outputLink value="/{!fac.id}" style="color: #952d98;text-decoration: none;font-weight: bold;">
+                            {!fac.title}
+                        </apex:outputLink>
+                    </td>
+                </tr>
+            </apex:repeat>
+        </tbody>
+    </table>
+    </div>
+    <div style="clear:both"></div>
+    
+    <div style="width:300px; padding:10px;border:1px solid #ddd; margin-bottom: 20px; background-color: #fff; border-radius: 4px;-webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);box-shadow: 0 1px 1px rgba(0,0,0,.05)">
+        <h3 style="color: #952d98;margin-top: 0;border-bottom: 1px solid #952d98;display: block;line-height: 24px;font-family: Rockwell, 'Courier Bold', Courier, Georgia, Times, 'Times New Roman', serif;font-size: 16px;font-style: normal;font-variant: normal;font-weight: bold;line-height: 18px;">Upcoming FAC Events</h3>
+
+        <ul style="padding: 0; list-style-type: none;">
+        <apex:repeat value="{!FACevents_List}" var="recentEvent" >
+            <li><a href="/{!recentEvent.ID}" style="color: #952d98;text-decoration: none;font-weight: bold;"><i class="fa fa-calendar-o" style="margin-right:10px;"></i> 
+            <apex:outputText value="{0,date,MMM.dd }" style="color: #952d98;text-decoration: none;font-weight: bold;">
+                   <apex:param value="{!recentEvent.Event_Date__c}" />
+            </apex:outputText>
+            - {!recentEvent.Name} </a></li>
+        </apex:repeat>
+    </ul>
+    </div>
+       
+     <div style="width:300px;padding:10px;border:1px solid #ddd; margin-bottom: 20px; background-color: #fff; border-radius: 4px;-webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);box-shadow: 0 1px 1px rgba(0,0,0,.05)">
+        <ul style="padding: 0; list-style-type: none;"> 
+            <center>            
+     <div style="min-height:10px; padding-top:3px;align:justify; font-size:13px;font-weight:bold;">
+    Do you have a question, comment, or concern you would like to share with the FAC Board or one of the subcommittees, click here:
+     </div>
+            </center>
+                <br>
+            <center>  
+            <button>                     
+     <apex:outputLink styleClass="MilestonButtons" style="color:#952d98;text-decoration:none; font-size:14px;" value="/PFContactFACtech" >Contact FAC Board</apex:outputLink>
+            </button>
+            </center>
+               </br>
+         </ul>
+     </div>
+    
+    </div>
+    <div style="clear:both;height:200px;">
+        
+    </div>
+
+</apex:page>

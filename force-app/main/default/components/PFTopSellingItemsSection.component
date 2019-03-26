@@ -1,0 +1,150 @@
+<apex:component controller="PFTopSellingSectionController">
+	<div class="row">
+		<div class="col-md-12">
+		    <div class="main-section">
+		        <p class="section-title">Top Selling Items</p>
+		    </div>
+		</div>
+	</div>
+
+    <div class="row">
+        <div class="col-md-12" id="no-more-tables">
+
+            <apex:panelGrid columns="4" id="theGrid" width="100%">
+                <apex:outputPanel >
+                    <table class="col-md-12 table-striped table-condensed cf" >
+                        <thead class="cf thead-custom">
+                            <tr>
+                                <th>Top Retail Items Overall</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                             <apex:repeat value="{!overal_products}" var="product" rows="20">
+                                <tr>
+                                    <td data-title="Top Retail Items Overall">
+	                                    {!product.Name}
+	                                    <apex:image styleClass="top-selling-items-icon" rendered="{!product.Black_Card_Member_Item__c}" value="{!URLFOR($Resource.CommunityAssets, '/img/black-card-member-item.png')}" />
+	                                    <apex:image styleClass="top-selling-items-icon" rendered="{!product.Planet_Fitness_Item__c}" value="{!URLFOR($Resource.CommunityAssets, '/img/planet-fitness-item.png')}" />
+                                    </td>
+                                </tr>
+                             </apex:repeat>
+                             <apex:outputPanel rendered="{!OR(overal_products.size = 0, overal_products = null)}">
+                             	<tr>
+                             		<td>
+										N/A
+									</td>
+								</tr>
+                            </apex:outputPanel>
+                        </tbody>
+                    </table>
+                </apex:outputPanel>
+
+                <apex:outputPanel >
+                    <table class="col-md-12 table-striped table-condensed cf" >
+                        <thead class="cf thead-custom">
+                            <tr>
+                                <th>Top Fusion Products</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                             <apex:repeat value="{!fusion_products}" var="product" rows="20"> 
+                                <tr>
+                                    <td data-title="Top Fusion Products">
+	                                    {!product.Name}
+	                                    <apex:image styleClass="top-selling-items-icon" rendered="{!product.Black_Card_Member_Item__c}" value="{!URLFOR($Resource.CommunityAssets, '/img/black-card-member-item.png')}" />
+	                                    <apex:image styleClass="top-selling-items-icon" rendered="{!product.Planet_Fitness_Item__c}" value="{!URLFOR($Resource.CommunityAssets, '/img/planet-fitness-item.png')}" />
+                                    </td>
+                                </tr>
+                             </apex:repeat>
+                            <apex:outputPanel rendered="{!OR(fusion_products.size = 0, fusion_products = null)}">
+                            	<tr>
+                                    <td data-title="Top Fusion Products">
+										N/A
+                                    </td>
+                                </tr>
+                            </apex:outputPanel>
+                        </tbody>
+                    </table>
+                </apex:outputPanel>
+
+                <apex:outputPanel >
+                    <table class="col-md-12 table-striped table-condensed cf">
+                        <thead class="cf thead-custom">
+                            <tr>
+                                <th>Top Tanning Products</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                             <apex:repeat value="{!tanning_products}" var="product" rows="20"> 
+                                <tr>
+                                    <td data-title="Top Tanning Products">
+	                                    {!product.Name}
+	                                    <apex:image styleClass="top-selling-items-icon" rendered="{!product.Black_Card_Member_Item__c}" value="{!URLFOR($Resource.CommunityAssets, '/img/black-card-member-item.png')}" />
+	                                    <apex:image styleClass="top-selling-items-icon" rendered="{!product.Planet_Fitness_Item__c}" value="{!URLFOR($Resource.CommunityAssets, '/img/planet-fitness-item.png')}" />
+                                    </td>                                   
+                                </tr>
+                             </apex:repeat>
+                             <apex:outputPanel rendered="{!OR(tanning_products.size = 0, tanning_products = null)}">
+                             	<tr>
+                             		<td>
+										N/A
+									</td>
+								</tr>
+                            </apex:outputPanel>
+                        </tbody>
+                    </table>
+                </apex:outputPanel>
+
+                <apex:outputPanel >
+                    <table class="col-md-12 table-striped table-condensed cf">
+                        <thead class="cf thead-custom">
+                            <tr>
+                                <th>Top Beverages</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                             <apex:repeat value="{!beverages_products}" var="product" rows="20"> 
+                                <tr>
+                                    <td data-title="Top Beverages">
+	                                    {!product.Name}
+	                                    <apex:image styleClass="top-selling-items-icon" rendered="{!product.Black_Card_Member_Item__c}" value="{!URLFOR($Resource.CommunityAssets, '/img/black-card-member-item.png')}" />
+	                                    <apex:image styleClass="top-selling-items-icon" rendered="{!product.Planet_Fitness_Item__c}" value="{!URLFOR($Resource.CommunityAssets, '/img/planet-fitness-item.png')}" />
+                                    </td>
+                                </tr>
+                             </apex:repeat>
+                             <apex:outputPanel rendered="{!OR(beverages_products.size = 0, beverages_products = null)}">
+                             	<tr>
+                             		<td>
+										N/A
+									</td>
+								</tr>
+                            </apex:outputPanel>
+                        </tbody>
+                    </table>
+                </apex:outputPanel>
+            </apex:panelGrid>
+        </div>
+    </div>
+
+    <div class="top-selling-items-legend-container">
+    	<div class="row">
+    		<div class="col-sm-4">
+    			<div class="pull-right">
+    				<img class="legend-image" src="{!URLFOR($Resource.CommunityAssets, '/img/planet-fitness-item.png')}"/>
+    				<span class="legend-text">Planet Fitness Item</span>
+    			</div>
+    		</div>
+    		<div class="col-sm-4">
+    			<div class="pull-right">
+    				<img class="legend-image" src="{!URLFOR($Resource.CommunityAssets, '/img/black-card-member-item.png')}"/>
+    				<span class="legend-text">Black Card Member Item</span>
+    			</div>
+    		</div>
+    		<!-- <div class="col-sm-4">
+    			<div class="pull-right">
+    				<apex:outputLink styleClass="btn btn-pf" value="/apex/PFTopSellingItems">View More</apex:outputLink>
+    			</div>
+    		</div> -->
+        </div>
+    </div>
+</apex:component>

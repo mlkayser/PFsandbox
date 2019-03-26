@@ -1,0 +1,91 @@
+<apex:page docType="html-5.0" title="Request a Project Site | Planet Fitness Franchise Community" label="PFProjectSiteRquest" name="PFProjectSiteRequest" showHeader="true" sidebar="false" standardStylesheets="false" controller="PFProjectSiteRequest">
+<div class="no-sf-style page-body page-landing-page-request">
+	 	<div class="container">
+	 		<div class="jumbotron">
+		        <div class="row">
+		        	<div class="col-md-6 page-description">
+		        		<h1>Request A Project Site</h1>
+		        		<p>This is where you will request a location, within your area, to submit Sites towards. Once approved by the Franchise Sales team, you will see a new Club in Development where you will submit Sites towards and start the Real Estate Site submission process. </p>
+		        	</div>
+		        	<div class="col-md-6 page-description-image hidden-xs hidden-sm">
+		        		<img class="img-responsive" src="/resource/CommunityAssets/img/select-location.jpg"/>
+		        	</div>
+		        </div>
+	      	</div>
+
+	      	<ol class="breadcrumb">
+			  <li><a href="/apex/PFHomepage">Home</a></li>
+			  <li>Request A Project Site</li>
+ 			</ol>
+
+	  		<div class="row">
+	 			<div class="col-md-12">
+	 				<div class="main-section">
+			 			<p class="section-title">Request A Project Site</p>
+			 		</div>
+			 	</div>
+			</div>
+
+			<apex:outputPanel rendered="{!submitted}">
+				<p id="confirmation">Your Project Site submission has been received. You will receive an email confirmation from the Franchise Sales team when the Project Site has been approved. This will allow you to submit specific Sites (Street Addresses) towards a Club in Development for this area.<br/><br/>
+				For more information please contact Brittany Guillemette (Franchise Sales Specialist) at <a href="mailto:Brittany.Guillemette@pfhq.com">Brittany.Guillemette@pfhq.com</a>.</p>
+			</apex:outputPanel>
+
+			<apex:form >		
+			<apex:outputPanel id="siteform" rendered="{!submitted == false}">
+				<div class="row">
+					<div class="form-group">
+						<div class="col-md-6">
+							<apex:outputLabel value="Name" for="name"/>
+							<apex:inputText id="name" required="true" value="{!userName}" styleClass="form-control"/>
+						</div>
+						<div class="col-md-6">
+							<apex:outputLabel value="Email" for="email"/>
+							<apex:inputText id="email" required="true" value="{!userEmail}" styleClass="form-control"/>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group">
+						<div class="col-md-6">
+							<apex:outputLabel value="Franchisee Name" for="franchiseename"/>
+							<apex:inputText id="franchiseename" required="true" value="{!franchiseeName}" styleClass="form-control"/>
+						</div>
+						<div class="col-md-6">
+							<apex:outputLabel value="Ownership Group" for="ownershipgroup"/>
+							<apex:inputText id="ownershipgroup" required="true" value="{!ownershipGroup}" styleClass="form-control"/>
+						</div>
+					</div>
+				</div>				
+				<div class="row">
+					<div class="form-group">
+						<div class="col-md-6">
+							<apex:outputLabel value="Agreement Type" for="agreementtype"/>
+							<apex:selectList id="agreementtype" multiselect="false" size="1" value="{!agreementType}" styleClass="form-control">
+            					<apex:selectOptions value="{!agreementTypes}" />            					
+							</apex:selectList>
+						</div>  
+							<div class="col-md-6">
+								<apex:outputLabel value="Agreement Number" for="agreementnumber"/>
+								<apex:inputText id="agreementnumber" value="{!agreementNumber}" styleClass="form-control"/>
+							</div>    					
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group">			
+						<div class="col-md-12">
+							<apex:outputLabel value="Proposed Site Address" for="siteaddress"/>
+							<apex:inputText id="siteaddress" required="true" value="{!siteAddress}" styleClass="form-control"/>
+						</div>
+					</div>
+				</div>	
+				<div class="row">
+					<div class="col-md-12">
+						<apex:commandButton styleClass="btn btn-pf form" value="Submit" action="{!submit}"/>
+					</div>
+				</div>		
+			</apex:outputPanel>
+			</apex:form>
+	 	</div>
+	</div>
+</apex:page>

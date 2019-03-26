@@ -1,0 +1,28 @@
+.THIS .contentPanel:before,
+.THIS .contentPanel:after {
+    content: " ";
+    display: table;
+}
+.THIS .contentPanel:after {
+    clear: both;
+}
+.THIS .contentPanel {
+    margin-bottom:2em;
+}
+.THIS .left {
+    float: left;
+    width: 50%;
+}
+.THIS .right {
+    float: right;
+    width: 50%;
+}
+.THIS .col {
+    float: left;
+    width: 50%;
+    background-color:yellow;
+    
+}
+.THIS.container {
+    padding-left:20px; padding-right:20px;
+}

@@ -1,0 +1,46 @@
+<apex:page docType="html-5.0" title="My Clubs | Planet Fitness Franchise Community" label="PFClubs" name="PFClubs" showHeader="true" sidebar="false" standardStylesheets="false">
+    <div class="no-sf-style page-body page-clubs">
+        <div class="container">
+            <div class="jumbotron">
+                <div class="row">
+                    <div class="col-md-6 page-description">
+                        <h1>My Clubs</h1>
+                        <p>Manage your clubs and development efforts with ease. Get vital stats and quickly understand your business to help you manage efficiently and effectively.</p>
+                    </div>
+                    <div class="col-md-6 page-description-image hidden-xs hidden-sm">
+                        <img class="img-responsive" src="/resource/CommunityAssets/img/my-clubs-banner-img.jpg"/>
+                    </div>
+                </div>
+            </div>
+
+            <ol class="breadcrumb">
+              <li><a href="/apex/PFHomepage">Home</a></li>
+              <li>My Clubs</li>
+            </ol>
+
+            <div class="custom-listview-section clubs-in-dev-section row">
+                <div class="col-md-12">
+                    <div class="main-section">
+                        <p class="section-title">Clubs In Development</p>
+                    </div>
+                </div>
+                <div class="col-md-12" id="no-more-tables">
+                    <c:PFHomepageClubsInDev />
+                </div>
+            </div>
+            
+            <div class="custom-listview-section open-clubs-section row" style="{!IF(contains($Profile.Name, 'Broker'), 'display:none', 'display:block')}">
+                <div class="col-md-12">
+                    <div class="main-section">
+                        <p class="section-title">Open Clubs</p>
+                    </div>
+                </div>
+                <div class="col-md-12" id="no-more-tables">
+                    <c:PFHomepageMyOpenClubs />
+                </div>
+            </div>
+            
+        </div>
+        <c:PFLinksFooterSection />  
+    </div>
+</apex:page>

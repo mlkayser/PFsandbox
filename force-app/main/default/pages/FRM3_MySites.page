@@ -1,0 +1,46 @@
+<apex:page standardStylesheets="true" showHeader="false" sidebar="false">
+
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <head> 
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="Content-type" content="text/html; utf-8" />
+        <meta content="yes" name="apple-mobile-web-app-capable" />
+        <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style" />
+        <link rel="shortcut icon" href="" />
+        <link type="text/css" rel="stylesheet" href="/resource/CommunityAssets/css/custom-bootstrap.min.css"/>
+        <link type="text/css" rel="stylesheet" href="/resource/CommunityAssets/css/font-awesome.min.css"/>
+        <link type="text/css" rel="stylesheet" href="/PFStyles"/>
+        <style>
+            @media only screen 
+            and (min-device-width : 990px ) 
+            and (max-device-width : 1200px ) {
+                .global-search-bar {
+                    width:100px !Important; 
+                }
+                ul.nav.navbar-nav.navbar-right.nav-profile {
+                    width: 225px !important;
+                }
+            }
+        </style>
+     </head>
+    <body>
+        <div class="no-sf-style page-body page-view-my-sites">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="main-section">
+                            <p class="section-title">View My Sites</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="sites-listview-container">
+                    <apex:listViews type="Sites__c"/>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
+</apex:page>

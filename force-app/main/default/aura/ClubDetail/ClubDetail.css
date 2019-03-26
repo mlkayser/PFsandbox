@@ -1,0 +1,17 @@
+.THIS .address {
+    display:inline-block; 
+    overflow: hidden;
+}
+.THIS .address-container .slds-icon_container {
+    vertical-align:top;
+}
+.THIS .social {
+    text-align:right;
+}
+.THIS .social img {
+    display:inline-box;
+     margin-right: .5em;
+}
+.THIS .slds-dl_horizontal__label {
+    font-weight:bold;
+}

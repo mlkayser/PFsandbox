@@ -1,0 +1,77 @@
+<apex:page standardController="Change_Request__c">
+  <!-- Begin Default Content REMOVE THIS -->
+  
+  <head>
+<style type='text/css'>
+.wrapper{
+   margin: 0px auto;
+   width: 920px;
+   background-color: #cccccc
+}
+.header{
+   float: left;
+   width: 100%;
+   background-color: #f4f4f4
+}
+.left{
+   float: left;
+   margin-right: 3px;
+   width: 220px;
+   background-color: #ccccff
+}
+
+.right{
+   float: right;
+   width: 220px;
+   background-color: #ccccff
+}
+.footer{
+   float: left;
+   width: 100%;
+   background-color: #cfcfcf
+}
+body {
+   padding: 0px;
+   margin: 0px;
+   font-size: 7pt;
+   background-color: #e7e7de
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+    <div class="header">
+        header
+    </div>
+    <div class="left">
+          <h1>Standard Pre-Approved Changes</h1>
+
+        Standard pre-approved changes allow for recurring or frequent minor changes to be made with a single approval.  These changes have no likelihood of an outage and no negative impact on the business.  Pre-approved changes will require manager approval in order to be accepted as a pre-approved change.  The change request must include the frequency and reason for the request.<br/>
+
+        Criteria for pre-approved changes include but are not limited to:
+        <ul><li>Changes to automate recurring maintenance tasks</li>
+        <li>Automated data feeds and replications</li>
+        <li>Scripts to add users or set permissions (variables like user and role may change on each use)</li>
+        </ul>
+    </div>
+    <div class="left">
+        left2
+    </div>
+    <div class="left">
+        left3
+    </div>
+    <div class="left">
+        left4
+    </div>
+    <div class="right">
+        right
+    </div> 
+    <div class="footer">
+        footer
+    </div>
+</div>  
+  
+
+</body>
+  <!-- End Default Content REMOVE THIS -->
+</apex:page>

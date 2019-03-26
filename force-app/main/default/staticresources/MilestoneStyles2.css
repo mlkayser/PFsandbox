@@ -1,0 +1,139 @@
+.milestonebox { 
+	border:1px solid #c6c6c6; 
+	border-radius:4px; 
+	min-height:100px; 
+	margin-bottom:30px; 
+}
+.milestontitle {
+	padding-left:10px; 
+	color:#952d98; 
+	font-size:15px; 
+	line-height:35px; 
+	font-weight:bold;
+	font-family:Rockwell, 'Courier Bold', Courier, Georgia, Times, 'Times New Roman', serif;
+    border-bottom:1px solid #c6c6c6;
+    background-color:#f4f4f4;
+}
+.statusoutter {
+	padding-left:10px;
+	padding-right:10px;
+	padding-bottom:10px;
+}
+.statusinner {
+	border-radius:15px; 
+	border:1px solid #952d98; 
+	width:100%; 
+	height:15px; 
+	padding:2px;
+	background-color:white;
+}
+.statusbar {
+	border-radius:15px; 
+	background-color: #952d98; 
+	height:9px;
+}
+.modalDialog {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: rgba(0, 0, 0, 0.8);
+	z-index: 99999;
+	opacity:0;
+	-webkit-transition: opacity 200ms ease-in;
+	-moz-transition: opacity 200ms ease-in;
+	transition: opacity 200ms ease-in;
+	pointer-events: none;
+}
+.modalDialog:target {
+	opacity:1;
+	pointer-events: auto;
+}
+.modalDialog > div {
+	width: 300px;
+	position: relative;
+	margin: 10% auto;
+	padding: 0px;
+	min-height:250px;
+	background: #fff;
+}
+.closebox {
+	background: #952d98!Important;
+	color:#fff!Important;
+	line-height: 25px;
+	position: absolute;
+	right: -12px;
+	text-align: center;
+	top: -10px;
+	width: 24px;
+	text-decoration: none;
+	font-weight: bold;
+	-webkit-border-radius: 12px;
+	-moz-border-radius: 12px;
+	border-radius: 12px;
+}
+.ProgressDiv {
+	background-color:#e8e8e8; 
+    position:initial; 
+    margin-top:10px; 
+    border-top:1px solid #c6c6c6;
+}
+.DescriptionDiv {
+    padding:10px; 
+    padding-top:20px;
+    margin-bottom:10px; 
+    font-size: 14px;
+    display: block;
+    min-height:85px;
+}
+.ButtonDiv {
+    padding-left:10px; 
+    padding-right:10px; 
+    font-size: 14px; 
+    margin-top:20px;
+    margin-left:135px;
+}
+.MilestonButtons {
+    font-family: Rockwell, 'Courier Bold', Courier, Georgia, Times, 'Times New Roman', serif;
+    border: 1px solid #b5b5b5;
+    font-size: 1.1em;
+    padding:5px;
+    margin:5px;
+    width:150px;
+}
+.MilestonButtons:hover{
+    text-decoration:none !important;;
+    color: #fff !important;
+    background-color:#952d98;
+    font-weight: normal;
+}
+span.MilestonButtons, span.MilestonButtons:hover {
+    color: #fff !important;
+    background-color:#999 !important;
+}
+.MilestoneIcon {
+    float:left;
+    padding-top:15px;
+    margin-right:50px;
+    padding-left:30px;
+    display: inline-block;
+    min-height:85px;
+}
+.ClubTitle {
+    color: #952d98;
+    font-size: 30px;
+    font-weight: bold;
+}
+.ClubAddress {
+    color: #414141;
+    font-size: 16px;
+    font-weight: bold;
+    margin-left:10px;
+    line-height:20px;
+}
+.ClubDetails {
+    color: #414141;
+    font-size: 14px;
+    margin-left:10px;
+}

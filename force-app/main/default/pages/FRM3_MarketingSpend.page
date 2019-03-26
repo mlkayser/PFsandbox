@@ -1,0 +1,951 @@
+<apex:page controller="PFMarketingSpendController" docType="html-5.0"
+           title="Marketing Spend | Planet Fitness Franchise Community" label="PFMarketingSpend" name="PFMarketingSpend"
+           showHeader="false" sidebar="false" standardStylesheets="false">
+    <head>
+        <!-- from header -->
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="Content-type" content="text/html; utf-8" />
+        <meta content="yes" name="apple-mobile-web-app-capable" />
+        <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style" />
+        <link rel="shortcut icon" href="" />
+        <link type="text/css" rel="stylesheet" href="/resource/CommunityAssets/css/custom-bootstrap.min.css"/>
+        <link type="text/css" rel="stylesheet" href="/resource/CommunityAssets/css/font-awesome.min.css"/>
+        <link type="text/css" rel="stylesheet" href="/PFStyles"/>
+        <!-- from header -->
+
+        <style class="cp-pen-styles">
+            body {
+                padding: 5em;
+            }
+
+            h1 {
+                margin-bottom: 1em;
+            }
+
+            .modal-body {
+                max-height: 80vh;
+                overflow-y: scroll;
+            }
+
+            /* cellpadding */
+            th, td { padding: 15px; spacing: 15px }
+
+            .circle-loader {
+                margin: 0 0 30px 10px;
+                border: 2px solid rgba(0, 0, 0, 0.2);
+                border-left-color: #5cb85c;
+                animation-name: loader-spin;
+                animation-duration: 1s;
+                animation-iteration-count: infinite;
+                animation-timing-function: linear;
+                position: relative;
+                display: inline-block;
+                vertical-align: top;
+            }
+
+            .circle-loader,
+            .circle-loader:after {
+                border-radius: 50%;
+                width: 8em;
+                height: 8em;
+            }
+
+            .load-complete {
+                -webkit-animation: none;
+                animation: none;
+                border-color: #5cb85c;
+                transition: border 500ms ease-out;
+            }
+
+            .checkmark {
+                display: none;
+            }
+
+            .checkmark.draw:after {
+                animation-duration: 800ms;
+                animation-timing-function: ease;
+                animation-name: checkmark;
+                transform: scaleX(-1) rotate(135deg);
+            }
+
+            .checkmark:after {
+                opacity: 1;
+                height: 4em;
+                width: 2em;
+                transform-origin: left top;
+                border-right: 2px solid #5cb85c;
+                border-top: 2px solid #5cb85c;
+                content: '';
+                left: 2em;
+                top: 4em;
+                position: absolute;
+            }
+
+            @keyframes loader-spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+
+            @keyframes checkmark {
+                0% {
+                    height: 0;
+                    width: 0;
+                    opacity: 1;
+                }
+                20% {
+                    height: 0;
+                    width: 2em;
+                    opacity: 1;
+                }
+                40% {
+                    height: 4em;
+                    width: 2em;
+                    opacity: 1;
+                }
+                100% {
+                    height: 4em;
+                    width: 2em;
+                    opacity: 1;
+                }
+            }
+        </style>
+        
+        <apex:remoteObjects >
+            <apex:remoteObjectModel name="Compliance__c" jsShorthand="Compliance" fields="Name,Id">
+                <apex:remoteObjectField name="mspend_Marketing_Spend_ID__c" jsShorthand="MarketingSpendId"/>
+                <apex:remoteObjectField name="Club__c" jsShorthand="Club"/>
+                <apex:remoteObjectField name="mspend_Spend_Month__c" jsShorthand="Month"/>
+                <apex:remoteObjectField name="RecordTypeId" jsShorthand="RecordType"/>
+                <apex:remoteObjectField name="mspend_Television__c" jsShorthand="Television"/>
+                <apex:remoteObjectField name="mspend_Streaming_Television__c" jsShorthand="Streaming_Television"/>
+                <apex:remoteObjectField name="mspend_Radio__c" jsShorthand="Radio"/>
+                <apex:remoteObjectField name="mspend_Streaming_Radio__c" jsShorthand="Streaming_Radio"/>
+                <apex:remoteObjectField name="mspend_Direct_Mail__c" jsShorthand="Direct_Mail"/>
+                <apex:remoteObjectField name="mspend_Shared_Mail__c" jsShorthand="Shared_Mail"/>
+                <apex:remoteObjectField name="mspend_Letter__c" jsShorthand="Letter"/>
+                <apex:remoteObjectField name="mspend_Email__c" jsShorthand="Email"/>
+                <apex:remoteObjectField name="mspend_Digital_Display__c" jsShorthand="Digital_Display"/>
+                <apex:remoteObjectField name="mspend_SEO_SEM__c" jsShorthand="SEO_SEM"/>
+                <apex:remoteObjectField name="mspend_Social__c" jsShorthand="Social"/>
+                <apex:remoteObjectField name="mspend_OOH__c" jsShorthand="OOH"/>
+                <apex:remoteObjectField name="mspend_Newspaper__c" jsShorthand="Newspaper"/>
+                <apex:remoteObjectField name="mspend_Events__c" jsShorthand="Events"/>
+                <apex:remoteObjectField name="mspend_Sponsorships__c" jsShorthand="Sponsorships"/>
+                <apex:remoteObjectField name="mspend_Guerilla_Marketing__c" jsShorthand="Guerilla_Marketing"/>
+                <apex:remoteObjectField name="mspend_Promotional_POP__c" jsShorthand="Promotional_POP"/>
+                <apex:remoteObjectField name="mspend_Public_Relations_Fee__c" jsShorthand="Public_Relations_Fee"/>
+                <apex:remoteObjectField name="mspend_Production_Fees__c" jsShorthand="Production_Fees"/>
+                <apex:remoteObjectField name="mspend_Agency_Fees__c" jsShorthand="Agency Fees"/>
+                <apex:remoteObjectField name="mspend_Reoccurring_Co_Op_Contribution__c" jsShorthand="Reoccurring_CoOp_Contribution"/>
+                <apex:remoteObjectField name="mspend_Promotional_Club_Expense__c" jsShorthand="Promotional_Club_Expense"/>
+            </apex:remoteObjectModel>
+        </apex:remoteObjects>
+        <apex:includescript value="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"/>
+        <apex:includescript value="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"/>
+        <apex:includescript value="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js"/>
+        <script language="JavaScript">
+            angular.module('pfMarketingSpendApp', [])
+            .factory('ApexController', ['$q', '$rootScope', function($q, $rootScope) {
+                var ApexController = {};
+
+                // Get List of Clubs associated to the selected group
+                ApexController.getClubs = function() {
+                    var deferred = $q.defer();
+                    var g = document.getElementById('{!$Component.groupForm.selectedGroup}').options[document.getElementById('{!$Component.groupForm.selectedGroup}').selectedIndex].value;
+                    Visualforce.remoting.Manager.invokeAction(
+                            '{!$RemoteAction.PFMarketingSpendController.getClubs}',
+                            g,
+                            function(result, event) {
+                                $rootScope.$apply(function() {
+                                    if (event.status) {
+                                        deferred.resolve(result);
+                                    } else {
+                                        deferred.reject(event);
+                                    }
+                                })
+                            },
+                            { buffer: true, escape: true, timeout: 30000 }
+                    );
+
+                    return deferred.promise;
+                };
+
+                // Get Marketing Spend Record
+                ApexController.getMarketingSpendRecord = function(msid) {
+                    var deferred = $q.defer();
+                    var r = new SObjectModel.Compliance();
+                    r.retrieve({where: {mspend_Marketing_Spend_ID__c: {eq: msid}}}, function (err, records, event) {
+                        $rootScope.$apply(function() {
+                            if (event.status) {
+                                deferred.resolve(records);
+                            } else {
+                                deferred.reject(event);
+                            }
+                        });
+                    });
+
+                    return deferred.promise;
+                };
+
+                // Upsert the Marketing Spend Record
+                ApexController.upsertMarketingSpendRecord = function(record) {
+                    var deferred = $q.defer();
+                    record.upsert(function (err, records, event) {
+                        if (event.status && records.length > 0) {
+                            deferred.resolve(records);
+                        } else {
+                            deferred.reject(event);
+                        }
+                    });
+
+                    return deferred.promise;
+                };
+
+                // Get the Marketing Spend Compliance Status results
+                ApexController.getComplianceStatusResults = function() {
+                    var deferred = $q.defer();
+                    Visualforce.remoting.Manager.invokeAction(
+                            '{!$RemoteAction.PFMarketingSpendController.getComplianceStatus}',
+                            function(result, event) {
+                                $rootScope.$apply(function() {
+                                    if (event.status) {
+                                        deferred.resolve(result);
+                                    } else {
+                                        deferred.reject(event);
+                                    }
+                                })
+                            },
+                            { buffer: true, escape: true, timeout: 120000 }
+                    );
+
+                    return deferred.promise;
+                };
+
+                return ApexController;
+            }])
+            .controller('pfMarketingSpendController', ['$scope', 'ApexController', function ($scope, $ApexController) {
+                $scope.complianceRecords = [];
+                $scope.complianceRecordsToOverwrite = [];
+                // Download Template
+                $scope.downloadTemplate = function() {
+                    var promise = $ApexController.getClubs();
+                    promise
+                    .then(function(result) {
+                        var clubs = [];
+                        var g = document.getElementById('{!$Component.groupForm.selectedGroup}').options[document.getElementById('{!$Component.groupForm.selectedGroup}').selectedIndex].value;
+                        var groupId = g.substring(0, g.indexOf('-'));
+                        console.log('groupId = ' + groupId);
+                        for (var i = 0; i < result.length; i++) {
+                            clubs[i] = {
+                                clubId: result[i].PF_Club_ID__c,
+                                clubName: result[i].Name
+                            };
+                        }
+                        // Process the template
+                        data = {ownershipGroupNumber: groupId, clubs: clubs};
+
+                        // Use XMLHttpRequest instead of Jquery $ajax
+                        xhttp = new XMLHttpRequest();
+                        xhttp.onreadystatechange = function () {
+                            var a;
+                            if (xhttp.readyState === 4 && xhttp.status === 200) {
+                                // Trick for making downloadable link
+                                a = document.createElement('a');
+                                a.href = window.URL.createObjectURL(xhttp.response);
+                                // Give filename you wish to download
+                                a.download = data.ownershipGroupNumber + '-template-' + new Date().toISOString().substr(0, 10) + '.xlsx';
+                                a.style.display = 'none';
+                                document.body.appendChild(a);
+                                a.click();
+                            }
+                        };
+                        // Post data to URL which handles post request
+                        xhttp.open('POST', '{!$Setup.Community_Settings__c.PF_Azure_Endpoint__c}/template'); // VFP should populate the URL
+                        xhttp.setRequestHeader("Content-Type", "application/json");
+                        // You should set responseType as blob for binary responses
+                        xhttp.responseType = 'blob';
+                        xhttp.send(JSON.stringify(data));
+                    })
+                    .then(function() {
+                        makeUploadTabActive();
+                    })
+                    .catch(function(err) {
+                        showErrorPane('Error when trying to generate Excel template.  Error Message = ' + JSON.stringify(err));
+                    });
+                };
+
+                $scope.lockButton = function() {
+                    if (document.getElementById('sampleFile').files[0] !== undefined){
+                        return false;
+                    } else {
+                        return true;
+                    }
+                };
+                // Upload File
+                $scope.uploadFile = function() {
+                    var promise = $ApexController.getClubs();
+                    promise
+                    .then(function(result) {
+                        // Set up the AJAX request.
+                        var xhr = new XMLHttpRequest();
+
+                        var formData = new FormData();
+                        var file = document.getElementById('sampleFile').files[0];
+                        formData.append('sampleFile', file, file.name);
+
+                        // Hidden fields
+                        var g = document.getElementById('{!$Component.groupForm.selectedGroup}').options[document.getElementById('{!$Component.groupForm.selectedGroup}').selectedIndex].value;
+                        var groupId = g.substring(0, g.indexOf('-'));
+                        formData.append('ownershipGroupId', groupId); // Ownership Group ID
+                        for (var i = 0; i < result.length; i++) {
+                            formData.append('clubId', result[i].PF_Club_ID__c);
+                        }
+
+                        // Open the connection.
+                        xhr.open('POST', '{!$Setup.Community_Settings__c.PF_Azure_Endpoint__c}/upload', true); // VFP should populate the URL
+
+                        // Set up a handler for when the request finishes.
+                        xhr.onload = function () {
+                            if (xhr.status === 200) {
+                                $scope.processUploadedSheet(xhr.responseText, result);
+                            } else if (xhr.status === 400) {
+                                showErrorPane(xhr.responseText);
+                            }
+                            else {
+                                console.log(xhr);
+                            }
+                        };
+
+                        // Send the Data.
+                        xhr.send(formData);
+                    })
+                    .catch(function(err) {
+                        showErrorPane('Error when trying to upload file.  Error Message = ' + JSON.stringify(err));
+                    });
+                };
+
+                // Process uploaded sheet
+                $scope.processUploadedSheet = function(responseText, clubs) {
+                    var res = JSON.parse(responseText).output.data;
+
+                    console.log(res);
+                    console.log(clubs);
+                    // First loop through and create all the appropriate Compliance__c records
+                    var results = [];
+                    var first = res[0];
+                    Object.keys(first).forEach(function (key) {
+                        if (key !== 'Tactic') {
+                            var comp = new SObjectModel.Compliance();
+                            for (var i = 0; i < clubs.length; i++) {
+                                if (clubs[i].PF_Club_ID__c === key) {
+                                    comp.Club = clubs[i].Id;
+                                    comp.ClubId = clubs[i].PF_Club_ID__c;
+                                    var month = document.getElementById('month').options[document.getElementById('month').selectedIndex].value;
+                                    var year = document.getElementById('year').options[document.getElementById('year').selectedIndex].value;
+                                    comp.MarketingSpendId = comp.ClubId + '-' + month + '-' + year; // Upsert key - [CLUBID]-[MM]-YYYY
+                                    comp.Month = new Date(month + '/01/' + year);
+                                    comp.Name = comp.MarketingSpendId + ' Marketing Spend';
+                                    comp.RecordType = '{!$Setup.Community_Settings__c.Marketing_Spend_Record_Type_ID__c}'; // Custom setting
+                                    results.push(comp);
+                                    break;
+                                }
+                            }
+                        }
+                    });
+                    // Now loop through and populate the club spends for each row
+                    for (var i = 0; i < res.length; i++) {
+                        populateTacticForClubs(res[i].Tactic, res[i], results);
+                    }
+
+                    // Put the records in scope for later processing
+                    var allPromises = [];
+                    // Zero these out
+                    $scope.complianceRecords = [];
+                    $scope.complianceRecordsToOverwrite = [];
+                    angular.forEach(results, function(res) {
+                        // if(res['ClubId'] === '1582') {
+                        console.log('These are the results');
+                        console.log(res);
+                            var promise = $ApexController.getMarketingSpendRecord(res['MarketingSpendId']);
+                            promise
+                            .then(function(record) {
+                                var c = createComplianceObject(res);
+                                if (record !== null && record.length > 0) {
+                                    console.log(record);
+                                    // We have a pre-existing record that will be updated, add it to the list
+                                    c.set('Id', record[0].get('Id'));
+                                    $scope.complianceRecordsToOverwrite.push(c);
+                                }
+                                $scope.complianceRecords.push(c);
+                            })
+                            .catch(function(err) {
+                                showErrorPane('Error when trying to process uploaded spreadsheet.  Error Message = ' + JSON.stringify(err));
+                            });
+
+                            //Add sort to the compliance records
+
+
+                            allPromises.push(promise);
+                        // }
+                    });
+
+
+
+                    // Show Success Pane
+                    Promise.all(allPromises).then(function() {
+                        showSuccessPane();
+                    });
+
+
+                };
+
+                $scope.saveToSalesforce = function() {
+                    // Put the records in scope for later processing
+                    var allPromises = [];
+                    for (var i = 0; i < $scope.complianceRecords.length; i++) {
+                        var c = $scope.complianceRecords[i];
+                        var promise = $ApexController.upsertMarketingSpendRecord(c);
+                        promise.then(function(record) {
+                            console.log('Record upserted = ' + record);
+                        })
+                                .catch(function(err) {
+                                    showErrorPane('Error when trying to save to Salesforce.  Error Message = ' + JSON.stringify(err));
+                                });
+                        allPromises.push(promise);
+                    }
+                    // Show Success Pane
+                    Promise.all(allPromises).then(function() {
+                        console.log('All upserts done!'); // Show visually
+                        showSuccessfulSave();
+                    });
+                };
+
+                // Calculate total spend for a club
+                $scope.calcTotal = function(club) {
+                    var total = 0;
+                    Object.keys(club._props).forEach(function (key) {
+                        console.log(key);
+                        if (key !== 'Tactic' && !isNaN(club.get(key)) && key !== 'mspend_Spend_Month__c') {
+                            total += parseFloat(club.get(key));
+
+                        }
+                    });
+                    // console.log('calcTotal(' + club.get('Name') + ' = ' + total);
+                    return total.toFixed(2);
+                };
+
+                // Return the PF Club ID
+                $scope.compName = function(club) {
+                    return club.get('Name');
+                };
+
+                $scope.getClubId = function(complianceName) {
+                    return complianceName.substr(0, 4);
+                };
+
+                // Test harness for compliance status
+                $scope.testComplianceStatus = function() {
+                    var promise = $ApexController.getComplianceStatusResults();
+                    promise
+                    .then(function(result) {
+                        console.log('getComplianceStatusResults() = ' + JSON.stringify(result));
+                    })
+                    .catch(function(err) {
+                        console.log('getComplianceStatusResults failed with ' + err);
+                    });
+                };
+
+                // Prepopulate the form if the data is available in the query string
+                $scope.initForm = function() {
+                    if(getUrlParameter('month') !== null && getUrlParameter('month') !== "") {
+                        var month = document.getElementById('month');
+                        month.value = getUrlParameter('month');
+                    }
+                    if(getUrlParameter('year') !== null && getUrlParameter('year') !== "") {
+                        var year = document.getElementById('year');
+                        year.value = getUrlParameter('year')
+                    }
+                    if(getUrlParameter('g') !== null && getUrlParameter('g') !== "") {
+                        var g = document.getElementById('{!$Component.groupForm.selectedGroup}');
+                        g.value = getUrlParameter('g');
+                    }
+                };
+            }]);
+
+            var previousUploadSuccess = false;
+
+            function showSuccessPane() {
+                // Update UI
+                $('#errorpane')[0].style.display = 'none'; // Hide any previous result just in case
+                $('#tab_save_li').removeClass('disabled');
+                $('#tab_save').attr('data-toggle', 'tab');
+                $('#tab_save').attr('href', '#tabpreviewsave');
+                $('#tab_save').trigger('click');
+                if(!previousUploadSuccess) {
+                    $('.circle-loader').toggleClass('load-complete');
+                    $('.checkmark').toggle();
+                    previousUploadSuccess = true;
+                }
+                $('#successpane')[0].style.display = 'block';
+            }
+
+            function showErrorPane(responseText) {
+                $('#successpane')[0].style.display = 'none'; // Hide any previous result just in case
+                $('#tab_save_li').removeClass('disabled');
+                $('#tab_save').attr('data-toggle', 'tab');
+                $('#tab_save').attr('href', '#tabpreviewsave');
+                $('#tab_save').trigger('click');
+                if(isJSON(responseText) && JSON.parse(responseText).output.err_desc !== undefined) { // Validation Errors from the Azure service
+                    $('#errorpane')[0].innerHTML = '<strong>' + JSON.parse(responseText).output.err_desc + ':</strong><br/><ul>';
+                    for (var i = 0; i < JSON.parse(responseText).output.validation_errors.length; i++) {
+                        $('#errorpane')[0].innerHTML += '<li>' + JSON.parse(responseText).output.validation_errors[i] + '</li>';
+                    }
+                } else { // Error from elsewhere, just a string.
+                    $('#errorpane')[0].innerHTML = '<strong>Unexpected Error:</strong><br/><ul>';
+                    $('#errorpane')[0].innerHTML += '<li>' + responseText +'</li>';
+                }
+
+                $('#errorpane')[0].innerHTML += '</ul>';
+                $('#errorpane')[0].style.display = 'block';
+            }
+
+            function showSuccessfulSave() {
+                $('#successfulSave').modal();
+            }
+
+            function makeUploadTabActive() {
+                // Set active tab to upload tab
+                $('#tab_upload').trigger('click');
+            }
+
+            function populateTacticForClubs(tactic, row, compliances) {
+                Object.keys(row).forEach(function (key) {
+                    if (key !== 'Tactic') {
+                        var comp = getComplianceWithClubId(compliances, key);
+                        //comp[tactic] = row[key].replace('$', '');
+                        comp[tactic] = row[key]
+                    }
+                });
+            }
+
+            function getComplianceWithClubId(compliances, clubId) {
+                var ret = null;
+                for (var i = 0; i < compliances.length; i++) {
+                    if (compliances[i].ClubId === clubId) {
+                        ret = compliances[i];
+                        break;
+                    }
+                }
+                return ret;
+            }
+
+            function createComplianceObject(res) {
+                return new SObjectModel.Compliance({
+                    Name: res['Name'],
+                    mspend_Marketing_Spend_ID__c: res['MarketingSpendId'],
+                    Club__c: res['Club'],
+                    mspend_Spend_Month__c: res['Month'],
+                    RecordTypeId: res['RecordType'],
+                    mspend_Television__c: res['Television'],
+                    mspend_Streaming_Television__c: res['Streaming Television'],
+                    mspend_Radio__c: res['Radio'],
+                    mspend_Streaming_Radio__c: res['Streaming Radio'],
+                    mspend_Direct_Mail__c: res['Direct Mail'],
+                    mspend_Shared_Mail__c: res['Shared Mail'],
+                    mspend_Letter__c: res['Letter'],
+                    mspend_Email__c: res['Email'],
+                    mspend_Digital_Display__c: res['Digital Display'],
+                    mspend_SEO_SEM__c: res['SEO/SEM'],
+                    mspend_Social__c: res['Social'],
+                    mspend_OOH__c: res['OOH'],
+                    mspend_Newspaper__c: res['Newspaper'],
+                    mspend_Events__c: res['Events'],
+                    mspend_Sponsorships__c: res['Sponsorship(s)'],
+                    mspend_Guerilla_Marketing__c: res['Guerilla Marketing'],
+                    mspend_Promotional_POP__c: res['Promotional POP'],
+                    mspend_Public_Relations_Fee__c: res['Public Relations Fee'],
+                    mspend_Production_Fees__c: res['Production Fees'],
+                    mspend_Agency_Fees__c: res['Agency Fees'],
+                    mspend_Reoccurring_Co_Op_Contribution__c: res['Reoccurring Co-Op Contribution'],
+                    mspend_Promotional_Club_Expense__c: res['Promotional Club Expense']
+                });
+            }
+
+            function isJSON(str) {
+                try {
+                    JSON.parse(str);
+                } catch (e) {
+                    return false;
+                }
+                return true;
+            }
+
+            function getUrlParameter(name) {
+                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+                var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+                var results = regex.exec(location.search);
+                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+            }
+        </script>
+    </head>
+    <body>
+        <div class="avs" ng-app="pfMarketingSpendApp">
+            <div ng-controller="pfMarketingSpendController" data-ng-init="initForm()">
+                <div class="no-sf-style page-body page-retail">
+                    <div class="container">
+                        <!--div class="jumbotron">
+                            <div class="row">
+                                <div class="col-md-6 page-description">
+                                    <h1>Marketing Spend</h1>
+                                    <p>The local marketing dollars fueling your growth!</p>
+                                </div>
+                                <div class="col-md-6 page-description-image hidden-xs hidden-sm">
+                                    <img class="img-responsive" src="/resource/CommunityAssets/img/retail-banner.jpg"/>
+                                </div>
+                            </div>
+                        </div-->
+
+                        <!--ol class="breadcrumb">
+                            <li><a href="/apex/PFHomepage">Home</a></li>
+                            <li>Marketing Spend</li>
+                        </ol-->
+
+                        <div class="row">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="panel with-nav-tabs panel-default">
+                                            <div class="panel-heading">
+                                                <ul class="nav nav-tabs" style="font-size:14px;">
+                                                    <li class="active"><a href="#tabdownloadtemplate" data-toggle="tab"
+                                                                          id="tab_download">Download Template</a></li>
+                                                    <li><a href="#tabupload" data-toggle="tab" id="tab_upload">Upload</a>
+                                                    </li>
+                                                    <li id="tab_save_li" class="disabled"><a id="tab_save">Validate /
+                                                        Save</a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="tab-content">
+                                                    <div class="tab-pane fade in active" id="tabdownloadtemplate" style="font-size:16px;">
+                                                        <p>First, select the <strong>Month</strong>, <strong>Year</strong>, and <strong>Group</strong> that you would like to upload the Marketing Spend for.
+                                                            Then, click the <strong>Download Template</strong> button.  This will create and download a pre-populated Excel Spreadsheet where you can enter in
+                                                            the Marketing spend information into.</p>
+                                                        <br/>
+                                                        <div class="form-group">
+                                                            <label for="month">Month</label>
+                                                            <select name="month" id="month" class="form-control">
+                                                                <option value="01">January</option>
+                                                                <option value="02">February</option>
+                                                                <option value="03">March</option>
+                                                                <option value="04">April</option>
+                                                                <option value="05">May</option>
+                                                                <option value="06">June</option>
+                                                                <option value="07">July</option>
+                                                                <option value="08">August</option>
+                                                                <option value="09">September</option>
+                                                                <option value="10">October</option>
+                                                                <option value="11">November</option>
+                                                                <option value="12">December</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="year">Year</label>
+                                                            <select name="year" id="year" class="form-control">
+                                                                <option>2017</option>
+                                                                <option>2018</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="selectedGroup">Group</label>
+                                                            <apex:form id="groupForm">
+                                                                <apex:selectList size="1" value="{!selectedGroup}"
+                                                                                 id="selectedGroup"
+                                                                                 styleClass="form-control">
+                                                                    <apex:selectOptions value="{!groupNames}"/>
+                                                                </apex:selectList>
+                                                            </apex:form>
+                                                        </div>
+                                                        <button type="button" class="btn btn-primary"
+                                                                ng-click="downloadTemplate()">Download Template
+                                                        </button>
+                                                        <!--<button type="button" class="btn btn-primary"-->
+                                                                <!--ng-click="testComplianceStatus()">Test Compliance Status-->
+                                                        <!--</button>-->
+                                                    </div>
+                                                    <div class="tab-pane fade" id="tabupload" style="font-size:16px;">
+                                                        <p>Next, once the Excel sheet is filled out, please upload the file.
+                                                            Click <strong>Choose File</strong> and select the file, then click the <strong>Upload</strong>
+                                                            button.  This will start the sheet validation process.  For questions on the meanings of the
+                                                            different Tactics, see the <a data-toggle="modal" data-target="#tacticDef">Tactic Definitions</a>.
+                                                        </p>
+                                                        <br/>
+                                                        <form ref='uploadForm'
+                                                              id='uploadForm'
+                                                              method='post'
+                                                              encType="multipart/form-data"
+                                                                name="myForm">
+                                                            <div class="form-group">
+                                                                <label for="sampleFile">Upload Marketing Spend
+                                                                    Spreadsheet</label>
+                                                                <input type="file" class="form-control-file"
+                                                                       name="sampleFile" id="sampleFile" />
+                                                            </div>
+                                                            <input type="button" class="btn btn-primary"
+                                                                   ng-click="uploadFile()" value="Upload"/>
+                                                        </form>
+                                                        <!-- Tactic Definitions Modal -->
+                                                        <div class="modal fade" id="tacticDef" tabindex="-1" role="dialog" aria-labelledby="tacticDefTitle" aria-hidden="true">
+                                                            <div class="modal-dialog modal-lg" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h3 class="modal-title" id="tacticDefTitle">Tactic Definitions</h3>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <table class="table">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th><strong>Tactic</strong></th>
+                                                                                    <th><strong>Definition</strong></th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td>Television</td>
+                                                                                    <td>Video content distributed on traditional media channels such as Broadcast, Cable, or Satellite</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Streaming Television</td>
+                                                                                    <td>Video content distributed and consumed over the internet (ex Online Pre-Roll, Hulu, etc)</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Radio</td>
+                                                                                    <td>Audio content distributed on traditional AM/FM Radio frequencies</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Streaming Radio</td>
+                                                                                    <td>Audio content distributed and consumed over the internet (ex Pandora, Spotify)</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Direct Mail</td>
+                                                                                    <td>Printed content sent direct to a prospect with the mail system</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Shared Mail</td>
+                                                                                    <td>Printed content combined with other advertisers and distributed as a single mail piece to multiple homes and businesses</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Letter</td>
+                                                                                    <td>Printed content in an envelope sent direct to a prospect</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Email</td>
+                                                                                    <td>Digital content distributed via an email address</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Digital Display</td>
+                                                                                    <td>Digital content distributed and consumed over the internet or on mobile device (banner ads, retargeting)</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>SEO/SEM</td>
+                                                                                    <td>Digital copy placed on the internet used to increase web traffic by obtaining high ranking search results (ex Google, Bing, Yahoo)</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Social</td>
+                                                                                    <td>Digital content distributed and consumed on social media (ex Facebook)</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>OOH</td>
+                                                                                    <td>(Out Of Home) Content consumed outside a consumers dwelling (ex Billboard, Transit)</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Newspaper</td>
+                                                                                    <td>Printed Content distributed and consumed through traditional newspaper advertising (ad copy, post-it notes)</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Events</td>
+                                                                                    <td>A themed activity, display, occasion, or exhibit for a promotion</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Sponsorship(s)</td>
+                                                                                    <td>A partnership with another organization</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Guerilla Marketing</td>
+                                                                                    <td>Innovative, unconventional, and low-cost marketing techniques aimed at obtaining maximum exposure for a product. (ex. Street Teams)</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Promotional POP</td>
+                                                                                    <td>Collateral used for a limited time promotion at the club level (ex Upgrade Banner Display or Window Cling)</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Public Relations Fee</td>
+                                                                                    <td>Fees associated with paying a PR agency</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Production Fees</td>
+                                                                                    <td>Fees associated with developing content</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Agency Fees</td>
+                                                                                    <td>Fees associated with paying a Media agency</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Reoccurring Co-Op Contribution</td>
+                                                                                    <td>Co-ops that collect a set amount of money on a monthly basis to establish a fund.  The fund is used on co-op inititives throughout the year and actual marketing dollars are not reflected of media support for each month. A separate co-op spend tracker will have to be completed by the co-op manager or the marketing agency that outlines how the co-op funds are allocated throughout the year on a DMA basis.</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Promotional Club Expense</td>
+                                                                                    <td>Collateral used for operating a business (ex T-shirts, Pens, Stickers, Pizza, Bagels)</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Ownership Group Number</td>
+                                                                                    <td>Refers to Planet Fitness Group Number Identifier (ex G0001-Corporate)</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>DMA</td>
+                                                                                    <td>A Designated Market Area or a DMA is a geographic area that represents specific television markets as defined by and updated annually by the Nielsen Company.</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>ACCRUAL Accounting</td>
+                                                                                    <td>Accounting method that records revenues and expenses when they are incurred, regardless of when cash is exchanged. The term "accrual" refers to any individual entry recording revenue or expense in the absence of a cash transaction.</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>CASH Accounting</td>
+                                                                                    <td>Cash accounting is an accounting method where receipts are recorded during the period they are received, and expenses are recorded in the period in which they are actually paid.</td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="tab-pane fade" id="tabpreviewsave">
+                                                        <div id="successpane" style="display: none;font-size:16px;">
+                                                            <p>Success!  You've uploaded a valid Marketing Spend Spreadsheet!  Now, click the <strong>Review Club Totals</strong> button to
+                                                            confirm that the numbers are correct.  If correct, click <strong>Save</strong> to save these records.</p>
+                                                            <table width="75%">
+                                                                <tr valign="top" align="center">
+                                                                    <td>
+                                                                        <div class="circle-loader"><div class="checkmark draw"></div></div>
+                                                                    </td>
+                                                                    <td rowspan="2" align="left">
+                                                                        <div>
+                                                                            <table width="75%">
+                                                                                <tr>
+                                                                                    <td colspan="2" align="center"><h1>Upload Summary</h1></td>
+                                                                                </tr>
+                                                                                <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+                                                                                <tr>
+                                                                                    <td align="center"><h3>Validation Status</h3></td>
+                                                                                    <td><h3><span class="text-success"><strong>SUCCESS</strong></span></h3></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td align="center"><h3>Number of Clubs</h3></td>
+                                                                                    <td><h3><span class="text-success"><strong>{{complianceRecords.length}}</strong></span></h3></td>
+                                                                                </tr>
+                                                                                <tr ng-show="complianceRecordsToOverwrite.length > 0">
+                                                                                    <td align="center"><h3>Overwrite Records</h3></td>
+                                                                                    <td>
+                                                                                        <!--<p>This will overwrite existing Marketing Spend Records.  Please check the box to confirm.</p>-->
+                                                                                        <p><input type="checkbox" class="checkbox-row" ng-model="overwriteConfirmed"/>&nbsp;&nbsp;Confirm Overwrite</p>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+                                                                                <tr>
+                                                                                    <td colspan="2" align="center">
+                                                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#clubTotalsModal">Review Club Totals</button>
+                                                                                        <button type="button" class="btn btn-primary" ng-click="saveToSalesforce()" ng-disabled="complianceRecordsToOverwrite.length > 0 && !overwriteConfirmed">Save</button>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                        <div class="alert alert-danger" id="errorpane"
+                                                             style="display: none;"></div>
+                                                        <!-- Club Totals Modal -->
+                                                        <div class="modal fade" id="clubTotalsModal" tabindex="-1" role="dialog" aria-labelledby="clubTotalsModalTitle" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="clubTotalsModalTitle">Club Totals</h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <table class="table">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Club Id</th>
+                                                                                    <th>Marketing Spend</th>
+                                                                                    <th>Total Amount ($)</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr ng-repeat="c in complianceRecords | orderBy: '_props.Name'" ng-init="$parent.total[compName(c)] = calcTotal(c)">
+                                                                                    <!--<td>{{c._props.Name}}</td>-->
+                                                                                    <td>{{getClubId(c._props.Name)}}</td>
+                                                                                    <td>{{compName(c)}}</td>
+                                                                                    <td>${{total[compName(c)]}}</td>
+                                                                                    <!--<td>${{calcTotal(c)}}</td>-->
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Successful Save Modal -->
+                                                        <div class="modal fade" id="successfulSave" tabindex="-1" role="dialog" aria-labelledby="successfulSaveLabel" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title" id="successfulSaveLabel">Marketing Spend Upload Successful</h4>
+                                                                        <button type="button" class="close" onclick="window.location='/'" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body" style="font-size:16px;">
+                                                                        Your Marketing Spend Upload was successful!  Click <strong>OK</strong> to return to the Marketing Spend Status page.
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-primary" onclick="window.location='/apex/PFMarketingSpendStatus'">OK</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</apex:page>

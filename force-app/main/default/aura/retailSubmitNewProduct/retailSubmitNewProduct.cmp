@@ -1,0 +1,12 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+
+    <article class="center">
+    	<a href="/all-products">
+            <img class="img-responsive" src="https://app.planetfitness.com/salesforce/assets/submit_product.png"/>
+        </a>
+        <h2 class="slds-text-heading_medium">Submit New Product</h2>
+        <p>Planet Fitness is continuously looking to add new merchandise to the current product assortment. A new product recommendation can be submitted here.</p>
+        <lightning:button variant="brand" label="Submit New Product" onclick="{! c.gotoPage}" title="/submit-new-product" />
+    </article>
+        
+</aura:component>

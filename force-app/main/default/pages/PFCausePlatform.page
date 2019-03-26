@@ -1,0 +1,131 @@
+<apex:page docType="html-5.0" title="Cause Platform | Planet Fitness Franchise Community" label="PFCausePlatform" name="PFCausePlatform" showHeader="true" sidebar="false" standardStylesheets="false">
+    <div class="no-sf-style page-body page-clubs">
+        <div class="main-section">
+            <div style="text-align:center; padding:10px; margin-bottom:30px;">
+                <img style="width:370px;" src="http://app.planetfitness.com/salesforce/assets/JFG Logo sm.png"/>                
+            </div>
+            
+            <div class="container">
+               
+                <div style="float:right; text-align:center;">
+                <a href="http://bgca.org/Pages/index.aspx" target="_blank"><img src="http://app.planetfitness.com/salesforce/assets/boys-and-girls.png" style="width:275px; padding:20px;"/></a><br/>
+                </div>
+                
+                <p class="section-title">About The Judgement Free Generation&trade;</p>
+                The Judgement Free Generation is Planet Fitness’ philanthropic initiative designed to combat the judgement and bullying faced by today’s youth by creating a culture of kindness and encouragement.
+                <br/><br/>
+                Bullying has become all-too-common in today’s society, with 1 in 4 youth reporting that they’ve been bullied and parents of school-aged children citing it as their #1 concern. With our Judgement Free Zone® and No Gymtimidation® policies as a solid foundation, Planet Fitness is the perfect company to tackle this issue.
+                <br/><br/>
+                                
+                <p class="section-title">Our Mission</p>
+                The Judgement Free Generation aims to empower a generation to grow up contributing to a more judgement free planet— a place where everyone feels accepted and like they belong.
+                <br/><br/>
+                
+                <p class="section-title">Our Partners</p> 
+                Together with our partners, we are providing youth with evidence-based tools and trainings across the country to create a culture where bullying is not accepted and kindness prevails.
+                <br/><br/>
+                Since Boys &amp; Girls Clubs of America, the nation's leading youth development organization, enables more than four million youth each year to reach their full potential, we believe that we can and will make a meaningful impact together.
+                <br/><br/>
+                
+                <p class="section-title">What We're Doing</p> 
+                Together with our partners, we have:
+                <br/>
+                <ul>
+                <li>
+                Donated approximately $1.5M to our charity partners since 2016
+                </li>
+                <li>
+                Engaged in volunteer efforts at local Boys &amp; Girls Clubs to help make our judgement free mission a reality, with the help of our passionate franchisees and staff
+                </li>
+                <li>
+                Provided first-of-its-kind anti-bullying / pro-kindness training to Boys &amp; Girls Club staff and youth leaders via local grants, reaching 360+ Boys &amp; Girls Clubs across the U.S. (and counting!)
+                </li>
+                <li>
+                Recognized standout Boys &amp; Girls Club teen leaders through our Judgement Free Generation Scholarship Program for embodying the values of kindness and acceptance 
+                </li>
+                <li>
+                Launched the first of a series of Mini Judgement Free Zones, which are positive, welcoming gym spaces in local Boys &amp; Girls Clubs
+                </li>
+                <li>
+                And there’s more to come!
+                </li>
+                </ul>
+
+                
+
+                
+                
+                        <br/>
+                    <p style="text-align:center; margin-top:40px; margin-bottom:40px; color: #9b1889; font-family: Rockwell, 'Courier Bold', Courier, Georgia, Times, 'Times New Roman', serif; font-size:26px;">Together, we can and will create the first-ever Judgement Free Generation!</p>
+                </div>
+            
+                <div class="row homepage-section my-group-health-section" >
+                    <div class="col-md-4" >
+                        <div class="panel panel-default group-health-panel" >
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Resources</h3>
+                            </div>
+                            <br/>
+                            <!--
+                            <div style="text-align:center;">
+                                <a href="https://fm-planetfitness.force.com/articles/Judgement_Free_Press/November-Sale-Guide?popup=false" class="btn btn-pf" style="width:210px;">November Sale Guide</a><br/>
+                                This guide includes important Nov. sale information, such as operational instructions and talking points for discussing The Judgement Free Generation initiative with members.
+                                <br/><br/>
+                            </div>
+                             <div style="text-align:center;">
+                                <a href="https://fm-planetfitness.force.com/articles/Judgement_Free_Press/JFG-Pin-Up-Template" class="btn btn-pf" style="width:210px;">JFG Pin Up Template</a><br/>
+                                 Each club is being sent 250 pin ups as part of the Nov. sale marketing toolkit (see above Nov. November Sale Guide for details). If you run out of these pin ups, please click above<br/>button to download a template that you can print locally. 
+                                <br/><br/>
+                            </div>
+                            <div style="text-align:center;">
+                                <a href="https://fm-planetfitness.force.com/articles/Judgement_Free_Press/November-Sale-Webinar-Deck" class="btn btn-pf" style="width:210px;">Nov Sale Wabinar Deck</a><br/>
+                                Please click above button to view the November Sale<br/>Informational Webinar deck.
+                                <br/><br/>
+                            </div>
+                            -->
+                            <div style="text-align:center;">
+                                <a href="https://fm-planetfitness.force.com/articles/Marketing/Judgement-Free-Generation-Guide" class="btn btn-pf" style="width:210px;">Download JFG Guide</a><br/>
+                                The JFG guide has all of the information <br/> you need to know about how you can get involved locally.
+                            </div>
+                            <br/><br/>
+                            <div style="text-align:center;">
+                                <a href="https://fm-planetfitness.force.com/articles/Marketing/BGCA-Club-Locations" class="btn btn-pf" style="width:210px;">Find Closest BGCA Club</a><br/>
+                                Find the closest BGCA Club to your PF location.
+                            </div>
+                            <br/><br/>
+                            <div style="text-align:center;">
+                                <a href="https://fm-planetfitness.force.com/articles/Marketing/Judgement-Free-Generation-Fact-Sheet" class="btn btn-pf" style="width:210px;">JFG Fact Sheet</a><br/>
+                                The Judgement Free Generation 101
+                            </div>
+                                                       
+                            
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="panel panel-default group-health-panel">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Contact Info</h3>
+                            </div>
+                            <div class="panel-body" style="min-height:175px;">
+                                <p class="panel-sub-text" style="text-align:left;">If you have any questions about The Judgement Free Generation, please contact:</p>
+                                <p class="panel-sub-text" style="text-align:left;"><strong>Corporate Communications Team</strong><br/>McCall Gosselin, Dineen Boyle, Becky Zirlen</p>
+                                <p class="panel-sub-text" style="text-align:left;"><strong>Email:</strong> <a href="mailto:jfg@pfhq.com">jfg@pfhq.com</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" style="display:none;">
+                        <div class="panel panel-default group-health-panel">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">November Sale Informational Webinar</h3>
+                            </div>
+                            <div class="panel-body" style="min-height:175px;">
+                                <iframe src="https://player.vimeo.com/video/189006882" width="315" height="225" frameborder="0" webkitallowfullscreen="1" mozallowfullscreen="1" allowfullscreen="1"></iframe>
+
+                            </div>
+                        </div>
+                    </div>
+                            
+            </div>
+        </div>
+    </div>
+</apex:page>

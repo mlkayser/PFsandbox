@@ -1,0 +1,115 @@
+<apex:page controller="PFRetailController" docType="html-5.0" title="Retail | Planet Fitness Franchise Community" label="PFRetail" name="PFRetail" showHeader="true" sidebar="false" standardStylesheets="false">
+    <div class="no-sf-style page-body page-retail">
+        <div class="container">
+            <div class="jumbotron">
+                <div class="row">
+                    <div class="col-md-6 page-description">
+                        <h1>Retail</h1>
+                        <p>The Retail Page is home to all club-related retail information and resources. The list of best-selling items is designed help you select the best product assortment for your club. To recommend that an item be reviewed by the PF Retail Committee, the new product submission form allows you to submit your ideas for consideration.</p>
+                    </div>
+                    <div class="col-md-6 page-description-image hidden-xs hidden-sm">
+                        <img class="img-responsive" src="/resource/CommunityAssets/img/retail-banner.jpg"/>
+                    </div>
+                </div>
+            </div>
+
+            <ol class="breadcrumb">
+              <li><a href="/apex/PFHomepage">Home</a></li>
+              <li>Retail</li>
+            </ol>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="main-section">
+                        <p class="section-title">Retail Links</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="retail-links-section">
+                        <a href="/PFAllProducts"><img class="img-responsive" src="https://app.planetfitness.com/salesforce/assets/approved_items.png"/></a>
+                        <p class="retail-links-title">Approved Product List</p>
+                        <p>The PF Retail Committee has approved the sale of the items listed below. All items are available in each POS system and can be sold at PF locations.</p>
+                    </div>
+                    <div class="retail-links-section-btn">
+                        <a href="/PFAllProducts" class="btn btn-pf">View Approved Products List</a>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="retail-links-section">
+                        <a href="/PFSubmitProduct"><img class="img-responsive" src="https://app.planetfitness.com/salesforce/assets/submit_product.png"/></a>
+                        <p class="retail-links-title">Submit New Product</p>
+                        <p>Planet Fitness is continuously looking to add new merchandise to the current product assortment. A new product recommendation can be submitted here.</p>
+                    </div>
+                    <div class="retail-links-section-btn">
+                        <a href="/PFSubmitProduct" class="btn btn-pf">Submit New Product</a>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="retail-links-section">
+                        <a href="/PFBrandStandards"><img class="img-responsive" src="https://app.planetfitness.com/salesforce/assets/brand_standards.png"/></a>
+                        <p class="retail-links-title">Brand Standards</p>
+                        <p>Consistency is a high priority with our brand stregth in order to reflect a uniform brand experience for our members.</p>
+                    </div>
+                    <!--
+                    <div class="retail-links-section-btn">
+                        <a href="/PFBrandStandards" class="btn btn-pf">View Brand Standards</a>
+                    </div>
+                    -->
+                </div>
+            </div>
+<br/><br/><br/>
+
+            <!--
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="retail-links-section">
+                        <a href="#"><img class="img-responsive" src="/resource/CommunityAssets/img/brand-standards-img.jpg"/></a>
+                        <p class="retail-links-title">Brand Standards</p>
+                        <p>There is a now a formal process for submitting new retail ideas on Franchise Management which will be reviewed by the PF Retail Committee in a timely manner.</p>
+                    </div>
+                    <div class="retail-links-section-btn">
+                        <a href="/{!BrandStandards}" class="btn btn-pf">View Now</a>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="retail-links-section">
+                        <a href="#"><img class="img-responsive" src="/resource/CommunityAssets/img/In-Club_Presentation-img.jpg"/></a>
+                        <p class="retail-links-title">In-Club Presentation</p>
+                        <p>Creating an exciting merchandise presentation can have a positive impact on our members and ultimately our retail sales.</p>
+                    </div>
+                    <div class="retail-links-section-btn">
+                        <a href="/{!InClubPresentation}" class="btn btn-pf">Learn More</a>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="retail-links-section">
+                        <a href="#"><img class="img-responsive" src="/resource/CommunityAssets/img/submit-new-product-img.jpg"/></a>
+                        <p class="retail-links-title">Submit New Product</p>
+                        <p>Planet Fitness is continuously looking to add new merchandise to the current product assortment. A new product recommendation can be submitted here.</p>
+                    </div>
+                    <div class="retail-links-section-btn">
+                        <a href="/PFSubmitProduct" class="btn btn-pf">Submit New Product</a>
+                    </div>
+                </div>
+            </div>
+            -->
+            <!--
+            <div class="top-selling-items-section">
+                <c:PFTopSellingItemsSection />
+            </div>
+            -->
+            <!--
+            <div class="fusion-retail-barcodes-section">
+                <c:PFFusionRetailBarcodesSection />
+            </div> 
+            -->
+            <!--
+            <div class="view-all-products-btn">
+                <a href="/PFAllProducts" class="btn btn-pf">View All Products</a>
+            </div>
+            -->
+        </div>
+    </div>
+</apex:page>

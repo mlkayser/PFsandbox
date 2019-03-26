@@ -1,0 +1,67 @@
+<apex:page applyHtmlTag="false" applyBodyTag="false" showHeader="false" sidebar="false" standardStylesheets="false" contentType="text/javascript">
+/**
+* Main JavaScript file for Planet Fitness Community
+* @Author: Brett Hammond
+* @Date: 2015-09-29
+* @Update: 
+*/
+	/** change jQuery namespace **/
+    var $j = jQuery.noConflict();
+    
+    $j(document).ready(function () {
+
+    	// This sets the field focus on page load to none, natively the global search is focused on page load
+		function setFocusOnLoad() {}
+
+		// Hightlight the Main Nav items when the page is active
+		var mainMenu = $j('.main-menu');
+        var path = location.pathname.split('/');
+        if(path[1] == '' || path[1] == 'PFHomepage' || path[2] == 'PFHomepage'){
+            mainMenu.find('.menu-home').addClass('active');
+        }else if(path[1] == 'PFClubs' || path[2] == 'PFClubs' || path[1] == 'PFClubDetail' || path[2] == 'PFClubDetail'){
+            mainMenu.find('.menu-clubs').addClass('active');
+        }else if(path[1] == 'knowledge' || path[2] == 'knowledge'){
+            mainMenu.find('.menu-resources').addClass('active');
+        }else if(path[1] == 'PFRetail' || path[2] == 'PFRetail'){
+            mainMenu.find('.menu-retail').addClass('active');
+        }
+
+        //Inject Profile pic, name to header
+        $j(".profile-pic").append('<c:PFHeaderProfilePic />');
+
+        // Dynamic Footer Link for M.A.T.C.H - stored in custom settings and injected to footer documenent link
+        $j(".match-link").append('<a href="{!$Setup.Community_Settings__c.Ansira_URL__c}">M.A.T.C.H.</a>');
+
+        // Change color of selected Accordion - Club Detail
+	    // Toggle "active" class for current collapse section
+		$j(".collapse").on('show.bs.collapse', function () {
+		   $j(".collapse").prev().removeClass("active");
+		   $j(this).prev().addClass("active");
+		});
+		$j('.collapse').on('hide.bs.collapse', function () {
+		   $j(this).prev().removeClass("active");
+		});
+		
+		// PFCC-2907: check if user has access to Retail Products and remove navigation link if no access to object
+		if ({!$ObjectType.Retail_Product__c.accessible} === false) {
+			$j(".menu-retail").remove();
+		}
+
+		// Remove the GroupHealth section from Broker Profiles - Brokers do not have access to Cases
+		if ({!$ObjectType.Case.accessible} === false) {
+			$j(".my-group-health-section").remove();
+		};
+		
+		//PFCC-3063: moved code from PFTermsAndConditions
+		try {
+			if (!termsAccepted) {
+				$j("#termsModal").modal({
+					backdrop: "static",
+					keyboard: false
+				});
+			}
+		} catch(e) {}
+
+	});
+
+</apex:page>

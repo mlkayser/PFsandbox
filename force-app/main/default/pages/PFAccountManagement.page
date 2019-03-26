@@ -1,0 +1,110 @@
+<apex:page docType="html-5.0" title="Account Management | Planet Fitness Franchise Community" label="PFAccountManagement" name="PFAccountManagement" showHeader="true" sidebar="false" standardStylesheets="false">
+<div class="no-sf-style page-body page-landing-page-request">
+        <div class="container" style="min-height:30px;">
+            <div class="jumbotron">
+                <div class="row">
+                    <div class="col-md-6 page-description">
+                        <h1>Account Management</h1>
+                        <p>Manage and request FM access for your group’s users! Here you will be able to request accounts for Owner, Broker, and individual Club access.</p>
+                    </div>
+                    <div class="col-md-6 page-description-image hidden-xs hidden-sm">
+                        <img class="img-responsive" src="http://app.planetfitness.com/salesforce/assets/user-accounts.jpg"/>
+                    </div>
+                </div>
+            </div>
+
+            <ol class="breadcrumb">
+              <li><a href="/apex/PFHomepage">Home</a></li>
+              <li>Account Management</li>
+            </ol>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="main-section">
+                        <p class="section-title">About Account Management</p>
+                        <p style="font-size:16px;">
+                            Welcome to the Planet Fitness Franchise Management Access Form. The purpose of this form is to hear from you on who from your team should have access to the new FM system. 
+                        </p>
+                        <br/>
+                        
+                        <br/>
+                      
+                        
+                     
+                        
+                        
+                        <div class="row homepage-section my-group-health-section">
+
+                
+                            
+        <div class="col-md-4">
+            <div class="panel panel-default group-health-panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Group Accounts</h3>
+                </div>
+                <div class="panel-body" style="height:175px;">
+                    <p class="panel-sub-text" style="text-align:left;">Request an Group Account if you would like additional users to view the full ownership group.</p>
+                </div>
+                <div style="text-align:center;">
+                    <a href="/a1G/e?RecordType=012j0000000qS67&ent=01Ij0000001FhHy" class="btn btn-pf">Request an Group Account</a>
+                                    </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default group-health-panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Club Accounts</h3>
+                </div>
+                <div class="panel-body" style="min-height:175px;">
+                    <p class="panel-sub-text" style="text-align:left;">All individual clubs will have an account automatically assigned to the club assigned email address as a login. Request a Club Account only if you would like to request additional access for a particular club location.</p>
+                </div>
+                <div style="text-align:center;">
+                    <a href="/a1G/e?RecordType=012j0000000qS66&ent=01Ij0000001FhHy" class="btn btn-pf">Request a Club Account</a> 
+                                       </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default group-health-panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Broker Accounts</h3>
+                </div>
+                <div class="panel-body" style="min-height:175px;">
+                    <p class="panel-sub-text" style="text-align:left;">Request a Broker Account if your group uses a Broker for Site submission</p>
+                </div>
+                <div style="text-align:center;">
+                    <a href="/a1G/e?RecordType=012j0000000qS65&ent=01Ij0000001FhHy" class="btn btn-pf">Request a Broker Account</a>
+                                        </div>
+            </div>
+        </div>
+                            
+            </div>
+
+                        
+                        
+                        <p class="section-title">Requested Accounts</p>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            <!--
+            <div>
+                <c:PFAccountManagementList />
+            </div>
+            -->
+            <div>
+                <c:PFAccountManagementList2 />
+            </div>
+            
+            
+    </div>
+    <div style="width:92%; margin-left:auto; margin-right:auto; background-color:#F2F2F2; padding:10px; font-size:13px; text-align:center; margin-top:25px; margin-bottom:40px;">
+            <b>Have questions regarding account access?</b>  Please contact the <a href="mailto:fm@planetfitness.com">System Administrator</a>
+            </div>
+</div>    
+</apex:page>

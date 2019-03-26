@@ -1,0 +1,12 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+
+    <lightning:listView aura:id="listViewSites"
+        objectApiName="Site__c"
+        listName="Sites_In_Process_FRM3"
+        rows="5"
+        showActionBar="false"
+        enableInlineEdit="true"
+        showRowLevelActions="false"
+    />
+    
+</aura:component>

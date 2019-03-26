@@ -1,0 +1,33 @@
+<apex:component controller="PFJudgementFreePressController" >
+    <apex:form >
+
+        <p class="section-title"><i class="fa fa-newspaper-o"></i> Judgement Free Press</p>
+        <div class="form-group select-list">
+            <label for="sel1">Newsletter</label>
+
+            <apex:selectList styleClass="form-control" value="{!monthly_newsletter_option}" multiselect="false" size="1" id="newsletters">
+                <apex:selectOptions value="{!monthly_newsletter}"/>
+            </apex:selectList>
+
+            <apex:commandLink styleClass="btn btn-pf" action="{!goToNewsletter}" value="GO" / >
+        </div>
+        <div class="form-group select-list">
+            <label for="sel1">Weekly Updates</label>
+
+            <apex:selectList styleClass="form-control" value="{!weekly_updates_option}" multiselect="false" size="1" id="weekly-updates">
+                <apex:selectOptions value="{!weekly_updates}"/>
+            </apex:selectList>
+
+            <apex:commandLink styleClass="btn btn-pf" action="{!goToWeeklyUpdates}" value="GO" / >
+        </div>
+        <div class="form-group select-list">
+            <label for="sel1">Special Announcements</label>
+
+            <apex:selectList styleClass="form-control" value="{!special_announcements_option}" multiselect="false" size="1" id="special-announcements" >
+                <apex:selectOptions value="{!special_announcements}"/>
+            </apex:selectList>
+
+            <apex:commandLink styleClass="btn btn-pf" action="{!goToSpecialAnnouncements}" value="GO" / >
+        </div>
+    </apex:form>
+</apex:component>

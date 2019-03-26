@@ -1,0 +1,2152 @@
+<apex:page controller="SharingWizardController" standardStylesheets="false" showHeader="false">
+    
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head> 
+            <apex:stylesheet value="{!URLFOR($Resource.MultiselectPicklist)}"/>
+            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+            <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"/>
+            <apex:includeScript value="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"/>
+            <script type="text/javascript" src="{!IF(isInternalUser, 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js', '')}"/>
+            <script src="https://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js" type="text/javascript"/>
+            <apex:stylesheet value="{!URLFOR($Resource.SLDS222, 'assets/styles/salesforce-lightning-design-system.min.css')}" />
+            <script>document.getElementsByClassName('bodyDiv')[0].style.display = 'none';</script>
+        </head>
+        
+        <div id="spinner" class="modal slds-spinner_container">
+            <div class="slds-spinner--brand slds-spinner slds-spinner--medium" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+        
+        <div ng-app="app" ng-controller="appCtrl" id="mainDiv" class="slds" style="display:none;">             
+            <div id="headAndFilter">
+                <header class="site site-masthead slds-grid slds-wrap" style="background-color:#951180;color: white;"> 
+                    <div class="slds-grid site-masthead-title slds-col slds-has-flexi-truncate slds-align-middle" style="margin-left:1rem;">
+                        <div class="slds-media slds-media--center slds-media--responsive" style="min-width:150px;">
+                            <div class="slds-media__body">
+                                <span class="slds-hide docsearch-category">Sharing Wizard</span>
+                                <strong style="font-size: 1rem;">Sharing Wizard</strong>
+                            </div>
+                        </div>
+                        <div class="slds-align-middle" style="margin:0.5rem;padding:0.5rem;border:1px solid black;border-radius: 15px;">
+                            <strong>Please Note:</strong> This page allows you to control who has access to the clubs listed. To deactivate or 
+                            activate new Franchise Management users, assign application access, reset passwords, or update user information, 
+                            please use the User Management button below.
+                            
+                            <!--This page allows you to control who has access to the clubs listed, but not 
+                            activate/deactivate Franchise Management users. If you need a Franchise Management user created 
+                            or disabled please reach out to Franchise Management support at: <i><strong>fm@planetfitness.com</strong></i>-->
+                        </div>
+                        <div class="slds-align-middle" style="margin-right: 0.5rem;">
+                            <span ng-click="gotoHelpPage();" class="slds-icon_container slds-icon__svg--default" style="margin:0.5rem 0.25rem;cursor:pointer;" title="Click Here for Help">
+                                <svg class="imgCls" aria-hidden="true" style="fill: white;">
+                                    <use xlink:href="{!$Resource.SLDS222}/assets/icons/utility-sprite/svg/symbols.svg#help"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </header>
+                
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--3-of-5" style="margin-top: 0.5rem">
+                        <div class="slds-grid">
+                            <div style="width:40%">
+                                <div class="slds-align--absolute-center absCenterCls">
+                                    <div style="min-width: 105px;">
+                                        <span class="slds-lookup__item-action slds-media" role="option" style="padding: 0rem;">
+                                            <svg class="imgCls" aria-hidden="true">
+                                                <use xlink:href="{!$Resource.SLDS222}/assets/icons/utility-sprite/svg/symbols.svg#user"/>
+                                            </svg>
+                                            <div class="slds-lookup__result-text" style="color: #606062;"> <strong>Franchisee</strong> </div>
+                                        </span>
+                                    </div>
+                                    <div class="slds-form-element" style="width: 67% !important;margin-left:0.4rem;">
+                                        <div class="slds-lookup" data-select="multi" data-scope="single" data-typeahead="true">
+                                            <div class="slds-form-element">
+                                                <div class="slds-form-element__control" ng-show="isUserSelected">
+                                                    <div class="slds-pill_container">
+                                                        <span class="slds-pill slds-size--1-of-1" style="background-color: #f6f6f4;">
+                                                            <span class="slds-icon_container slds-icon-standard-account slds-pill__icon_container">
+                                                                <svg class="slds-icon" aria-hidden="true">
+                                                                    <use xlink:href="{!$Resource.SLDS222}/assets/icons/standard-sprite/svg/symbols.svg#user"></use>
+                                                                </svg>
+                                                                <span class="slds-assistive-text">Franchisee</span>
+                                                            </span> 
+                                                            <span class="slds-pill__label">{{selectedUserName}}</span>
+                                                            <button ng-disabled="isRmvBtnDisable" ng-click="removeInfo();" type="button" class="slds-button slds-button--icon slds-pill__remove" title="Remove" style="border: none;">
+                                                                <svg ng-hide="isRmvBtnDisable" class="slds-button__icon" aria-hidden="true">
+                                                                    <use xlink:href="{!$Resource.SLDS222}/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                                                                </svg>
+                                                                <span class="slds-assistive-text">Remove</span>
+                                                            </button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-form-element" ng-hide="isUserSelected">
+                                                    <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon--left-right">
+                                                        <svg aria-hidden="true" class="slds-input__icon slds-input__icon--left slds-icon-text-default" style="fill: #606062">
+                                                            <use xlink:href="{!URLFOR($Resource.SLDS222, '/assets/icons/utility-sprite/svg/symbols.svg#search')}"></use>
+                                                        </svg>
+                                                        <input id="userTextBox" ng-model="usrSearch" class="slds-input" type="text" placeholder="User" aria-autocomplete="list" role="combobox" aria-expanded="true" aria-activedescendant="userDropDown"/>
+                                                        <svg ng-click="clearText();" class="slds-input__icon slds-input__icon--right slds-button slds-button--icon" style="cursor:pointer;fill:#606062;border: none;">
+                                                            <use xlink:href="{!URLFOR($Resource.SLDS222, '/assets/icons/utility-sprite/svg/symbols.svg#clear')}"></use>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="slds-lookup__menu" role="listbox" id="userDropDown">
+                                                <div class="slds-lookup__item">
+                                                    <button class="slds-button borderCls" type="button" style="color:#606062;">
+                                                        <svg aria-hidden="true" class="slds-icon slds-icon--x-small slds-icon-text-default">
+                                                            <use xlink:href="{!$Resource.SLDS222}/assets/icons/utility-sprite/svg/symbols.svg#search"></use>
+                                                        </svg>&quot;<span id="searchTextForUser"></span>&quot; in User
+                                                    </button>
+                                                </div>
+                                                <ul class="slds-lookup__list" role="presentation" style="max-height: 240px;">
+                                                    <li style="margin-left:1.5rem !important;" class="slds-lookup__item" ng-show="users.length == 0">No Records Found</li>
+                                                    <li role="presentation" ng-click="setInfo(usr)" ng-repeat="usr in users">
+                                                        <span class="slds-lookup__item-action slds-media" role="option">
+                                                            <svg class="slds-icon slds-icon-standard-account slds-icon--small slds-media__figure" aria-hidden="true">
+                                                                <use xlink:href="{!$Resource.SLDS222}/assets/icons/standard-sprite/svg/symbols.svg#user"/>
+                                                            </svg>
+                                                            <span style="padding:0.25rem;">{{::usr.Name}}</span>
+                                                        </span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="width:60%;margin-left:1rem;">
+                                <div class="slds-align--absolute-center absCenterCls">
+                                    <div style="min-width: 105px;margin-right:0.4rem;">
+                                        <span class="slds-lookup__item-action slds-media" role="option" style="padding: 0rem">
+                                            <svg class="imgCls" aria-hidden="true">
+                                                <use xlink:href="{!$Resource.SLDS222}/assets/icons/utility-sprite/svg/symbols.svg#location"/>
+                                            </svg>
+                                            <div class="slds-lookup__result-text" style="color:#606062;"> <strong>Agreements</strong> </div>
+                                        </span>
+                                    </div>
+                                    <select style="min-width: 180px;" id="adaId" multiple="multiple" onchange="angular.element(this).scope().selectedValues('', this, 'ada')">
+                                        <option ng-repeat="ada in adas" value="{{::ada}}">{{::ada}}</option>
+                                    </select> 
+                                </div>
+                            </div>
+                            <button class="slds-button slds-button--neutral btnTxtCls" ng-click="userFilter();" style="min-width: 110px;">Apply Filters</button>
+                        </div>
+                    </div>
+                    <div class="slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--2-of-5" style="margin-top: 0.5rem;text-align: right;">
+                        <button class="slds-button slds-button--neutral btnTxtCls" style="min-width: 120px;font-weight: bold;background-color: #fff00d !important;" onclick="window.open('/frm3/s/user-management','_top');">User Management</button>
+                        <img src="{!URLFOR($Resource.SharingWizardResource, 'thumbsdown.png')}" class="tdownSaveBtnCls" style="width:1rem;display:none;"/>
+                        <button ng-disabled="isInternalUser" class="slds-button slds-button--neutral saveBtnCls" ng-click="saveChanges();" style="background-color:#606062;color: white;">Save Changes</button>
+                        <button ng-disabled="isInternalUser" class="slds-button slds-button--neutral btnTxtCls" ng-click="cancelChanges();" style="background-color:#606062;color:white !important;border-color: darkslategrey;min-width: 110px;">Cancel Changes</button>
+                    </div>
+                </div>
+            </div>
+                
+            <div ng-show="isInternalUser" style="margin:1rem 0.5rem;background-color: #951180;" class="slds-notify slds-notify--alert slds-theme--alert-texture" role="alert">
+                <span class="slds-assistive-text">Warning</span>
+                <strong>Select a user to proceed</strong>
+            </div>
+            
+            <div ng-hide="isInternalUser">
+                <div style="overflow-y:auto;margin-top: 0.5rem;" id="htable">
+                    <div class="slds-box" ng-hide="mainData.length" style="text-align: center;background-color: #f6f6f4;">
+                        No records found
+                    </div>
+                    <div ng-repeat="ada in mainData | startFrom:currentPage*pageSize | limitTo:pageSize" class="slds-box topPadCls" style="background-color: rgba(187, 188, 191, 0.27);">
+                        <div ng-show="showExpand[ada.Id]">
+                            <button ng-click="toggleArrow(ada.Id)" type="button" class="slds-button slds-input__icon slds-text-color--default borderCls" aria-expanded="false" tabindex="-1" title="Expand">
+                                <svg class="imgCls" aria-hidden="true">
+                                    <use xlink:href="{!$Resource.SLDS222}/assets/icons/utility-sprite/svg/symbols.svg#chevronright"></use>
+                                </svg>
+                                <span class="slds-assistive-text">Expand category options</span>
+                            </button>
+                            <strong style="color: #951180 !important;">{{::ada.Name}}</strong>
+                        </div>
+                        
+                        <div ng-hide="showExpand[ada.Id]">
+                            <div style="display:inline-block;vertical-align:top;">
+                                <button ng-hide="showExpand[ada.Id]" ng-click="toggleArrow(ada.Id)" type="button" class="slds-button slds-input__icon slds-text-color--default borderCls" aria-expanded="false" tabindex="-1" title="Collapse">
+                                    <svg class="imgCls" aria-hidden="true">
+                                        <use xlink:href="{!$Resource.SLDS222}/assets/icons/utility-sprite/svg/symbols.svg#chevrondown"></use>
+                                    </svg>
+                                    <span class="slds-assistive-text">Expand category options</span>
+                                </button>
+                            </div>
+                            <strong ng-hide="ada.Accounts__r.length" style="color: #951180 !important;">{{::ada.Name}}</strong>
+                            <div ng-hide="ada.Accounts__r.length" style="width:100%;">
+                                <div class="slds-box" style="text-align:center;background-color: #f6f6f4;"> No records found </div>
+                            </div>
+                            
+                            <div class="slds-grid" style="margin-left:40px;height:1.75rem;width:95%;margin-top: -1.5rem;">
+                                <div class="slds-size--1-of-5" style="min-width:205px"/>
+                                <div class="slds-size--4-of-5">
+                                    <div class="slds-grid">
+                                        <div class="slds-size--1-of-2">
+                                            <button id="left{{::ada.Id}}" type="button" class="slds-button slds-input__icon slds-text-color--default borderCls" aria-expanded="false" tabindex="-1" title="Scroll left">
+                                                <svg id="back{{::ada.Id}}" class="imgCls" aria-hidden="true" style="display:none;">
+                                                    <use xlink:href="{!$Resource.SLDS222}/assets/icons/utility-sprite/svg/symbols.svg#back"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div class="slds-size--1-of-2" style="text-align:right;">
+                                            <button id="right{{::ada.Id}}" type="button" class="slds-button slds-input__icon slds-text-color--default borderCls" aria-expanded="false" tabindex="-1" title="Scroll right">
+                                                <svg id="forward{{::ada.Id}}" class="imgCls" aria-hidden="true" style="display:{{ada.Accounts__r.length > 3 ? 'block' : 'none'}}">
+                                                    <use xlink:href="{!$Resource.SLDS222}/assets/icons/utility-sprite/svg/symbols.svg#forward"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-show="adaIdAndErrors[ada.Id]" class="slds-notify slds-notify--alert" id="errDiv" role="alert" style="background-color: rgb(244, 237, 133);margin-left: 40px;margin-right: 20px;">
+                                <h2><b> {{adaIdAndErrors[ada.Id]}} </b></h2>
+                            </div>
+                            <div class="slds-grid" ng-show="ada.Accounts__r.length">
+                                <div class="paginationBtnCls">
+                                    <div class="centerAlign">
+                                        <button ng-click="jumpPagination(ada.Id, 'first')" type="button" class="slds-button slds-input__icon slds-text-color--default borderCls" aria-expanded="false" tabindex="-1" title="Jump to Top" style="{{inrcurrentPage[ada.Id] == 0 ? 'cursor: not-allowed;' : ''}}" ng-disabled="inrcurrentPage[ada.Id] == 0">
+                                            <svg class="imgCls" aria-hidden="true">
+                                                <use xlink:href="{!$Resource.SLDS222}/assets/icons/utility-sprite/svg/symbols.svg#jump_to_top"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div class="centerAlign" style="margin-top: 10px;">
+                                        <button ng-click="paginationFunction('pre', 'inr', ada.Id);" type="button" class="slds-button slds-input__icon slds-text-color--default borderCls" aria-expanded="false" tabindex="-1" title="Previous" style="{{inrcurrentPage[ada.Id] == 0 ? 'cursor: not-allowed;' : ''}}" ng-disabled="inrcurrentPage[ada.Id] == 0">
+                                            <svg class="imgCls" aria-hidden="true">
+                                                <use xlink:href="{!$Resource.SLDS222}/assets/icons/utility-sprite/svg/symbols.svg#up"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div class="centerAlign" style="margin-top: 40px;color: #77227b !important;">
+                                        {{inrcurrentPage[ada.Id]+1}}/{{pfIdAndConCount[ada.Id] == 0 ? '1' : (Math.ceil(pfIdAndConCount[ada.Id]/inrPageSize))}}
+                                    </div>
+                                    <div class="centerAlign" style="margin-top: 35px;">
+                                        <button ng-click="paginationFunction('next', 'inr', ada.Id);" type="button" class="slds-button slds-input__icon slds-text-color--default borderCls" aria-expanded="false" tabindex="-1" title="Next" style="{{inrcurrentPage[ada.Id] >= (pfIdAndConCount[ada.Id]/inrPageSize)-1 ? 'cursor: not-allowed;' : ''}}" ng-disabled="inrcurrentPage[ada.Id] >= (pfIdAndConCount[ada.Id]/inrPageSize)-1">
+                                            <svg class="imgCls" aria-hidden="true">
+                                                <use xlink:href="{!$Resource.SLDS222}/assets/icons/utility-sprite/svg/symbols.svg#down"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div class="centerAlign" style="margin-top: 10px;">
+                                        <button ng-click="jumpPagination(ada.Id, 'last')" type="button" class="slds-button slds-input__icon slds-text-color--default borderCls" aria-expanded="false" tabindex="-1" title="Jump to Bottom" style="{{inrcurrentPage[ada.Id] >= (pfIdAndConCount[ada.Id]/inrPageSize)-1 ? 'cursor: not-allowed;' : ''}}" ng-disabled="inrcurrentPage[ada.Id] >= (pfIdAndConCount[ada.Id]/inrPageSize)-1">
+                                            <svg class="imgCls" aria-hidden="true">
+                                                <use xlink:href="{!$Resource.SLDS222}/assets/icons/utility-sprite/svg/symbols.svg#jump_to_bottom"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="slds-grid" style="background-color:#f6f6f4;width:95%;min-height: 265px;">
+                                    <div class="slds-size--1-of-5" style="min-width:205px">
+                                        <div class="divCls headDiv conNameCls" style="padding:1rem 0.25rem;">
+                                           <strong style="margin-left: 2rem;color: #951180 !important;">{{::ada.Name}} ({{ada.Accounts__r.length >= 0 ? ada.Accounts__r.length : 0}})</strong>
+                                        </div> 
+                                        <div class="divCls headDiv conNameCls conName{{::ada.Id}}{{::con.Id}}" ng-repeat="con in pfIdAndContacts[ada.Id]" style="padding:0.5rem 1rem !important;">
+                                            <button ng-click="showAccessPopup(ada, con, '', ada.Name, '');" type="button" class="slds-button slds-input__icon slds-text-color--default" aria-expanded="false" tabindex="-1" title="Grant All Access to Clubs" style="border: none;">
+                                                <svg class="imgCls" aria-hidden="true">
+                                                    <use xlink:href="{!$Resource.SLDS222}/assets/icons/utility-sprite/svg/symbols.svg#insert_template"/>
+                                                </svg>
+                                            </button>
+                                            <button ng-click="showAccessPopup(ada, con, 'remove', ada.Name, con.Name);" ng-disabled="isDisable(con, ada)" type="button" class="slds-button slds-input__icon slds-text-color--default" aria-expanded="false" tabindex="-1" title="Remove All Access to Clubs" style="border: none;{{isDisable(con, ada) ? 'cursor: not-allowed;' : ''}}margin-left: -10px;">
+                                                <svg class="imgCls" aria-hidden="true" style="{{(isDisable(con, ada) ? 'fill: rgba(128, 128, 128, 0.72) !important;' : '')}}">
+                                                    <use xlink:href="{!$Resource.SLDS222}/assets/icons/utility-sprite/svg/symbols.svg#ban"/>
+                                                </svg>
+                                            </button>
+                                            <span style="margin-left: -8px;">{{::con.Name}} ({{getCountsObj[ada.Id+con.Id]}})</span>
+                                        </div>
+                                    </div>
+                                    <div id="{{::ada.Id}}" class="slds-size--4-of-5 hScrollCls" style="overflow-x: scroll;" align="left">
+                                        <div class="slds-grid divCls">
+                                            <div class="headDiv" ng-repeat="acc in ada.Accounts__r" style="border-right: {{ada.Accounts__r.length-1 == $index ? '1px solid #d8dde6;' : 'none'}}">
+                                                <a href="/{{::acc.Id}}" target="_blank" class="accNameCls"><strong>{{::acc.Name}}</strong></a>
+                                                <div style="text-align:center;">({{::acc.Status__c}})</div>
+                                            </div>
+                                        </div>
+                                        <div class="divCls" ng-repeat="con in pfIdAndContacts[ada.Id]">
+                                            <div class="slds-grid">
+                                                <div ng-repeat="acc in ada.Accounts__r" class="bodyDiv1 bodyDiv{{::acc.Id}}{{::con.Id}}" style="border-right: {{ada.Accounts__r.length-1 == $index ? '1px solid #d8dde6;' : 'none'}}">
+                                                    <div class="slds-align--absolute-center">
+                                                        <div style="display:inline-block;margin-right: 0.5rem;">
+                                                            <button ng-disabled="isDisable(con, ada, acc.Id)" ng-show="acrValues[acc.Id+con.Id].acr.IsShared__c" ng-click="checkBoxChange(ada.Id, false, acc.Id, con.Id)" type="button" class="slds-button slds-input__icon slds-text-color--default" aria-expanded="false" tabindex="-1" title="Remove Club Access" style="border: none;{{isDisable(con, ada, acc.Id) ? 'cursor: not-allowed;' : ''}}">
+                                                                <span class="slds-icon_container null slds-icon__svg--default">
+                                                                    <svg class="imgCls" aria-hidden="true" style="{{(isDisable(con, ada, acc.Id) ? 'fill: rgba(128, 128, 128, 0.72) !important;' : '')}}">
+                                                                        <use xlink:href="{!$Resource.SLDS222}/assets/icons/utility-sprite/svg/symbols.svg#error"/>
+                                                                    </svg>
+                                                                </span>
+                                                            </button>
+                                                            <button ng-hide="acrValues[acc.Id+con.Id].acr.IsShared__c" ng-click="checkBoxChange(ada.Id, true, acc.Id, con.Id)" type="button" class="slds-button slds-input__icon slds-text-color--default" aria-expanded="false" tabindex="-1" title="Grant Club Access" style="border: none;">
+                                                                <span class="slds-icon_container null slds-icon__svg--default">
+                                                                    <svg class="imgCls" aria-hidden="true">
+                                                                        <use xlink:href="{!$Resource.SLDS222}/assets/icons/utility-sprite/svg/symbols.svg#add"/>
+                                                                    </svg>
+                                                                </span>
+                                                            </button>
+                                                        </div>
+                                                        <div style="display:inline-block;margin-left: -0.5rem;">
+                                                            <select onchange="angular.element(this).scope().selectedValues(angular.element(this).scope().ada, this, 'acr', angular.element(this).scope().acc.Id, angular.element(this).scope().con)" id="{{::acc.Id}}{{::con.Id}}" multiple="multiple" style="display:none;">
+                                                                <option ng-repeat="role in roles" value="{{::role}}">{{::role}}</option>
+                                                            </select>
+                                                        </div>
+                                                        <div style="display:inline-block;width:1.25rem;">
+                                                            <img src="{!URLFOR($Resource.SharingWizardResource, 'thumbsdown.png')}" class="tdownCls tdown{{::acc.Id}}{{::con.Id}}" style="width:1rem;display:none;margin-left: 0.25rem;"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+                <div id="paginationDiv" class="slds-align--absolute-center" style="padding-bottom: 0.25rem;">
+                    <button ng-disabled="currentPage == 0" ng-click="paginationFunction('pre');" type="button" class="slds-button slds-button--neutral btnTxtCls" style="{{currentPage == 0 ? 'cursor: not-allowed;' : ''}}">
+                        Previous
+                    </button>
+                    <div style="color: #77227b !important;margin:0rem 1rem;">{{currentPage+1}}/{{mainData.length == 0 ? '1' : (Math.ceil(mainData.length/pageSize))}}</div>
+                    <button ng-disabled="currentPage >= mainData.length/pageSize - 1" ng-click="paginationFunction('next');" type="button" class="slds-button slds-button--neutral btnTxtCls" style="{{(currentPage >= mainData.length/pageSize - 1) ? 'cursor: not-allowed;' : ''}}">
+                        Next
+                    </button>
+                </div>
+            </div>
+            <div ng-show="showPopup">
+                <div role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <button ng-click="clearAllChecks();" class="slds-button slds-modal__close slds-button--icon-inverse borderCls" title="Close" type="button">
+                                <svg class="slds-button__icon slds-button__icon--large" aria-hidden="true">
+                                    <use xlink:href="{!$Resource.SLDS222}/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                                </svg>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 class="slds-text-heading--medium">Grant Access to All Clubs for {{adaName}} for {{cont.Name}}</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium">
+                            <div class="slds-grid" style="margin-bottom:0.5rem;">
+                                <div class="slds-size--1-of-2">
+                                    <strong style="font-size:1rem;"> Roles </strong>
+                                </div>
+                                <div class="slds-size--1-of-2" style="text-align:right;">
+                                    <a href="javascript:void(0);" ng-click="allRoleSelectFn('true');" style="color: #77227b !important;">Select All</a> &nbsp;&nbsp;
+                                    <a href="javascript:void(0);" ng-click="allRoleSelectFn('false');" style="color: #77227b !important;">Unselect All</a>
+                                </div>
+                            </div>
+                            <div class="slds-grid slds-wrap">
+                                 <div class="slds-size--1-of-2" ng-repeat="role in roles">
+                                     <div class="slds-form-element">
+                                        <div class="slds-form-element__control">
+                                            <span class="slds-checkbox" ng-click="addGrantValues(isChecked, role);">
+                                                <input type="checkbox" ng-model="isChecked" name="options" id="{{::role}}" ng-class="removeSpace(role)" class="sldsCheck" ng-disabled="role == 'Former Contact'"/>
+                                                <label class="slds-checkbox__label" for="{{::role}}"><span class="slds-checkbox--faux"></span>
+                                                <span class="slds-form-element__label">{{::role}}</span></label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                 </div>
+                            </div>
+                        </div>
+                        <div class="slds-modal__footer">
+                            <input type="button" class="slds-button slds-button--neutral btnTxtCls" ng-click="clearAllChecks();" value="Cancel"/>
+                            <input type="button" class="slds-button slds-button--neutral btnTxtCls" ng-click="grantAllAccess();" value="Grant All Access"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+            </div>
+            <div ng-show="alertPopup">
+                <div role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <button ng-click="resetValues();" class="slds-button slds-modal__close slds-button--icon-inverse borderCls" title="Close" type="button">
+                                <svg class="slds-button__icon slds-button__icon--large" aria-hidden="true">
+                                    <use xlink:href="{!$Resource.SLDS222}/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                                </svg>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 class="slds-text-heading--medium">{{alertName != '' ? alertName : 'Alert'}}</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium">
+                            {{alertMessage}}
+                            <img src="{!URLFOR($Resource.SharingWizardResource, 'thumbsup.png')}" style="width: 0.9rem;margin-bottom: 0.5rem;" ng-show="alertMessage=='Success! Your changes have been saved.'"/>
+                            <img src="{!URLFOR($Resource.SharingWizardResource, 'thumbsdown.png')}" style="width: 0.9rem;" ng-show="alertMessage.includes('Your changes have partially saved.') || alertMessage.includes('Please review your changes, there must be at least one role selected for each shared club. ')"/>
+                            <br/><br/>
+                            {{additionalAlertMessage}}
+                        </div>
+                        <div class="slds-modal__footer">    
+                            <input type="button" ng-hide="okBtnFlag && (!accessBtnFlag)" class="slds-button slds-button--neutral btnTxtCls" ng-click="resetValues();" value="No"/>
+                            <input type="button" ng-show="uncommitedFlag && (!okBtnFlag) && (!accessBtnFlag) && (!confirmationFlag)" class="slds-button slds-button--neutral btnTxtCls" ng-click="saveChanges('pagination');resetValues();" value="Yes"/>
+                            <input type="button" ng-hide="uncommitedFlag || okBtnFlag || accessBtnFlag || confirmationFlag" class="slds-button slds-button--neutral btnTxtCls" ng-click="adaFilter('cancelChanges');resetValues();" value="Yes"/>
+                            <input type="button" ng-show="okBtnFlag && (!accessBtnFlag) && (!confirmationFlag)" class="slds-button slds-button--neutral btnTxtCls" ng-click="goNext();resetValues();" value="Ok"/>
+                            <input type="button" ng-show="accessBtnFlag && (!confirmationFlag)" class="slds-button slds-button--neutral btnTxtCls" ng-click="grantAllAccess(true);resetValues();" value="Yes"/>
+                            <input type="button" ng-show="confirmationFlag" class="slds-button slds-button--neutral btnTxtCls" ng-click="validateData(true);resetValues();" value="Show Errors"/>
+                            <input type="button" ng-show="confirmationFlag" class="slds-button slds-button--neutral btnTxtCls" ng-click="saveChanges('showError', false);resetValues();" value="Save & Show Errors"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+            </div>
+        </div>
+        
+        <script>
+        
+            if(document.getElementById('phHeaderLogoImage')) {
+                document.getElementById('phHeaderLogoImage').style.minWidth = '175px';
+            }
+            var underscore = angular.module('underscore', []);
+            underscore.factory('_', ['$window', function($window) {
+                return $window._;
+            }]);
+            Visualforce.remoting.timeout = 120000;
+            var app = angular.module('app',['underscore']);
+            app.filter('startFrom', function() {
+                return function(input, start) {
+                    start = +start; 
+                    if(input) return input.slice(start);
+                }
+            });
+            app.controller('appCtrl',function($scope,$timeout,_) {
+                                
+                $scope.Math = window.Math;
+                $scope.currentPage = 0;
+                $scope.inrcurrentPage = [];
+                $scope.pageSize = 5;
+                $scope.inrPageSize = 5;
+                var roles = '{!rolesString}';
+                var cnt = 0;
+                $scope.isInternalUser = '{!isInternalUser}';
+                $scope.userName = '{!userName}';
+                $scope.selectedADA = [];
+                $scope.showExpand = [];
+                $scope.mainData = [];
+                var mainDataOriginal = [];
+                $scope.pfIdAndContacts = {};
+                var userList = [];
+                $scope.users = [];
+                $scope,selectedUserName = '';
+                $scope.selectedUserId = '{!userId}';
+                $scope.acrValues = {};
+                var acrValuesOriginal = {};
+                var acrValuesForAccess = {};
+                var acrValues = {};
+                $scope.showPopup = false;
+                $scope.cont = {};
+                $scope.alertName = '';
+                $scope.adaId = '';
+                $scope.grantAllValues = [];
+                $scope.uncommitedFlag = false;
+                $scope.okBtnFlag = false;
+                $scope.adas = [];
+                $scope.isRmvBtnDisable = false;
+                $scope.adaName = '';
+                $scope.isIntnlStatic = '{!isInternalUser}';
+                $scope.userContactId = '{!userContactId}';
+                $scope.helpURL = '{!helpURL}';
+                $scope.getCountsObj = {};
+                var pfIdAndContacts = {};
+                var pfIdAndACRKeys = {};
+                $scope.pfIdAndConCount = [];
+                var grpIdAndAccountsMap = {};
+                var accConIdAndADAId = {};
+                var adaId_pageNo_conIds = {};
+                var saveACRList = [];
+                var errACRList = [];
+                $scope.adaIdAndErrors = {};
+                var adaIdConIdPgNo = {};
+                $scope.restrictACRAccAndConId = [];
+                                
+                if($scope.isIntnlStatic == 'false') {
+                    $scope.isUserSelected = true;
+                    $scope.isInternalUser = false;
+                    $scope.isRmvBtnDisable = true;
+                    $scope.selectedUserName = $scope.userName;
+                }
+                
+                if(roles) { 
+                    $scope.roles = [];
+                    _.filter(JSON.parse(roles), function(role) {
+                        if(role != 'Former Contact') {
+                            $scope.roles.push(role);
+                        }
+                    });
+                    $scope.roles.sort();
+                    $scope.roles.push('Former Contact');
+                }
+                Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.SharingWizardController.getUser}',
+                    function(result, event) {
+                        if(event.status && result) {
+                            userList = result;
+                        } 
+                    },
+                    { escape: false }    
+                ); 
+                
+                $scope.getData = function(userId) { 
+                                        
+                    if(userId) {   
+                        Visualforce.remoting.Manager.invokeAction(
+                        '{!$RemoteAction.SharingWizardController.getData}', userId,
+                            function(result, event) {
+                                if(event.status && result) {
+                                    console.log(':::Main Result:::', result);
+                                    if(result.pfAgreements) {
+                                        
+                                        var addADA;
+                                        var mainData = result.pfAgreements;
+                                       
+                                        if(result.restrictACRAccAndConId) {
+                                            $scope.restrictACRAccAndConId = result.restrictACRAccAndConId;
+                                        }
+                                       
+                                        if(result.grpIdAndAccountsMap) {
+                                            var obj = {};
+                                            var accnts = [];
+                                            var accIds = [];
+                                            var conIds = [];
+                                            var conts = [];
+                                           
+                                            obj.Id = "franchiseAgreements";
+                                            grpIdAndAccountsMap = result.grpIdAndAccountsMap;
+                                            _.filter(Object.keys(grpIdAndAccountsMap), function(grpId) { 
+                                                
+                                                if(result.grpIdAndAccountsMap && result.grpIdAndAccountsMap[grpId]) {
+                                                    _.filter(result.grpIdAndAccountsMap[grpId], function(acc) {
+                                                        if(!(_.contains(accIds, acc.Id))) {
+                                                            accnts.push(acc);
+                                                            accIds.push(acc.Id);
+                                                        }
+                                                    });                                              
+                                                }
+                                                
+                                                if(result.pfIdAndContacts && result.pfIdAndContacts[grpId]) {
+                                                    _.filter(result.pfIdAndContacts[grpId], function(con) {
+                                                        if(!(_.contains(conIds, con.Id))) {
+                                                            conts.push(angular.copy(con));
+                                                            conIds.push(con.Id);
+                                                        }
+                                                    });   
+                                                    delete result.pfIdAndContacts[grpId]                                           
+                                                }
+                                                
+                                            });
+                                            obj.Accounts__r = _.sortBy(accnts, 'Name');
+                                            obj.Name = obj.Accounts__r.length > 1 ? 'Franchise Agreements' : 'Franchise Agreement';
+                                            if(!result.pfIdAndContacts) {
+                                                result.pfIdAndContacts = {};
+                                                result.pfIdAndContacts[obj.Id] = [];
+                                            }
+                                            result.pfIdAndContacts[obj.Id] = conts;
+                                            if(obj.Accounts__r && obj.Accounts__r.length > 0 && result.pfIdAndContacts[obj.Id] && result.pfIdAndContacts[obj.Id].length > 0) {
+                                                mainData.push(obj);
+                                            }
+                                        }
+                                        
+                                        $scope.mainData = _.sortBy(mainData, 'Name');
+                                        mainDataOriginal = angular.copy($scope.mainData);
+                                    }
+                                    if(result.accConIdACRMap) { 
+                                        acrValues = result.accConIdACRMap;
+                                    }
+                                    if(result.pfIdAndContacts) {
+                                        $scope.reorderContact(result.pfIdAndContacts);
+                                    }
+                                    
+                                    $scope.getCounts();
+                                    acrValuesOriginal = angular.copy(acrValues);
+                                    adaId_pageNo_conIds = {};
+                                    _.filter($scope.mainData, function(ada) { 
+                                        
+                                        $scope.adas.push(ada.Name);
+                                        
+                                        $scope.inrcurrentPage[ada.Id] = 0; 
+                        
+                                        if(pfIdAndContacts[ada.Id] && pfIdAndContacts[ada.Id].length > 0) {
+                                            _.filter(pfIdAndContacts[ada.Id], function(con) { 
+                                                if(ada.Accounts__r && ada.Accounts__r.length > 0) {
+                                                    _.filter(ada.Accounts__r, function(acc) { 
+                                                        var k = acc.Id+con.Id;
+                                                        accConIdAndADAId[k] = ada.Id;
+                                                    });
+                                                }
+                                            });
+                                            
+                                            var totpages = Math.ceil(pfIdAndContacts[ada.Id].length/$scope.inrPageSize);
+                                            var orderedCon = _.sortBy(result.pfIdAndContacts[ada.Id], 'Name');
+                                            
+                                            for(var pgNo=1; pgNo<=totpages; pgNo++) {
+                                                curpos = pgNo-1;
+                                                var position = (curpos && curpos > 0) ? curpos * $scope.inrPageSize : 0;
+                                                var cons = orderedCon.slice(position,position+$scope.inrPageSize);
+                                                for(var g=0; g<cons.length; g++) {
+                                                
+                                                    if(!adaId_pageNo_conIds[ada.Id])
+                                                        adaId_pageNo_conIds[ada.Id] = {};
+                                                    
+                                                    if(!adaId_pageNo_conIds[ada.Id][pgNo]) 
+                                                        adaId_pageNo_conIds[ada.Id][pgNo] = [];
+                                                   
+                                                    adaId_pageNo_conIds[ada.Id][pgNo].push(cons[g].Id);
+                                                    
+                                                    adaIdConIdPgNo[ada.Id+cons[g].Id] = pgNo;
+                                                }                        
+                                            }
+                                        }                                        
+                                    }); 
+                                    $scope.adas.sort();
+                                    $scope.selectedADA = angular.copy($scope.adas);
+                                    $scope.adaFilter('applyFilter');
+                                    $scope.$apply();
+                                } 
+                                $('#adaId').multiselect('destroy');
+                                $('#adaId').multiselect({
+                                    includeSelectAllOption: true,
+                                    enableCaseInsensitiveFiltering: true,
+                                    buttonClass: 'slds-button slds-button--neutral pickBtnCls adaBtnCls',
+                                    buttonText: function(options, select) {
+                                        if (options.length === 0) {
+                                            return 'None selected';
+                                        }
+                                        else if (options.length > 0) {
+                                            var label = '';
+                                            var plus = "+";
+                                            options.each(function(k) {
+                                                if(k == 0) { label = $(this).text(); }
+                                            });
+                                            label += (options.length > 1 ? ' ' + plus + ' ' + (options.length-1) : '')
+                                            return label;
+                                        }
+                                    }
+                                });
+                                $('#adaId').multiselect('select', $scope.selectedADA);
+                                $scope.dropdownPosition();
+                            },
+                            { escape: false }    
+                        ); 
+                    } else {
+                        $scope.mainData = [];
+                        $scope.isInternalUser = true;
+                        $timeout(function() { $(".modal").hide(); },50);
+                    }
+                } 
+                
+                $scope.getCounts = function(adaId) {
+                    $scope.getCountsObj = {};
+                    
+                    _.filter($scope.mainData, function(ada) { 
+                        if(ada.Accounts__r && ada.Accounts__r.length > 0) {
+                            _.filter(ada.Accounts__r, function(acc) { 
+                                if(pfIdAndContacts[ada.Id] && pfIdAndContacts[ada.Id].length > 0) {
+                                    _.filter(pfIdAndContacts[ada.Id], function(con) { 
+                                        
+                                        var key = acc.Id + con.Id;
+                                        var cntKey = ada.Id + con.Id;
+                                        
+                                        if(_.contains(Object.keys(acrValues), key)) {
+                                            if($scope.getCountsObj[cntKey] >= 0) {
+                                                $scope.getCountsObj[cntKey] = $scope.getCountsObj[cntKey] + 1;
+                                            } else {
+                                                $scope.getCountsObj[cntKey] = 1;
+                                            }
+                                            if($scope.getCountsObj[ada.Id] > 0) {
+                                                $scope.getCountsObj[ada.Id] = $scope.getCountsObj[ada.Id] + 1;
+                                            } else {
+                                                $scope.getCountsObj[ada.Id] = 1;
+                                            }
+                                            
+                                        } else {
+                                            if(!$scope.getCountsObj[cntKey]) {
+                                                $scope.getCountsObj[cntKey] = 0;
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+                
+                $scope.reorderContact = function(records) {
+                    if(records) {
+                        $scope.pfIdAndContacts = {};
+                        $scope.pfIdAndConCount = [];
+                        _.filter(Object.keys(records), function(key) { 
+                            pfIdAndContacts[key] = _.sortBy(records[key], 'Name');
+                            $scope.getContactPagination(key);
+                            $scope.pfIdAndConCount[key] = pfIdAndContacts[key].length;
+                        });
+                    }
+                }
+                
+                $scope.getContactPagination = function(key) {
+                    if(key) {
+                        var curpos = $scope.inrcurrentPage[key];
+                        var position = (curpos && curpos > 0) ? curpos * $scope.inrPageSize : 0;
+                        $scope.pfIdAndContacts[key] = pfIdAndContacts[key].slice(position,position+$scope.inrPageSize); 
+                        
+                        var adas = _.filter($scope.mainData, function(ada) { return ada.Id == key; });
+                        var ada = adas.length > 0 ? adas[0] : {};
+                        
+                        pfIdAndACRKeys[key] = [];
+                        _.filter(ada.Accounts__r, function(acc) {
+                            _.filter($scope.pfIdAndContacts[key], function(con) {
+                                var k = acc.Id + con.Id;
+                                if(_.contains(Object.keys(acrValues), k)) {
+                                    $scope.acrValues[k] = acrValues[k];
+                                }
+                                pfIdAndACRKeys[key].push(k);
+                            });
+                        });
+                    }
+                }
+                
+                $scope.dataChanges = function(adaId) {
+                    
+                    $scope.fixACRValues();
+                    
+                    var conIds = [];
+                    var accIds = [];
+                    var adaIdConIdFlag = {};
+                    
+                    var adas = _.filter($scope.mainData, function(ada) { return ada.Id == adaId; });
+                    
+                    if(adas.length == 0) {
+                        adas = $scope.mainData;
+                    }
+                   
+                    _.filter(Object.keys(acrValues), function(key) { 
+                        if(!angular.equals(acrValuesOriginal[key], acrValues[key])) {
+                        
+                            var acr = acrValues[key].acr;
+                            var accIdACRId = acr.AccountId + accConIdAndADAId[acr.AccountId+acr.ContactId];
+                            var conIdACRId = acr.ContactId + accConIdAndADAId[acr.AccountId+acr.ContactId]; 
+                            accIds.push(accIdACRId);
+                            conIds.push(conIdACRId);
+                        }
+                    });
+                    
+                    accIds = _.uniq(accIds);
+                    conIds = _.uniq(conIds);
+                                                            
+                    $(".saveBtnCls").css("background-color", "#606062");
+                    $(".saveBtnCls").css("color", "white");
+                              
+                    _.filter(adas, function(ada) { 
+                        if($scope.pfIdAndContacts[ada.Id] && $scope.pfIdAndContacts[ada.Id].length > 0) {
+                            _.filter($scope.pfIdAndContacts[ada.Id], function(con) {
+                                var s1 = con.Id + ada.Id;
+                                if(_.contains(conIds, s1)) { 
+                                    if(ada.Accounts__r && ada.Accounts__r.length > 0) {
+                                        _.filter(ada.Accounts__r, function(acc) { 
+                                            var s2 = acc.Id + ada.Id;
+                                            if(_.contains(accIds, s2)) { 
+                                                var k = ada.Id+con.Id;
+                                                adaIdConIdFlag[k] = true;
+                                                $(".saveBtnCls").css("background-color", "#951180");
+                                                $(".saveBtnCls").css("color", "white");
+                                            }                                                
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    }); 
+                                    
+                    _.filter(adas, function(ada) { 
+                        if($scope.pfIdAndContacts[ada.Id] && $scope.pfIdAndContacts[ada.Id].length > 0) {
+                            _.filter($scope.pfIdAndContacts[ada.Id], function(con) { 
+                                var k2 = ada.Id+con.Id;
+                                if(adaIdConIdFlag[k2] == true) {
+                                    _.filter(ada.Accounts__r, function(acc) {
+                                        $('.bodyDiv' + acc.Id + con.Id).css('background-color', '#e9cfe5');
+                                        $('.conName' + ada.Id + con.Id).css('background-color', '#e9cfe5');
+                                    });
+                                } else {
+                                    _.filter(ada.Accounts__r, function(acc) {
+                                        $('.bodyDiv' + acc.Id + con.Id).css('background-color', '#f6f6f4');
+                                        $('.conName' + ada.Id + con.Id).css('background-color', '#f6f6f4');
+                                    });
+                                } 
+                            });
+                        }
+                    });
+                }
+                
+                $scope.fixACRValues = function() {
+                    _.filter(Object.keys(acrValues), function(key) {                         
+                        var acr = acrValues[key];
+                        if(!(acr.acr && acr.acr.Id)) {
+                            if((!acr.acr.IsShared__c || acr.acr.IsShared__c == false) && (!acr.acr.Roles || acr.acr.Roles == null || acr.acr.Roles == '')) {
+                                delete acrValues[key];
+                            }
+                        } 
+                    });
+                }  
+                
+                $scope.resetValues = function() {
+                    $scope.alertPopup = false;
+                    $scope.accessBtnFlag = false;
+                    $scope.alertName = '';
+                    $scope.confirmationFlag = false;
+                    $scope.okBtnFlag = false;
+                    $scope.uncommitedFlag = false;
+                    $scope.additionalAlertMessage = '';
+                }
+                
+                $scope.validateData = function(isColorApplied) {
+                    
+                    var adaIdAndErrPageNo = {};
+                    $scope.adaIdAndErrors = {};
+                    var errACRs;
+                    
+                    if(isColorApplied == true) {
+                        $('.divCls').css('background-color', '#f6f6f4');
+                        $('.headDiv').css('background-color', '#f6f6f4');
+                        $('.bodyDiv1').css('background-color', '#f6f6f4');
+                    }
+                    saveACRList = [];
+                    errACRList = [];
+                    var showADAIds = [];
+                               
+                    _.filter(Object.keys(acrValues), function(key) { 
+                        var acr = acrValues[key].acr;
+                        if(acr.IsShared__c == true && (!acr.Roles || acr.Roles == '')) {
+                            if(!errACRs) { errACRs = {}; }
+                            errACRList.push(acrValues[key]);
+                            errACRs[key] = angular.copy(acrValues[key]);
+                            if(isColorApplied == true) {
+                                _.filter($scope.mainData, function(ada) { 
+                                    if($scope.pfIdAndContacts[ada.Id] && $scope.pfIdAndContacts[ada.Id].length > 0) {
+                                        _.filter($scope.pfIdAndContacts[ada.Id], function(con) { 
+                                            if(acr.ContactId == con.Id) { 
+                                                if(ada.Accounts__r && ada.Accounts__r.length > 0) {
+                                                    _.filter(ada.Accounts__r, function(acc) { 
+                                                        if(acr.AccountId == acc.Id) {
+                                                            _.filter(ada.Accounts__r, function(acc1) { 
+                                                                $('.bodyDiv' + acc1.Id + acr.ContactId).css('background-color', 'rgba(244, 232, 67, 0.62)');
+                                                                $('.conName' + ada.Id + acr.ContactId).css('background-color', 'rgba(244, 232, 67, 0.62)');
+                                                                $(".tdown" + acr.AccountId + acr.ContactId).show();
+                                                                showADAIds.push(ada.Id);
+                                                            });
+                                                        }                                                
+                                                    });
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
+                            }    
+                        } else {
+                            if(acr.Id) {
+                                var key = acr.AccountId + acr.ContactId;
+                                if(!angular.equals(acrValuesOriginal[key].acr, acr)) {
+                                    saveACRList.push(acr);
+                                }
+                            } else if(acr.IsShared__c != false || (acr.Roles && acr.Roles != null && acr.Roles != '')) {
+                                saveACRList.push(acr);
+                            }
+                            $(".tdown" + acr.AccountId + acr.ContactId).hide();
+                        }
+                        
+                        if(_.contains(Object.keys($scope.acrValues), key)) {
+                            $scope.acrValues[key] = acrValues[key];
+                        }
+                    });
+                    
+                    if(isColorApplied == true) {
+                        _.filter($scope.mainData, function(ada) { 
+                            if(_.contains(showADAIds, ada.Id)) {
+                                $scope.showExpand[ada.Id] = false;
+                            }
+                        });
+                    }
+                    
+                    if(isColorApplied == true && errACRs) {
+                        
+                        _.filter($scope.mainData, function(ada) { 
+                            var errPg = [];
+                            _.filter(ada.Accounts__r, function(acc) { 
+                                if(pfIdAndContacts[ada.Id]) {
+                                    _.filter(pfIdAndContacts[ada.Id], function(con) { 
+                                        var ky = acc.Id + con.Id;
+                                        if(errACRs[ky] && adaIdConIdPgNo[ada.Id+con.Id]) {
+                                            errPg.push(adaIdConIdPgNo[ada.Id+con.Id]);
+                                        }
+                                    });
+                                }                            
+                            });
+                            if(errPg.length > 0) {
+                                var array = _.sortBy(_.uniq(errPg), function(num) { return num; });
+                                var str = '';
+                                _.filter(array, function(arr) { 
+                                    if(str == '' || array.length == 1) {
+                                        str = arr;
+                                    } else {
+                                        str += ', ' + arr;
+                                    }
+                                });
+                                $scope.adaIdAndErrors[ada.Id] = 'Error pages - ' + str;
+                            }
+                        });
+                    }                  
+                }
+                
+                $scope.goNext = function() {
+                
+                    $scope.alertPopup = false;
+                    $scope.okBtnFlag = false;
+                    $scope.alertName = '';
+                    
+                    if($scope.isGoNextPage == true) {
+                        $scope.goNextPage();
+                    }
+                }
+                
+                $scope.saveChanges = function(from, isValidate) {
+                    
+                    $(".modal").show();
+                    $scope.alertPopup = false;
+                    $scope.isAfterSave = false;
+                    
+                    $scope.validateData(false);
+                    $(".tdownSaveBtnCls").hide();
+                    $(".saveBtnCls").css("background-color", "#606062");
+                    $(".saveBtnCls").css("color", "white");
+                    $(".tdownCls").css("display", "none");
+                                        
+                    if(saveACRList && saveACRList.length > 0) {
+                        
+                        Visualforce.remoting.Manager.invokeAction(
+                        '{!$RemoteAction.SharingWizardController.saveChanges}', JSON.stringify(saveACRList),
+                            function(result, event) {
+                                
+                                if(event.status && result) {
+                                    if(result.includes('Error :')) {
+                                        $(".modal").hide();
+                                        $scope.okBtnFlag = true;
+                                        $scope.alertMessage = result.substring(7, result.length);
+                                        $scope.alertPopup = true;
+                                    } else {
+                                        var acrValuesCopy = angular.copy(acrValues);
+                                        var acrValuesOri = angular.copy(acrValuesOriginal);
+                                        acrValuesForAccess = {};
+                                        
+                                        var parseResult = JSON.parse(result);
+                                        _.filter(Object.keys(parseResult), function(acrKey) {
+                                            acrValues[acrKey]  = angular.copy(parseResult[acrKey]);
+                                            acrValuesOriginal[acrKey] = angular.copy(parseResult[acrKey]);
+                                        });
+                                        $scope.okBtnFlag = true;
+                                        if(errACRList && errACRList.length > 0) {
+                                            $(".tdownSaveBtnCls").show();
+                                            $(".saveBtnCls").css("background-color", "#f4e843");
+                                            $(".saveBtnCls").css("color", "darkslategrey");
+                                            $scope.alertMessage = 'Your changes have partially saved. There ' + (errACRList.length == 1 ? 'is ' : 'are ') + errACRList.length + (errACRList.length == 1 ? ' error' : ' errors') + '. Please review these (in yellow) and save again when the errors are resolved.';
+                                            $scope.isAfterSave = true;
+                                        } else {
+                                            $scope.alertMessage = 'Success! Your changes have been saved.';
+                                        }
+                                        $scope.alertPopup = true;
+                                        if(from == 'pagination') {
+                                            $scope.isGoNextPage = true;
+                                        } else {
+                                            $scope.isGoNextPage = false;
+                                        }
+                                        $scope.getCounts();
+                                        _.filter(errACRList, function(errACR) {
+                                            var errKey = errACR.acr.AccountId + errACR.acr.ContactId;
+                                            if(!acrValues[errKey]) {
+                                                acrValues[errKey] = {};
+                                            } 
+                                            acrValues[errKey] = errACR;
+                                            _.filter(acrValuesOri, function(oriACR) {
+                                                var oriKey = oriACR.acr.AccountId + oriACR.acr.ContactId;
+                                                if(oriKey == errKey) {
+                                                    if(acrValuesOriginal[oriKey])
+                                                        acrValuesOriginal[oriKey] = {};
+                                                    acrValuesOriginal[oriKey] = oriACR;
+                                                }
+                                            });
+                                        });
+                                    }
+                                    $scope.validateData(true);
+                                    $scope.$apply();
+                                    $(".modal").hide();
+                                } else {
+                                    $(".modal").hide();
+                                }
+                            },
+                            { escape: false }    
+                        );
+                    } else {
+                        $scope.validateData(true);
+                        if(errACRList && errACRList.length > 0) {
+                            $(".tdownSaveBtnCls").show();
+                            $(".saveBtnCls").css("background-color", "#f4e843");
+                            $(".saveBtnCls").css("color", "darkslategrey");
+                            $scope.alertMessage = 'There ' + (errACRList.length == 1 ? 'is ' : 'are ') + errACRList.length + (errACRList.length == 1 ? ' error' : ' errors') + '. Please review these (in yellow) and save again when the errors are resolved.';
+                            $scope.isAfterSave = true;
+                        } else {
+                            $scope.alertMessage = 'No changes made in this page';
+                        }
+                        $scope.alertPopup = true;
+                        $scope.okBtnFlag = true;
+                        $(".modal").hide();
+                    }
+                }
+                
+                $scope.userFilter = function() {
+                    $(".modal").show();
+                    if($scope.selectedUserId != '') {
+                        $scope.isInternalUser = false;
+                        $scope.adaFilter('applyFilter');
+                    } else {
+                        $scope.isInternalUser = true;
+                        $scope.mainData = [];
+                        $(".modal").hide();
+                    }
+                }
+                $scope.getData($scope.selectedUserId);
+                
+                $scope.isAfterSave = false;
+                
+                $scope.jumpPagination = function(adaId, direction) {
+                    if(direction == 'first') {
+                        $scope.inrcurrentPage[adaId] = 0;
+                    } else {
+                        $scope.inrcurrentPage[adaId] = Math.ceil($scope.pfIdAndConCount[adaId]/$scope.inrPageSize) -1 ;
+                    }
+                    $scope.getContactPagination(adaId);
+                    $timeout(function() { $scope.applyMultiSelectFromPagination(adaId); })
+                }
+                
+                $scope.paginationFunction = function(direction, from, adaId) {
+                    $scope.preOrNext = '';
+                    if(from == 'inr') {                        
+                        if(direction == 'pre') {
+                            $scope.inrcurrentPage[adaId] = $scope.inrcurrentPage[adaId]-1
+                        } else if(direction == 'next') {
+                            $scope.inrcurrentPage[adaId] = $scope.inrcurrentPage[adaId]+1
+                        }
+                        $scope.getContactPagination(adaId);
+                        $timeout(function() { $scope.applyMultiSelectFromPagination(adaId); });
+                    } else {
+                        $scope.preOrNext = direction;
+                        if(angular.equals(acrValuesOriginal, acrValues)) {
+                            if(direction == 'pre') {
+                                $scope.currentPage = $scope.currentPage-1;
+                            } else if(direction == 'next') {
+                                $scope.currentPage = $scope.currentPage+1;
+                            }
+                            $timeout(function() { 
+                                $scope.applyMultiSelect(); 
+                                applyScrollFn($scope.mainData); 
+                            });
+                        } else {
+                            $scope.uncommitedFlag = true;
+                            $scope.alertMessage = 'There are unsaved changes! If you ' + (direction == 'next' ? 'continue to the next' : 'go back to the previous') + ' page, changes will be lost, unless you save first. Do you want to save and continue?'
+                            $scope.alertPopup = true;
+                        }
+                    }
+                }
+                
+                $scope.goNextPage = function() {
+                    acrValues = angular.copy(acrValuesOriginal);
+                    if($scope.preOrNext == 'pre') {
+                        $scope.currentPage = $scope.currentPage-1;
+                    } else if($scope.preOrNext == 'next') {
+                        $scope.currentPage = $scope.currentPage+1;
+                    }
+                    $timeout(function() { $scope.applyMultiSelect(); });
+                    $scope.alertPopup = false;
+                }
+                
+                $scope.allRoleSelectFn = function(isAllSelect) {
+                    
+                    if(isAllSelect == 'true') {
+                        _.filter($scope.roles, function(r) {
+                            if(r != 'Former Contact') {
+                                $scope.grantAllValues.push(r);
+                            }
+                        });
+                    } else {
+                        $scope.grantAllValues = [];
+                    }
+                    
+                    _.filter($scope.roles, function(role) { 
+                        var selector = "." + $scope.removeSpace(role);
+                        if(role != 'Former Contact') {
+                            if(isAllSelect == 'true') {
+                                $( selector ).prop('checked', true);
+                            } else {
+                                $( selector ).prop('checked', false);
+                            }
+                        }
+                    });
+                } 
+                
+                $scope.cancelChanges = function() {
+                    $scope.alertPopup = true;
+                    $scope.alertMessage = 'Are you sure you want to cancel? All changes will be lost.'
+                }
+                
+                $scope.addGrantValues = function(isChecked, val) {
+                    
+                    if(_.contains($scope.grantAllValues, val)) {
+                        if(!isChecked) {
+                            $scope.grantAllValues.splice(_.indexOf($scope.grantAllValues, val), 1);
+                        }
+                    } else {
+                        if(isChecked) {
+                            $scope.grantAllValues.push(val);
+                        }
+                    }
+                }
+                          
+                $scope.grantAllAccess = function(isRevoke) {
+                                        
+                    if($scope.adaId != '' && Object.keys($scope.cont).length > 0) {
+                        
+                        var pickVal = '';
+                        _.filter($scope.grantAllValues, function(val) { 
+                            pickVal += val + ';';
+                        });
+                                                
+                        if($scope.isDisable($scope.cont, $scope.adaForAllPopup) && pickVal.length == 0) {
+                            $scope.alertMessage = "You cannot remove all roles, please select the correct role before removing any existing roles.";
+                            $scope.alertPopup = true;
+                            $scope.okBtnFlag = true;
+                        } else {
+                        
+                            _.filter($scope.mainData, function(ada) { 
+                                if(ada.Id == $scope.adaId) {
+                                    if(ada.Accounts__r && ada.Accounts__r.length > 0) {
+                                        _.filter(ada.Accounts__r, function(acc) { 
+                                            if($scope.pfIdAndContacts[ada.Id] && $scope.pfIdAndContacts[ada.Id].length > 0) {
+                                                _.filter($scope.pfIdAndContacts[ada.Id], function(con) { 
+                                                    if($scope.cont.Id == con.Id) {
+                                                        var key = acc.Id + con.Id;
+                                                        if(acrValues[key]) {
+                                                            if(acrValues[key].acr) {
+                                                                if(pickVal != '') {
+                                                                    acrValues[key].acr.Roles = pickVal.substr(0, pickVal.length-1);
+                                                                } else {
+                                                                    if(isRevoke == true) {
+                                                                        acrValues[key].acr.Roles = 'Former Contact';
+                                                                    } else {
+                                                                        acrValues[key].acr.Roles = null;
+                                                                    }
+                                                                }
+                                                            } else {
+                                                                var newACR = {"ContactId":con.Id, "AccountId":acc.Id};
+                                                                if(pickVal != '') {
+                                                                    newACR.Roles = pickVal.substr(0, pickVal.length-1);
+                                                                } else {
+                                                                    newACR.Roles = null;
+                                                                }
+                                                                acrValues[key].acr = newACR;
+                                                            }
+                                                            if(isRevoke == true && acrValues[key].acr.Roles != null) {
+                                                                acrValues[key].roles = ['Former Contact'];
+                                                            } else {
+                                                                acrValues[key].roles = $scope.grantAllValues;
+                                                            }
+                                                            
+                                                        } else {
+                                                            acrValues[key] = {};
+                                                            
+                                                            var newACR = {"ContactId":con.Id, "AccountId":acc.Id};
+                                                            if(pickVal != '') {
+                                                                newACR.Roles = pickVal.substr(0, pickVal.length-1);
+                                                            } else {
+                                                                newACR.Roles = null;
+                                                            }
+                                                            acrValues[key].acr = newACR;
+                                                            if(isRevoke == true && acrValues[key].acr.Roles != null) {
+                                                                acrValues[key].roles = ['Former Contact'];
+                                                            } else {
+                                                                acrValues[key].roles = $scope.grantAllValues;
+                                                            }
+                                                        }
+                                                        $('#'+key).multiselect('deselect', $scope.roles);
+                                                        $('#'+key).multiselect('select', acrValues[key].roles);
+                                                        
+                                                        if($scope.grantAllValues && $scope.grantAllValues.length > 0) {
+                                                            acrValues[key].acr.IsShared__c = true;
+                                                        } else {
+                                                            acrValues[key].acr.IsShared__c = false;
+                                                        }
+                                                        if(_.contains(pfIdAndACRKeys[ada.Id], key)) {
+                                                            $scope.acrValues[key] = {};
+                                                            $scope.acrValues[key] = acrValues[key];
+                                                        } 
+                                                        if(acrValues[key] && acrValues[key].roles && acrValues[key].roles[0] == 'Former Contact') {
+                                                            $('#'+key).multiselect('disable');
+                                                        } else {
+                                                            $('#'+key).multiselect('enable');
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                }    
+                            });
+                        }
+                    }
+                    $scope.dataChanges($scope.adaId);
+                    $scope.clearAllChecks();
+                }
+                
+                $scope.showAccessPopup = function(ada, con, operation, adaName, conName) {
+                    
+                    $scope.cont = con;
+                    $scope.adaId = ada.Id; 
+                    $scope.adaForAllPopup = ada;
+                                      
+                    if(operation) {
+                        $scope.accessBtnFlag = true;
+                        $scope.operation = operation;
+                        $scope.alertMessage = 'Are you sure you want to remove all access to the clubs in the ' + adaName + ' for ' + conName + '?';
+                        $scope.alertName = 'Remove Access to All Clubs for ' + adaName + ' for ' + conName;
+                        $scope.alertPopup = true;
+                    } else {
+                        $scope.showPopup = true;
+                        $scope.adaName = adaName
+                    }
+                }
+                
+                $scope.clearAllChecks = function() {
+                    
+                    _.filter($scope.roles, function(role) { 
+                        var selector = $scope.removeSpace(role);
+                        $("."+selector).attr('checked', false);
+                    });
+                    $scope.showPopup = false;
+                    $scope.grantAllValues = [];
+                    $scope.cont = {};
+                    $scope.adaId = '';
+                }
+                
+                $scope.adaFilter = function(from) {
+                    $(".modal").show();
+                    $timeout(function() { 
+                        $(".tdownSaveBtnCls").hide();
+                        $(".saveBtnCls").css("background-color", "#606062");
+                        $(".saveBtnCls").css("color", "white");
+                    });
+                    if(from == 'cancelChanges') {
+                        acrValuesForAccess = {};
+                        acrValues = angular.copy(acrValuesOriginal);
+                        _.filter(Object.keys($scope.acrValues), function(acrKey) { 
+                            $scope.acrValues[acrKey] = acrValuesOriginal[acrKey]
+                        });
+                    } else if(from == 'applyFilter') {
+                        $scope.currentPage = 0;
+                    }
+                    
+                    _.filter($scope.mainData, function(data) { 
+                        $scope.adaIdAndErrors[data.Id] = false;
+                    });
+                    
+                    var mainData = angular.copy(mainDataOriginal);
+                    if($scope.selectedADA && $scope.selectedADA.length > 0) {
+                        mainData = _.filter(mainData, function(data) { return _.contains($scope.selectedADA, data.Name); });
+                    } 
+                    $scope.mainData = _.uniq(mainData);
+                    if($scope.isInternalUser != true) {
+                        $timeout(function() { 
+                            $scope.applyMultiSelect();
+                        });
+                    } else {
+                        $(".modal").hide();
+                    }
+                    $timeout(function() { applyScrollFn($scope.mainData); },20); 
+                } 
+                
+                $scope.toggleArrow = function(inx) {
+                    $scope.showExpand[inx] = !$scope.showExpand[inx];
+                }
+                
+                $scope.reConstructMultiselect = function(isChecked, key) {   
+                    
+                    $('#'+key).multiselect({
+                        includeSelectAllOption: true,
+                        enableCaseInsensitiveFiltering: true,
+                        buttonClass: 'slds-button slds-button--neutral pickBtnCls adaBtnCls',
+                        buttonText: function(options, select) {
+                            if (options.length === 0) {
+                                if(isChecked == true) {
+                                    return 'Please Select';
+                                } else {
+                                    return 'None selected';
+                                }
+                            }
+                            else if (options.length > 0) {
+                                var label = '';
+                                var plus = "+";
+                                options.each(function(k) {
+                                    if(k == 0) { label = $(this).text(); }
+                                });
+                                label += (options.length > 1 ? ' ' + plus + ' ' + (options.length-1) : '')
+                                return label;
+                            }
+                        }
+                    });
+                    
+                    $('#'+key).multiselect('deselect', $scope.roles);
+                    $('#'+key).multiselect('select', acrValues[key].roles);
+                    
+                    if(acrValues[key] && acrValues[key].roles && acrValues[key].roles[0] == 'Former Contact') {
+                        $('#'+key).multiselect('disable');
+                    } else {
+                        $('#'+key).multiselect('enable');
+                    }
+                    $scope.dropdownPosition();
+                }
+                
+                $scope.checkBoxChange = function(adaId, isChecked, accId, conId) {
+                    if(accId && conId) {
+                        var tempACR = angular.copy(acrValues);
+                        var key = accId + conId;
+                        
+                        if(!(isChecked == true)) {
+                            acrValuesForAccess[key] = angular.copy(acrValues[key]);
+                        }
+                        
+                        if(acrValues[key] && acrValues[key].acr) {
+                            acrValues[key].acr.IsShared__c = isChecked;
+                        } else {
+                            var newACR = {"ContactId":conId, "AccountId":accId, "IsShared__c":isChecked};
+                            acrValues[key] = {};
+                            acrValues[key].acr = newACR;
+                        }
+                        acrValues[key].acr.Roles = null;
+                        acrValues[key].roles = [];
+                        if(isChecked == true) {
+                            if(acrValuesForAccess[key] && acrValuesForAccess[key].acr) {
+                                acrValues[key].acr.Roles = acrValuesForAccess[key].acr.Roles;
+                                acrValues[key].roles = acrValuesForAccess[key].roles
+                            }
+                        } else {
+                            if(tempACR[key] && tempACR[key].acr && tempACR[key].acr.Roles != null) {
+                                acrValues[key].acr.Roles = 'Former Contact';
+                                acrValues[key].roles = ['Former Contact'];
+                            }                          
+                        }
+                        $scope.reConstructMultiselect(isChecked, key);
+                        if(_.contains(pfIdAndACRKeys[adaId], key)) {
+                            $scope.acrValues[key] = {};
+                            $scope.acrValues[key] = acrValues[key];
+                        } 
+                    }
+                    $timeout(function() { 
+                        $scope.dataChanges(adaId);
+                    });
+                }
+                
+                $scope.selectedValues = function(ada, elem, type, accId, con) {
+                    
+                    var pickval = [];
+                    var pickStr = '';
+                    
+                    angular.forEach($(elem).val(),function(rel){
+                        if(rel != 'Former Contact') {
+                            pickval.push(rel);
+                            pickStr += rel + ';';
+                        }
+                    });
+                   
+                    if(type == 'ada') {
+                        $scope.selectedADA = [];
+                        $scope.selectedADA = pickval;
+                    } else if(type == 'acr') {
+                        
+                        var adaId = ada.Id;
+                        var conId = con.Id;
+                        
+                        if(accId && conId) {
+                            var key = accId + conId;
+                            if($scope.isDisable(con, ada, accId) && pickval.length == 0) {
+                                
+                                $timeout(function() { 
+                                    $scope.alertMessage = "You cannot remove all roles, please select the correct role before removing any existing roles.";
+                                    $scope.alertPopup = true;
+                                    $scope.okBtnFlag = true;
+                                    $('#'+key).multiselect('deselect', $scope.roles);
+                                    $('#'+key).multiselect('select', acrValues[key].roles);
+                                });
+                            } else {                        
+                                
+                                if(acrValues[key] && acrValues[key].acr) {
+                                    if(pickval.length == 0) {
+                                        acrValues[key].acr.Roles = 'Former Contact';
+                                        pickval.push('Former Contact');
+                                    } else {
+                                        if(pickStr != '') {
+                                            acrValues[key].acr.Roles = pickStr.substr(0, pickStr.length-1);
+                                        } else {
+                                            acrValues[key].acr.Roles = null;
+                                        }
+                                    }
+                                } else {
+                                    
+                                    var newACR = {"ContactId":conId, "AccountId":accId};
+                                    if(pickval.length == 0) {
+                                        newACR.Roles = 'Former Contact';
+                                        pickval.push('Former Contact');
+                                    } else {
+                                        if(pickStr != '') {
+                                            newACR.Roles = pickStr.substr(0, pickStr.length-1);
+                                        } else {
+                                            newACR.Roles = null;
+                                        }
+                                    }
+                                    acrValues[key] = {};
+                                    acrValues[key].acr = newACR;
+                                }
+                                acrValues[key].roles = pickval;
+                                
+                                $timeout(function() { 
+                                    if(pickval && pickval.length > 0) {
+                                        if(acrValues[key].acr.Roles == 'Former Contact') {
+                                            acrValues[key].acr.IsShared__c = false;
+                                            $scope.reConstructMultiselect(false, key);
+                                        } else {
+                                            acrValues[key].acr.IsShared__c = true;
+                                            $scope.reConstructMultiselect(true, key);
+                                        }
+                                    } else {
+                                        acrValues[key].acr.IsShared__c = false;
+                                        $scope.reConstructMultiselect(false, key);
+                                    }
+                                });
+                                acrValuesForAccess[key] = acrValues[key];
+                                if(_.contains(pfIdAndACRKeys[adaId], key)) {
+                                    $scope.acrValues[key] = {};
+                                    $scope.acrValues[key] = acrValues[key];
+                                }
+                                $timeout(function() { $scope.dataChanges(adaId); },50);
+                            }
+                        } 
+                    }
+                }
+                
+                $scope.isDisable = function(con, ada, accId) {
+                    
+                    if(accId && accId != '') {
+                        var accConId = accId + con.Id;
+                    } else if(ada.Accounts__r && ada.Accounts__r.length > 0) {
+                        
+                        for(var z=0; z<ada.Accounts__r.length; z++) {
+                            var acId = ada.Accounts__r[z].Id + con.Id;
+                            if(_.contains($scope.restrictACRAccAndConId, acId)) {
+                                return true;
+                            }
+                        }
+                    }
+                    
+                    if($scope.userContactId == con.Id || ($scope.userContactId && 
+                    (con.Id == ada.Approved_Operator__c || con.Id == ada.Responsible_Owner__c || 
+                    con.Id == ada.Delegated_Administrator_1__c || con.Id == ada.Delegated_Administrator_2__c)) || 
+                    _.contains($scope.restrictACRAccAndConId, accConId)) {
+                        return true;
+                    }
+                    
+                    
+                    return false;
+                }
+                
+                $scope.removeInfo = function() {
+                    
+                    $scope.selectedUserId = '';
+                    $scope.selectedUserName = '';
+                    $scope.isUserSelected = false;
+                    $scope.usrSearch = '';
+                    $scope.mainData = [];
+                    _.filter($scope.adas, function(ada) { 
+                        var opt = 'option[value="'+ada+'"]';
+                        $(opt, $('#adaId')).remove();
+                    });
+                    $('#adaId').multiselect('rebuild');
+                    $scope.isInternalUser = true;
+                    $scope.adas = [];
+                }
+                
+                $scope.setInfo = function(record) {
+                    
+                    $(".slds-lookup__menu").hide();
+                    $scope.selectedUserId = record.Id;
+                    $scope.selectedUserName = record.Name;
+                    $scope.isUserSelected = true;
+                    $(".modal").show();
+                    $scope.getData($scope.selectedUserId);
+                }
+                
+                $scope.clearText = function() {
+                    $scope.usrSearch = '';
+                    $("#userDropDown").hide();
+                }
+                
+                $scope.pickSearchValue = function(searchKey) {
+                       
+                    $scope.users = [];
+                    _.filter(userList, function(usr) { 
+                        var usrName = (usr.Name).toLowerCase();
+                        var key = searchKey.toLowerCase();
+                        if((usrName).startsWith(key)) {
+                            $scope.users.push(usr);
+                        }                                          
+                    });
+                    $scope.$apply();
+                }
+                
+                $scope.applyMultiSelectFromPagination = function(adaId) {
+                                            
+                    var conIds = [];
+                    var accIds = [];
+                    var adaIdConIdFlag = {};
+                    var adas = _.filter($scope.mainData, function(pf) { return pf.Id == adaId; });
+                    var ada = adas.length > 0 ? adas[0] : {};
+                    $scope.fixACRValues();
+                                        
+                    _.filter(ada.Accounts__r, function(acc) { 
+                        _.filter($scope.pfIdAndContacts[ada.Id], function(con) { 
+                            var multiPickId = acc.Id + con.Id;
+                                                                                  
+                            $('#'+multiPickId).multiselect({
+                                includeSelectAllOption: true,
+                                enableCaseInsensitiveFiltering: true,
+                                buttonClass: 'slds-button slds-button--neutral pickBtnCls roleBtnCls' + (' btn' + multiPickId),
+                                buttonText: function(options, select) {
+                                    if (options.length === 0) {
+                                        if(acrValues[multiPickId] && acrValues[multiPickId].acr && acrValues[multiPickId].acr.IsShared__c == true) {
+                                            return 'Please Select';
+                                        } else {
+                                            return 'None selected';
+                                        }
+                                    }
+                                    else if (options.length > 0) {
+                                        var label = '';
+                                        var plus = "+";
+                                        options.each(function(k) {
+                                            if(k == 0) { label = $(this).text(); }
+                                        });
+                                        label += (options.length > 1 ? ' ' + plus + ' ' + (options.length-1) : '')
+                                        return label;
+                                    }
+                                }
+                            });
+                            
+                            if(acrValues[multiPickId] && acrValues[multiPickId].roles && acrValues[multiPickId].roles[0] == 'Former Contact') {
+                                $('#'+multiPickId).multiselect('disable');
+                            } else {
+                                $('#'+multiPickId).multiselect('enable');
+                            }
+                            
+                            if(acrValues[multiPickId] && acrValues[multiPickId].roles && acrValues[multiPickId].roles.length > 0) {
+                                $('#'+multiPickId).multiselect('select', acrValues[multiPickId].roles);
+                            }
+                            if(!angular.equals(acrValuesOriginal[multiPickId], acrValues[multiPickId])) {
+                                var acr = acrValues[multiPickId].acr;
+                                var accIdACRId = acr.AccountId + accConIdAndADAId[acr.AccountId+acr.ContactId];
+                                var conIdACRId = acr.ContactId + accConIdAndADAId[acr.AccountId+acr.ContactId]; 
+                                accIds.push(accIdACRId);
+                                conIds.push(conIdACRId);
+                            }                                
+                        });
+                    });
+                    
+                    accIds = _.uniq(accIds);
+                    conIds = _.uniq(conIds);
+                                                            
+                    $(".saveBtnCls").css("background-color", "#606062");
+                    $(".saveBtnCls").css("color", "white");
+                              
+                    if($scope.pfIdAndContacts[ada.Id] && $scope.pfIdAndContacts[ada.Id].length > 0) {
+                        _.filter($scope.pfIdAndContacts[ada.Id], function(con) {
+                            var s1 = con.Id + ada.Id;
+                            if(_.contains(conIds, s1)) { 
+                                if(ada.Accounts__r && ada.Accounts__r.length > 0) {
+                                    _.filter(ada.Accounts__r, function(acc) { 
+                                        var s2 = acc.Id + ada.Id;
+                                        if(_.contains(accIds, s2)) { 
+                                            var k = ada.Id+con.Id;
+                                            adaIdConIdFlag[k] = true;
+                                            $(".saveBtnCls").css("background-color", "#951180");
+                                            $(".saveBtnCls").css("color", "white");
+                                        }                                                
+                                    });
+                                }
+                            }
+                        });
+                    
+                        _.filter($scope.pfIdAndContacts[ada.Id], function(con) { 
+                            var k2 = ada.Id+con.Id;
+                            if(adaIdConIdFlag[k2] == true) {
+                                _.filter(ada.Accounts__r, function(acc) {
+                                    $('.bodyDiv' + acc.Id + con.Id).css('background-color', '#e9cfe5');
+                                    $('.conName' + ada.Id + con.Id).css('background-color', '#e9cfe5');
+                                });
+                            } else {
+                                _.filter(ada.Accounts__r, function(acc) {
+                                    $('.bodyDiv' + acc.Id + con.Id).css('background-color', '#f6f6f4');
+                                    $('.conName' + ada.Id + con.Id).css('background-color', '#f6f6f4');
+                                });
+                            } 
+                        });
+                    }
+                    if($scope.isAfterSave == true) {
+                    
+                        var adaConIdAndAccConIds = {};
+                        
+                        _.filter($scope.pfIdAndContacts[ada.Id], function(con) {
+                            var key = ada.Id + con.Id;
+                            _.filter(ada.Accounts__r, function(acc) {
+                                var accConId = acc.Id + con.Id;
+                                if(!adaConIdAndAccConIds[key]) {
+                                    adaConIdAndAccConIds[key] = [];
+                                }
+                                adaConIdAndAccConIds[key].push(accConId);
+                            });
+                        });
+                        _.filter(Object.keys($scope.acrValues), function(k) { 
+                            if(acrValues[k] && acrValues[k].acr) {
+                                var acr = acrValues[k].acr;
+                                if(acr && acr.IsShared__c == true && (!acr.Roles || acr.Roles == null || acr.Roles == '')) {
+                                    var accIdAndConId = acr.AccountId + acr.ContactId;
+                                    if(accConIdAndADAId[accIdAndConId]) {
+                                        var keyForLoop = accConIdAndADAId[accIdAndConId] + acr.ContactId;
+                                        if(adaConIdAndAccConIds[keyForLoop]) {
+                                            _.filter(adaConIdAndAccConIds[keyForLoop], function(accConId) { 
+                                                $('.bodyDiv' + accConId).css('background-color', 'rgba(244, 232, 67, 0.62)');
+                                                $('.conName' + keyForLoop).css('background-color', 'rgba(244, 232, 67, 0.62)');
+                                                $(".tdown" + accIdAndConId).show();
+                                            });
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    
+                    $scope.dropdownPosition();                        
+                }
+                
+                $scope.applyMultiSelect = function() {
+                    if($scope.mainData) {
+                        
+                        var adas = [];
+                                                
+                        _.filter($scope.mainData, function(ada) { 
+                            if(ada.Id == adaId) {
+                                adas.push(ada)
+                            }
+                        });
+                        
+                        if(adas.length == 0) {
+                            adas = $scope.mainData;
+                        }
+                       
+                        _.filter(adas, function(ada) { 
+                            _.filter(pfIdAndACRKeys[ada.Id], function(multiPickId) { 
+                            
+                                $('#'+multiPickId).multiselect({
+                                    includeSelectAllOption: true,
+                                    enableCaseInsensitiveFiltering: true,
+                                    buttonClass: 'slds-button slds-button--neutral pickBtnCls roleBtnCls' + (' btn' + multiPickId),
+                                    buttonText: function(options, select) {
+                                        if (options.length === 0) {
+                                            if(acrValues[multiPickId] && acrValues[multiPickId].acr && acrValues[multiPickId].acr.IsShared__c == true) {
+                                                return 'Please Select';
+                                            } else {
+                                                return 'None selected';
+                                            }
+                                        }
+                                        else if (options.length > 0) {
+                                            var label = '';
+                                            var plus = "+";
+                                            options.each(function(k) {
+                                                if(k == 0) { label = $(this).text(); }
+                                            });
+                                            label += (options.length > 1 ? ' ' + plus + ' ' + (options.length-1) : '')
+                                            return label;
+                                        }
+                                    }
+                                });
+                                
+                                if(acrValues[multiPickId] && acrValues[multiPickId].roles && acrValues[multiPickId].roles[0] == 'Former Contact') {
+                                    $('#'+multiPickId).multiselect('disable');
+                                } else {
+                                    $('#'+multiPickId).multiselect('enable');
+                                }
+                                
+                                if(acrValuesOriginal[multiPickId]) {
+                                    if(acrValuesOriginal[multiPickId].roles && acrValuesOriginal[multiPickId].roles.length > 0) {
+                                        $('#'+multiPickId).multiselect('select', acrValuesOriginal[multiPickId].roles);
+                                    }
+                                }
+                            });
+                        });
+                        $scope.dropdownPosition();
+                    }
+                    $(".modal").hide();
+                }
+                
+                $scope.dropdownPosition = function() {                     
+                    
+                    $(".multiselect").click(function(e) {
+                        
+                        $(".dropdown-menu").css("top", "");
+                        $(".dropdown-menu").css("bottom", "");
+                        
+                        var tar = e.target;
+                        var dim = tar.getBoundingClientRect();
+                        var posX = dim.left, posY = dim.top + 35;
+                        
+                        if(tar.nodeName == 'SPAN') {
+                            posX = posX - 50.35; posY = posY - 8; 
+                        } else if(tar.tagName == 'use' || tar.nodeName == 'svg' || tar.nodeName == 'b' || tar.nodeName == 'B') {
+                            posX = posX - 184; posY = posY - 12; 
+                        }
+                        $(".dropdown-menu").css("left", posX);
+                        $(".dropdown-menu").css("top", posY);
+                       
+                    });
+                    
+                    $(".hScrollCls").scroll(function(){
+                        $(".btn-group").removeClass("open");
+                        var thisEle = $(this)[0];
+                        var back = "#back"+thisEle.id;
+                        var forward = "#forward"+thisEle.id;
+                        if(thisEle.scrollLeft >= 200) {
+                            $(back).show();
+                        } else {
+                            $(back).hide();
+                        }
+                        
+                        if((thisEle.scrollWidth - thisEle.scrollLeft) <= (thisEle.clientWidth + 200)) {
+                            $(forward).hide();
+                        } else {
+                            $(forward).show();
+                        }
+                    });
+                    $(window).scroll(function(){
+                        $(".btn-group").removeClass("open");
+                    });
+                    
+                    $('.caret').each(function() {   
+                        $(this).remove();
+                    });
+                    $('.multiselect-selected-text').each(function() {   
+                        $('<b class="caret"/>').insertBefore(this);
+                    });
+                    
+                    $(".checkbox").addClass("slds-lookup__item-action slds-lookup__item-action--label");
+                    $(".multiselect-search").addClass("slds-input");
+                    var downArrow = '<svg class="slds-button__icon slds-button__icon" aria-hidden="true">';
+                    downArrow += '<use xlink:href="{!URLFOR($Resource.SLDS222, '/assets/icons/utility-sprite/svg/symbols.svg#down')}"></use>';
+                    downArrow += '</svg>';
+                    $( ".caret" ).html('');
+                    $( ".caret" ).append(downArrow);
+                    
+                    $('input[type=checkbox]').each(function() {
+                        if(!($(this).hasClass("sldsCheck"))) {
+                            $(this).attr("id", cnt);
+                            $(this).addClass("sldsCheck");
+                            var pick = '<span class="slds-checkbox" style="margin-right:0.5rem;"></span>';
+                            var pick1 = '<label class="slds-checkbox__label" for="'+cnt+'"><span class="slds-checkbox--faux"></span></label></span>';
+                            $(this).wrap(pick);
+                            $(pick1).insertAfter(this);
+                            if($(this)[0].value == 'Former Contact') {
+                                $(this).attr("disabled", "disabled");
+                            }
+                            cnt++;
+                        }
+                    }); 
+                }
+                
+                $scope.gotoHelpPage = function() {
+                    if($scope.helpURL && $scope.helpURL != '') {
+                        window.open($scope.helpURL, '_blank' );
+                    } else {
+                        $scope.alertMessage = 'This help article is currently unavailable. Please reach out to Franchise Management support through the fm@planetfitness.com email address for assistance.';
+                        $scope.alertPopup = true;
+                        $scope.okBtnFlag = true;
+                    }
+                }
+                
+                $scope.removeSpace = function(clsName) {
+                    
+                    if(clsName != undefined && clsName != '') {
+                        
+                        var cls = clsName.replace(/[^a-z\d\s]+/gi, "");
+                        clsName = cls.replace(/ /g, ''); 
+                    }
+                    return clsName;
+                }
+            });
+            
+            function applyScrollFn(mainData) {
+                
+                _.filter(mainData, function(ada) { 
+                    var timeout;
+                    $("#right"+ada.Id).mousedown(function(){
+                        timeout = setInterval(function(){
+                            var scrolled = $("#"+ada.Id)[0].scrollLeft;
+                                                                                
+                            $("#"+ada.Id).animate({
+                                scrollLeft:  scrolled + 270
+                            });
+                        }, 400);
+                    
+                        return false;
+                    });
+                    
+                    $("#left"+ada.Id).mousedown(function(){
+                        timeout = setInterval(function(){
+                            var scrolled = $("#"+ada.Id)[0].scrollLeft;
+                        
+                            $("#"+ada.Id).animate({
+                                scrollLeft:  scrolled - 270
+                            });
+                        }, 400);
+                    
+                        return false;
+                    });
+                    
+                    $(document).mouseup(function(){
+                        clearInterval(timeout);
+                        return false;
+                    });
+                    
+                    $("#right"+ada.Id).on("click" ,function(){
+                        
+                        var scrolled = $("#"+ada.Id)[0].scrollLeft;
+                                                                                
+                        $("#"+ada.Id).animate({
+                            scrollLeft:  scrolled + 270
+                        });
+                    });
+                    
+                    $("#left"+ada.Id).on("click" ,function(){
+                        
+                        var scrolled = $("#"+ada.Id)[0].scrollLeft;
+                        
+                        $("#"+ada.Id).animate({
+                            scrollLeft:  scrolled - 270
+                        });
+                    });
+                });
+            }
+            
+            $(document).ready(function() {
+                
+                $(".bodyDiv").show();
+                $(".modal").show();
+                
+                $('#userTextBox').keyup(function () {
+                    
+                    $('#'+$(this).attr('aria-activedescendant')).show();
+                    searchKey = $(this).val();
+                    if(searchKey == '')
+                    $('#'+$(this).attr('aria-activedescendant')).hide();
+                    $('#searchTextForUser').text(searchKey);
+                    
+                    angular.element(document.getElementById('mainDiv')).scope().pickSearchValue(searchKey);
+                    
+                });
+                
+                $('#adaId').multiselect({
+                    includeSelectAllOption: true,
+                    enableCaseInsensitiveFiltering: true,
+                    buttonClass: 'slds-button slds-button--neutral pickBtnCls adaBtnCls',
+                    buttonText: function(options, select) {
+                        if (options.length === 0) {
+                            return 'None selected';
+                        }
+                        else if (options.length > 0) {
+                            var label = '';
+                            var plus = "+";
+                            options.each(function(k) {
+                                if(k == 0) { label = $(this).text(); }
+                            });
+                            label += (options.length > 1 ? ' ' + plus + ' ' + (options.length-1) : '')
+                            return label;
+                        }
+                    }
+                });
+                $('.caret').each(function() {   
+                    $(this).remove();
+                });
+                
+                $('.multiselect-selected-text').each(function() {   
+                    $('<b class="caret"/>').insertBefore(this);
+                });
+                var drow = '<svg class="slds-button__icon slds-button__icon" aria-hidden="true">';
+                drow += '<use xlink:href="{!URLFOR($Resource.SLDS222, '/assets/icons/utility-sprite/svg/symbols.svg#down')}"></use>';
+                drow += '</svg>';
+                
+                $( ".caret" ).html('');
+                $( ".caret" ).append(drow);
+                
+            });
+             
+            $(".slds").show();            
+        </script>
+        
+        <style>
+            .oRight { 
+                background-image: url('{!URLFOR($Resource.SharingWizardResource, 'backgroundImg.png')}') !important; 
+                background-size: cover;
+            } 
+            .spinner {
+                position: relative;
+                margin-top: -15.5rem;
+                width: 100%;
+                height: 100%;
+            }
+            .modal {
+                position: fixed;
+                z-index: 1000;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                background-color: rgba(230, 233, 239, 0.91) 
+            }
+            .slds, h2 {
+                font-family: Rockwell, "Courier Bold", Courier, Georgia, Times, "Times New Roman", serif !important;
+                color:#606062 !important;
+            }
+            .slds {
+                line-height: 1.5 !important;
+            }
+            .slds-input {
+                min-width:100px;
+                border-color: #bbbcbf;
+            }
+            .slds-button {
+                border-color: #bbbcbf;
+            }
+            input[type=text] {
+                color: #606062;
+            }
+            html {
+                background:none;
+                line-height: normal;
+            }
+            #tsidButton {
+                min-width: 110px;
+            }
+            .bPageHeader span,a {
+                font-family: Arial,Helvetica,sans-serif !important;
+            }
+            .bPageHeader .phHeader td.right {       
+                width:initial;      
+            }
+            .bPageHeader, .sidebarCell {
+                font-size:0.75rem;
+                font-family: Arial,Helvetica,sans-serif !important;
+            }
+            #sidebarDiv .sidebarModuleHeader h2 {
+                padding: 5px 9px !ipmortant;
+                display: block !ipmortant;
+                background: transparent url(/img/alohaSkin/sidebar_sprite.png) -9px bottom no-repeat !ipmortant;
+            }
+            .sidebarCollapsed {
+                width: 0px !important;
+                padding: 0px !important;
+            }
+            .left {
+                width: 180px !important;
+            }
+            .sidebarCollapsible {
+                padding: 10px;
+            }
+            .sidebarCell, #sidebarDiv {
+                width: 210px;
+            } 
+            .sidebarModule {
+                width: 200px;
+            }
+            .recycleBinModule a span {
+                vertical-align: middle !important;
+            }
+            .slds-page-header {
+                padding: 0.5rem 1rem;
+            }
+            .btnTxtCls {
+                font-weight: normal;
+                font-family: Rockwell, "Courier Bold", Courier, Georgia, Times, "Times New Roman", serif;
+                min-width: 135px;
+                color: #951180 !important;
+            }
+            .bPageFooter {
+                display:none !important;
+            }
+            .slds-dropdown-trigger .slds-dropdown {
+                visibility: visible !important;
+                opacity: initial;
+            }
+            li {
+                margin-left: 0px !important;
+            }
+            .topPadCls {
+                margin-top:0.25rem;
+            }
+            .slds-text-heading--medium {
+                font-size: 1rem;
+            }
+            .slds-lookup__item-action .slds-icon {
+                margin-top: .125rem !important;
+            }
+            .slds-table--bordered {
+                border-collapse: inherit;
+            }
+            .thCls {
+                text-align:center;
+            }
+            body, td, .dropdown-menu a label {
+                color: #16325c; !important;
+                font-family: Rockwell, "Courier Bold", Courier, Georgia, Times, "Times New Roman", serif !important;
+            }
+            .pickBtnCls {
+                color: #16325c !important;
+                font-weight: normal;
+                font-size: .8125rem;
+                min-width: 205px;
+                max-width: 205px;
+                white-space: nowrap;
+                overflow: hidden;
+                padding: 0rem 0.5rem;
+                font-family: Rockwell, "Courier Bold", Courier, Georgia, Times, "Times New Roman", serif !important;
+            }
+            .pickBtnCls1 {
+                color: #16325c !important;
+                font-weight: normal;
+                font-size: .8125rem;
+                min-width: 225px;
+                max-width: 225px;
+                white-space: nowrap;
+                overflow: hidden;
+                padding: 0rem 0.5rem;
+            }
+            .caret {
+                float: right;
+                margin-top: 0.5rem;
+            }
+            .dropdown-menu {
+                min-width: 205px;
+            }
+            input[type=checkbox] {
+                vertical-align:middle !important;
+                margin-right: 0.5rem !important;
+                width: 1rem;
+                height: 1rem;
+                border-color: #bbbcbf;
+            }
+            .slds-checkbox .slds-checkbox--faux {
+                border-color: #bbbcbf;
+            }
+            .slds-checkbox [type=checkbox]:checked+.slds-checkbox--faux:after, .slds-checkbox [type=checkbox]:checked+.slds-checkbox__label .slds-checkbox--faux:after, .slds-checkbox [type=checkbox]:checked~.slds-checkbox--faux:after {
+                border-bottom: 2px solid #77227b;
+                border-left: 2px solid #77227b;
+            }
+            .outer td.oRight {
+                padding :0.125rem 0.75rem;
+            }
+            .divCls {
+                min-height: 40px !important;
+                max-width: 300px;
+            }
+            .headDiv {
+                min-width:270px;
+                display: inline-block;
+                padding:0.4rem;
+                text-align:center;
+                background-color: #f6f6f4;
+                border-bottom: 1px solid #d8dde6;
+                min-height:50px;
+                max-height:50px;
+                width: 100%;
+            }
+            .bodyDiv1 {
+                min-width:270px;
+                display: inline-block;
+                padding: 0.15rem;
+                background-color: #f6f6f4;
+                border-bottom: 1px solid #d8dde6;
+                min-height:40px;
+                width: 100%;
+            }
+            table {
+                table-layout: fixed; 
+            }
+            .conNameCls {
+                text-align:left !important;
+            }
+            .slds-media {
+                align-items: center !important;
+            }
+            .imgCls {
+                width: 1.25rem;
+                height: 1.2rem;
+                margin-right: 0.3rem;
+                fill: #951180;
+            }
+            .paginationBtnCls {
+                min-width: 40px;
+                height: 200px;
+                margin-top: 3.25rem;
+            }
+            .centerAlign {
+                text-align: center;
+            }
+            .slds-form-element__label, .checkbox, .multiselect-selected-text, ::-webkit-input-placeholder, .slds span, {
+                color: #606062 !important;
+            }
+            .slds-icon-standard-account {
+                background-color: #951180;
+            }
+            .borderCls {
+                border:none;
+            }
+            .sidebarModuleHeader h2 {
+                color: white !important;
+            }
+            .mruList a, .sidebarModuleBody {
+                color: #222 !important;
+                font-family: Arial,Helvetica,sans-serif !important;
+            }
+            .mruItem a {
+                text-decoration: underline;
+            }
+            .sidebarCell h2 {
+               font-family: Arial,Helvetica,sans-serif !important; 
+            }
+            .absCenterCls {
+                justify-content: flex-start;
+                align-content: flex-start;
+            }
+            #handlebarContainer {
+                left:215px;
+            }
+            .accNameCls {
+                color: #951180 !important;
+                font-family: Rockwell, 'Courier Bold', Courier, Georgia, Times, 'Times New Roman', serif !important;
+            }
+            .saveBtnCls {
+                min-width:100px !important;
+                border-color: darkslategrey;
+                font-weight: normal;
+                font-family: Rockwell, "Courier Bold", Courier, Georgia, Times, "Times New Roman", serif;
+            }
+        </style>
+    </html>
+</apex:page>

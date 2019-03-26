@@ -1,0 +1,68 @@
+<apex:page docType="html-5.0" title="Planet Fitness Franchise Community" label="PFHomepage" name="PFHomepage" showHeader="true" sidebar="false" standardStylesheets="false">
+    <div class="no-sf-style page-body page-home">
+        <apex:include pageName="PFVoteAlert"/>
+
+        <div class="container">
+            
+            <!-- Homepage Carousel -->
+            <div id="carousel-example-generic" class="carousel slide hidden-xs hidden-s" data-ride="carousel">
+                <c:PFHomepageCarousel />
+            </div>
+
+            <!-- Clubs Info List Views -->
+            <div class="row">
+                <div class="col-md-12  my-clubs-table">
+                    <div class="main-section">
+                        <p class="section-title">Clubs In Development</p>
+                    </div>
+                    <div id="no-more-tables">
+                        <c:PFHomepageClubsInDev /> 
+                    </div>
+                    <div class="more-clubs-link-container">
+                        <apex:outputLink styleClass="more-clubs-link" value="/apex/PFClubs" >View All Clubs In Development ></apex:outputLink>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="{!IF(contains($Profile.Name, 'Broker'), 'display:none', 'display:block')}">
+                <div class="col-md-12  my-clubs-table">
+                    <div class="main-section">
+                        <p class="section-title">My Open Clubs</p>
+                    </div>
+                    <div id="no-more-tables">
+                        <c:PFHomepageMyOpenClubs /> 
+                    </div>
+                    <div class="more-clubs-link-container">
+                        <apex:outputLink styleClass="more-clubs-link" value="/apex/PFClubs" >View All Open Clubs ></apex:outputLink>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Group Health Section-->
+            <!-- THIS WILL SHOW STATISTICS FOR ALL CLUBS COMBINED VS THE CLUB DETAIL PAGE WHICH WILL ONLY SHOW STATISTICS FOR THAT SPECIFIC CLUB -->
+            <div class="row homepage-section my-group-health-section" style="{!IF(contains($Profile.Name, 'Broker'), 'display:none', 'display:block')}">
+                <div class="col-md-12">
+                    <div class="main-section">
+                        <p class="section-title">My Group Health</p>
+                    </div>
+                </div>
+                <c:PFHomepageGroupHealth />
+            </div>
+            
+            <!-- Operational Updates -->
+            <!--div class="row">
+                <div class="col-md-12">
+                    <div class="main-section">
+                        <p class="section-title">Operational Updates</p>
+                    </div>
+                </div>
+                <div class="operational-update">
+                    <c:PFHomeOperationalUpdates />
+                </div>
+            </div-->
+
+        </div>  
+        
+        <c:PFLinksFooterSection />
+        <c:PFTermsAndConditions />
+    </div>
+</apex:page>

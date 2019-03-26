@@ -1,0 +1,33 @@
+<apex:page docType="html-5.0" title="Request a Site | Planet Fitness Franchise Community" label="PFSiteRequest" name="PFSiteRequest" showHeader="true" sidebar="false" standardStylesheets="false">
+    <div class="no-sf-style page-body page-view-my-sites">
+        <div class="container">
+            <div class="jumbotron">
+                <div class="row">
+                    <div class="col-md-6 page-description">
+                        <h1>My Sites</h1>
+                        <p>This page shows all sites that you have submitted. You have the ability to filter all submissions by status (In Process, Denied, and On Hold) along with selecting a site to see additional information submitted.</p>
+                    </div>
+                    <div class="col-md-6 page-description-image hidden-xs hidden-sm">
+                        <img class="img-responsive" src="/resource/CommunityAssets/img/my-sites-banner.jpg"/>
+                    </div>
+                </div>
+            </div>
+
+            <ol class="breadcrumb">
+              <li><a href="/apex/PFHomepage">Home</a></li>
+              <li>View My Sites</li>
+            </ol>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="main-section">
+                        <p class="section-title">View My Sites</p>
+                    </div>
+                </div>
+            </div>
+            <div class="sites-listview-container">
+                <apex:listViews type="Sites__c"/>
+            </div>
+        </div>
+    </div>
+</apex:page>

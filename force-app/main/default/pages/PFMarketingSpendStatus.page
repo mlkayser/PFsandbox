@@ -1,0 +1,204 @@
+<apex:page controller="PFMarketingSpendController" docType="html-5.0"
+           title="Marketing Spend Status | Planet Fitness Franchise Community" label="PFMarketingSpendStatus" name="PFMarketingSpendStatus"
+           showHeader="true" sidebar="false" standardStylesheets="false">
+    <head>
+        <apex:includescript value="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"/>
+        <apex:includescript value="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"/>
+        <apex:includescript value="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js"/>
+        <script language="JavaScript">
+             angular.module('pfMarketingSpendStatusApp', [])
+                    .factory('ApexController', ['$q', '$rootScope', function($q, $rootScope) {
+                        var ApexController = {};
+
+                        // Get the Marketing Spend Compliance Status results
+                        ApexController.getComplianceStatusResults = function() {
+                            var group = document.getElementById('{!$Component.groupForm.selectedGroup}').options[document.getElementById('{!$Component.groupForm.selectedGroup}').selectedIndex].value;
+                            console.log('Group = ' + group);
+                            var year = document.getElementById('selectedYear').options[document.getElementById('selectedYear').selectedIndex].value;
+                            var deferred = $q.defer();
+
+                            // limit results to a single month for specificed Group
+                            // if (group == 'G0239-UNITED PF PARTNERS') {
+                            //var month = null;
+                            var month = null;
+                            if ({!showMonth}) { 
+                                 month = document.getElementById('selectedMonth').options[document.getElementById('selectedMonth').selectedIndex].value;
+                            }
+
+                            Visualforce.remoting.Manager.invokeAction(
+                                    '{!$RemoteAction.PFMarketingSpendController.getComplianceStatus}',
+                                    group,
+                                    year,
+                                    month,
+                                    function(result, event) {
+                                        $rootScope.$apply(function() {
+                                            if (event.status) {
+                                                deferred.resolve(result);
+                                                document.getElementById('spinner').style.visibility="hidden";
+                                            } else {
+                                                deferred.reject(event);
+                                            }
+                                        })
+                                    },
+                                    { buffer: true, escape: true, timeout: 30000 }
+                            );
+
+                            return deferred.promise;
+                        };
+
+                        return ApexController;
+                    }])
+                    .controller('pfMarketingSpendStatusController', ['$scope', 'ApexController', function ($scope, $ApexController) {
+                        $scope.complianceStatusReport = {};
+                        // Get Compliance status list
+                        $scope.getComplianceStatus = function() {
+                            var promise = $ApexController.getComplianceStatusResults();
+                            promise
+                            .then(function(result) {
+                                $scope.complianceStatusReport = result[0];
+                            })
+                            .catch(function(err) {
+                                console.log('getComplianceStatusResults failed with ' + err);
+                            });
+                        };
+
+                        $scope.redirectToUpload = function(m, y) {
+                            var group = document.getElementById('{!$Component.groupForm.selectedGroup}').options[document.getElementById('{!$Component.groupForm.selectedGroup}').selectedIndex].value;
+                            var formattedMonth = m < 10 ? '0' + m : m;
+                            window.location='/apex/PFMarketingSpend?month=' + formattedMonth + '&year=' + y + '&g=' + group;
+                        };
+
+                        $scope.complianceStatusReport = $scope.getComplianceStatus();
+                    }]);
+        </script>
+    </head>
+    <body>
+        <!-- spinner -->
+        <apex:slds />
+        <style> 
+            .modal {
+                position: fixed;
+                z-index: 1000;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                background-color: rgba(230, 233, 239, 0.91) 
+            }
+        </style>
+        <div id="spinner" class="modal slds-spinner_container">
+            <div class="slds-spinner--brand slds-spinner slds-spinner--medium" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>        
+        <!-- spinner -->
+
+        <div class="avs" ng-app="pfMarketingSpendStatusApp">
+            <div ng-controller="pfMarketingSpendStatusController">
+                <div class="no-sf-style page-body page-retail">
+                    <div class="container">
+                        <div class="jumbotron">
+                            <div class="row">
+                                <div class="col-md-6 page-description">
+                                    <h1>Marketing Spend Status</h1>
+                                    <p>The local marketing dollars fueling your growth!</p>
+                                </div>
+                                <div class="col-md-6 page-description-image hidden-xs hidden-sm">
+                                    <img class="img-responsive" src="/resource/CommunityAssets/img/retail-banner.jpg"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <ol class="breadcrumb">
+                            <li><a href="/apex/PFHomepage">Home</a></li>
+                            <li>Marketing Spend Status</li>
+                        </ol>
+
+                        <div class="row">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group group">
+                                            <label for="selectedGroup">Group</label>
+                                            <apex:form id="groupForm">
+                                                <apex:selectList size="1" value="{!selectedGroup}"
+                                                                 id="selectedGroup" styleClass="form-control">
+                                                    <apex:selectOptions value="{!groupNames}"/>
+                                                </apex:selectList>
+                                            </apex:form>
+                                        </div>
+                                        <div class="form-group year">
+                                            <label for="selectedYear">Year</label>
+                                            <select name="selectedYear" id="selectedYear" class="form-control">
+                                                <option>2017</option>
+                                                <option>2018</option>
+                                                <option selected="true">2019</option>
+                                            </select>
+                                        </div>
+                                        <apex:outputPanel rendered="{!IF (showMonth, true, false)}">
+                                            <div class="form-group month">     
+                                                <label for="selectedMonth">Month</label>
+                                                <select name="selectedMonth" id="selectedMonth" class="form-control">
+                                                    <option value="1" selected="selected">January</option>
+                                                    <option value="2">February</option>
+                                                    <option value="3">March</option>
+                                                    <option value="4">April</option>
+                                                    <option value="5">May</option>
+                                                    <option value="6">June</option>
+                                                    <option value="7">July</option>
+                                                    <option value="8">August</option>
+                                                    <option value="9">September</option>
+                                                    <option value="10">October</option>
+                                                    <option value="11">November</option>
+                                                    <option value="12">December</option>
+                                                </select>
+                                            </div>
+                                        </apex:outputPanel>
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary btn-sm"
+                                                    ng-click="getComplianceStatus()">Update</button>
+                                        </div>
+                                        <table class="table">
+                                            <thead class="cf thead-custom">
+                                                <tr>
+                                                    <th class="text-center">Month / Year</th>
+                                                    <th class="text-center">Submitted / Total Clubs</th>
+                                                    <th>Status</th>
+                                                    <th class="text-center">Total Spend</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="table-striped">
+                                                <tr ng-repeat="cmp in complianceStatusReport.complianceStatusItems" ng-class="{'success': cmp.compliantClubs == cmp.totalClubs, 'danger': cmp.compliantClubs != cmp.totalClubs}">
+                                                    <th scope="row" class="text-center">{{cmp.month}}/{{cmp.year}}</th>
+                                                    <td align="center">{{cmp.compliantClubs}}&nbsp;/&nbsp;{{cmp.totalClubs}}</td>
+                                                    <td>
+                                                        <div ng-if="cmp.compliantClubs == cmp.totalClubs && cmp.totalClubs != 0">SUBMITTED</div>
+                                                        <div ng-if="cmp.totalClubs == 0">NOT-APPLICABLE</div>
+                                                        <div ng-if="cmp.compliantClubs != cmp.totalClubs">NOT-SUBMITTED</div>
+                                                    </td>
+                                                    <td align="center">${{cmp.totalSpend}}</td>
+                                                    <td>
+                                                        <div ng-if="cmp.totalClubs != 0">
+                                                            <button type="button" class="btn btn-primary btn-sm"
+                                                                    ng-click="redirectToUpload(cmp.month, cmp.year)">
+                                                                <span ng-if="cmp.compliantClubs != cmp.totalClubs">Upload Marketing Spend</span>
+                                                                <span ng-if="cmp.compliantClubs === cmp.totalClubs">Update Marketing Spend</span>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</apex:page>

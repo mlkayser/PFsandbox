@@ -1,0 +1,223 @@
+<apex:page docType="html-5.0" controller="PFCustomLoginController" showHeader="false" sidebar="false" standardStylesheets="false">
+<apex:stylesheet value="{! URLFOR($Resource.CommunityAssets, '/css/custom-bootstrap.min.css')}"/>
+<apex:stylesheet value="{! URLFOR($Resource.CommunityAssets, '/css/font-awesome.min.css')}"/>
+
+<style>
+    /*Planet Fitness Font - Rockwell*/
+    @font-face {
+        font-family: 'Rockwell';
+        src: url('/resource/CommunityAssets/fonts/Rockwell.eot');
+        src: url('/resource/CommunityAssets/fonts/Rockwell.eot?#iefix') format('embedded-opentype'), url('/resource/CommunityAssets/fonts/Rockwell.woff') format('woff'), url('/resource/CommunityAssets/fonts/Rockwell.ttf') format('truetype'), url('/resource/CommunityAssets/fonts/Rockwell.svg#Rockwell') format('svg');
+    }
+    html{
+        background:url(/resource/1499262136000/Dots) !IMPORTANT; 
+        background-repeat: repeat !IMPORTANT;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        height: 100%;
+    }
+    body{
+        background-color: transparent;
+    }
+
+    .form-container{
+        margin-top: 10%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 20px;
+        max-width: 400px;
+        background-color: #eee;
+        font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+        padding: 30px;
+    }
+    .form-container img{
+        width: 130px;
+    }
+    .form-container h2{
+        text-align: center;
+        font-size: 24px;
+        color: #952d98;
+        font-weight: bold;
+        display: block;
+        font-family: Rockwell, 'Courier Bold', Courier, Georgia, Times, 'Times New Roman', serif;
+        letter-spacing: 1px;
+    }
+    input[type="text"] {
+        width: 150px;
+        display: block;
+        margin-bottom: 10px;
+        background-color: yellow;
+    }
+    label.checkbox{
+        margin-left: 40px;
+        font-size: 15px;
+        font-weight: 100;
+    }
+    .checkbox span{
+        line-height: 24px;
+    }
+    .no-sf-style .form-control{
+        width: 100%;
+        margin: 0 auto;
+        position: relative;
+        font-size: 16px;
+        height: auto;
+        padding: 10px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    .un{
+        background-color: #f3f5f6;
+        max-width: 280px;
+        margin: 0 auto;
+    }
+    .pw{
+        background-color: #f3f5f6;
+        max-width: 280px;
+        margin: 0 auto;
+    }
+    .login-logo{
+        margin: 0 auto;
+        display: block;
+    }
+    .forgot-password{
+        text-align: center;
+    }
+    .forgot-password a{
+        margin-top: 10px;
+        margin-bottom: 10px;
+        text-decoration: none;
+        color: #952d98;
+        font-weight: 400;
+        font-size: 12px;
+        margin: 10px;
+        text-align: center;
+    }
+    .forgot-password a:hover{
+        color: #702070;
+    }
+    .no-sf-style .btn {
+        font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+        display: block;
+        padding: 6px 12px;
+        font-size: 20px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 16px;
+        color: #fff;
+        background-color: #952d98;
+        max-width: 280px;
+    }
+    .no-sf-style .btn:hover{
+        background-color: #702070;
+        color: #fff;
+    }
+    .copyright{
+        color: #fff;
+        font-size: 12px;
+        font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    }
+    .remember-me{
+        color: #5a5b5d;
+        padding-left: 10px;
+        font-size: 12px;
+    }
+    .forgot-password{
+        margin: 20px 5px 0;
+    }
+    /*Error Message styles*/
+    .no-sf-style td, .no-sf-style th {
+        padding: 0;
+        display: block;
+        width: 100%;
+        margin: 0;
+    }
+    .form-container img.msgIcon{
+        width: 0px;
+    }
+    .messageCell{
+        font-size: 14px;
+    }
+    .messageCell h4{
+        font-size: 16px;
+        margin-top: 0;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        display: inline;
+        margin-right: 5px;
+    }
+    /*Font Awesome in Placeholder with Text*/
+    input.un::-webkit-input-placeholder::before { font-family: fontAwesome; content:'\f007  '; color: #d8d8d8 }
+    input.un::-moz-placeholder::before  { font-family: fontAwesome; content:'\f007  '; color: #d8d8d8 } /* firefox 19+ */
+    input.un:-ms-input-placeholder::before  { font-family: fontAwesome; content:'\f007  '; color: #d8d8d8 } /* ie */
+    input.un:-moz-placeholder::before  { font-family: fontAwesome; content:'\f007  '; color: #d8d8d8 }
+
+    input.pw::-webkit-input-placeholder::before { font-family: fontAwesome; content:'\f023   '; color: #d8d8d8 }
+    input.pw::-moz-placeholder::before  { font-family: fontAwesome; content:'\f023   '; color: #d8d8d8 } /* firefox 19+ */
+    input.pw:-ms-input-placeholder::before  { font-family: fontAwesome; content:'\f023   '; color: #d8d8d8 } /* ie */
+    input.pw:-moz-placeholder::before  { font-family: fontAwesome; content:'\f023   '; color: #d8d8d8 }
+</style>
+
+<div class="no-sf-style">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <apex:form id="loginForm">
+                    <fieldset>
+                        <div class="form-container">
+                            <div class="error-messages">
+                                <apex:pageMessages id="error"/>
+                            </div>
+                            <img class="login-logo" src="/resource/CommunityAssets/img/planet-fitness-logo.png" alt="Planet Fitness"/>
+                            <h2>franchise relationship management</h2>
+                            <apex:inputText value="{!username}" label="username" id="username" required="true" styleClass="form-control un"/>
+                            <apex:inputSecret id="password" value="{!password}" label="password" required="true" styleClass="form-control pw" />
+                            <apex:commandButton action="{!login}" styleClass="btn btn-block" value="Log In"/>
+                            <label class="checkbox">
+                                <input type="checkbox" id="rememberUsername" /> Remember Me
+                            </label>
+                            <div class="forgot-password">
+                                <apex:outputLink value="{!$Page.PFCommunityForgotPassword}">Forgot your password?</apex:outputLink>
+                            </div>
+                     
+                             <div style="border-top:1px solid silver; padding-top:10px; font-size:12px;" class="forgot-password">
+     PF World Headquarters employee? 
+                                <a href="https://planetfitness.my.salesforce.com//servlet/networks/session/create?site=0DMj00000008Qn5&refURL=http%3A%2F%2Ffm-planetfitness.force.com%2Flogin&inst=j">Log In Here</a>
+                            </div>
+                        </div>
+                    </fieldset>
+                </apex:form>
+                           
+            </div>
+        </div>
+        <p class="copyright text-center">Copyright &copy; 2017, Planet Fitness</p>
+    </div>
+</div>
+<script src="{! URLFOR($Resource.CommunityAssets, '/js/jquery-1.11.2.min.js')}"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script type="text/javascript">
+    if ($.cookie("rememberUsernameValue") !== undefined) {
+        $("#rememberUsername").prop("checked", true);
+        $("[id$=username]").val($.cookie("rememberUsernameValue"));
+    }
+    $("form[id$=loginForm]").submit(function(e){
+        if ($("#rememberUsername").is(":checked") && $("[id$=username]").val() !== "") {
+            var usernameVal = $("[id$=username]").val();
+            $.cookie('rememberUsernameValue', usernameVal, { expires: 14 });
+        }
+        if (!$("#rememberUsername").is(":checked")) {
+            $.removeCookie('rememberUsernameValue');
+        }
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.un').attr('placeholder','Email Address');
+        $('.pw').attr('placeholder','{!$Label.site.password}');
+    });
+</script>
+
+</apex:page>

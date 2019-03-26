@@ -1,0 +1,39 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global"
+                controller="FRM3_DelegatesController">
+    
+    <!--aura:handler name="init" value="{!this}" action="{!c.loadData}"/-->
+    <aura:attribute name="keyList" type="List"/>
+    <aura:attribute name="delegates" type="Map" />	
+
+    <lightning:card iconName="utility:people" title="Sharing Wizard Contacts" class="slds-is-open">
+        <table class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal">    
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <th class="slds-text-title_caps" scope="col">
+                        <div class="slds-truncate" title="Name">Name</div>
+                    </th>
+                    <th class="slds-text-title_caps" scope="col">
+                        <div class="slds-truncate" title="Email">Email</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.delegates}" var="delegate">                    
+                        <tr class="slds-hint-parent">
+                            <td data-label="Name" scope="row">
+                                <div class="slds-truncate" title="Name">
+                                    {!delegate.FirstName} &nbsp;{!delegate.LastName}
+                                </div>
+                            </td>
+                            <td data-label="Email" scope="row">
+                                <div class="slds-truncate" title="Email">
+                                    <a href="{!'mailto:' + delegate.Email}" class="slds-brand-band">{!delegate.Email}</a>
+                                </div>
+                            </td>   
+                        </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+    </lightning:card>	   
+    
+</aura:component>

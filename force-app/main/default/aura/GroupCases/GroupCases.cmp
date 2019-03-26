@@ -1,0 +1,62 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global"
+                controller="FRM3_CasesController">
+
+    <!--aura:handler name="init" value="{!this}" action="{!c.loadData}"/-->
+    <aura:attribute name="cases" type="object[]" />
+    
+    <lightning:card iconName="utility:activity" title="Recent Group Cases" class="slds-is-open">
+        <table class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal">    
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <th class="slds-text-title_caps" scope="col">
+                        <div class="slds-truncate" title="Number">Case Number</div>
+                    </th>
+                    <th class="slds-text-title_caps" scope="col">
+                        <div class="slds-truncate" title="Date">Created Date</div>
+                    </th>
+                    <th class="slds-text-title_caps" scope="col">
+                        <div class="slds-truncate" title="Reason">Reason</div>
+                    </th>
+                    <th class="slds-text-title_caps" scope="col">
+                        <div class="slds-truncate" title="Status">Status</div>
+                    </th>
+                    <th class="slds-text-title_caps" scope="col">
+                        <div class="slds-truncate" title="Club">Club</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.cases}" var="case">
+                    <tr class="slds-hint-parent">
+                        <td data-label="Number" scope="row">
+                            <div class="slds-truncate" title="Number">
+                                {!case.CaseNumber}
+                            </div>
+                        </td>
+                        <td data-label="Date" scope="row">
+                            <div class="slds-truncate" title="Date">
+                                <ui:outputDate value="{!case.CreatedDate}"/>
+                            </div>
+                        </td>  
+                        <td data-label="Reason" scope="row">
+                            <div class="slds-truncate" title="Reason">
+                                {!case.Reason}
+                            </div>
+                        </td>                        
+                        <td data-label="Status" scope="row">
+                            <div class="slds-truncate" title="Status">
+                                {!case.Status}
+                            </div>
+                        </td>   
+                        <td data-label="Club" scope="row">
+                            <div class="slds-truncate" title="Club">
+                                {!case.Account.Name}
+                            </div>
+                        </td>  
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+    </lightning:card>	   
+    
+</aura:component>

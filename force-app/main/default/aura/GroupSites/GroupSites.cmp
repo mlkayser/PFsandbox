@@ -1,0 +1,71 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global"
+                controller="FRM3_SitesController">
+
+	<!--aura:handler name="init" value="{!this}" action="{!c.loadData}"/-->
+	<aura:attribute name="sites" type="object[]" />
+    <aura:attribute name="nRows" type="Integer" default=""/>
+
+    <lightning:card iconName="utility:activity" title="Group Sites" class="slds-is-open">
+        <table class="slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal">    
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <th class="slds-text-title_caps" scope="col">
+                        <div class="slds-truncate" title="Name">Name</div>
+                    </th>
+                    <th class="slds-text-title_caps" scope="col">
+                        <div class="slds-truncate" title="Status">Status</div>
+                    </th>
+                    <th class="slds-text-title_caps" scope="col">
+                        <div class="slds-truncate" title="Submitter">Submitter</div>
+                    </th>
+                    <th class="slds-text-title_caps" scope="col">
+                        <div class="slds-truncate" title="Project">Project</div>
+                    </th>
+                    <th class="slds-text-title_caps" scope="col">
+                        <div class="slds-truncate" title="ADA">ADA</div>
+                    </th>
+                    <th class="slds-text-title_caps" scope="col">
+                        <div class="slds-truncate" title="Development Region">Development Region</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.sites}" var="site" end="{!v.nRows}">
+                    <tr class="slds-hint-parent">
+                        <td data-label="Name" scope="row">
+                            <div class="slds-truncate" title="Name">
+                                <lightning:button variant="base" label="{!site.Name}" title="{!site.Id}" onclick="{! c.gotoDetail}" />
+                            </div>
+                        </td>
+                        <td data-label="Status" scope="row">
+                            <div class="slds-truncate" title="Status">
+                                {!site.Status__c}
+                            </div>
+                        </td>
+                        <td data-label="Status" scope="row">
+                            <div class="slds-truncate" title="Subitter">
+                                {!site.Submitter__r.Name}
+                            </div>
+                        </td>
+                        <td data-label="Project" scope="row">
+                            <div class="slds-truncate" title="Project">
+                                {!site.Project__r.Name}
+                            </div>
+                        </td>
+                        <td data-label="ADA" scope="row">
+                            <div class="slds-truncate" title="ADA">
+                                {!site.ADA__c}
+                            </div>
+                        </td>
+                        <td data-label="Region" scope="row">
+                            <div class="slds-truncate" title="Region">
+                                {!site.Development_Region__c}
+                            </div>
+                        </td>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+    </lightning:card>	   
+    
+</aura:component>

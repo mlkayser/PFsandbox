@@ -1,0 +1,57 @@
+<apex:page docType="html-5.0" title="Top Selling Items | Planet Fitness Franchise Community" label="PFTopSellingItems" name="PFTopSellingItems" showHeader="true" sidebar="false" standardStylesheets="false">
+	<div class="no-sf-style page-body page-retail">
+	 	<div class="container">
+	 		<div class="jumbotron">
+		        <div class="row">
+		        	<div class="col-md-6 page-description">
+		        		<h1>Top Selling Items</h1>
+		        		<p></p>
+		        	</div>
+		        	<div class="col-md-6 page-description-image hidden-xs hidden-sm">
+		        		<img class="img-responsive" src="/resource/CommunityAssets/img/retail-banner-img.jpg"/>
+		        	</div>
+		        </div>
+	      	</div>
+
+	      	<ol class="breadcrumb">
+			  <li><a href="/apex/PFHomepage">Home</a></li>
+			  <li><a href="/apex/PFRetail">Retail</a></li>
+			  <li>Top Selling Items</li>
+ 			</ol>
+
+	  		<div class="row">
+	 			<div class="col-md-12">
+	 				<div class="main-section">
+			 			<p class="section-title">Top Selling Items</p>
+			 		</div>
+			 	</div>
+			</div>
+			
+			<div class="row">
+			    <div class="col-md-12" id="no-more-tables">
+			        <table class="col-md-12 table-striped table-condensed cf">
+			            <thead class="cf">
+			                <tr>
+			                    <th>Top Retail Items Overall</th>
+			                    <th>Top Fusion Products</th>
+			                    <th>Top Tanning Products</th>
+			                    <th>Top Beverages</th>
+			                </tr>
+			            </thead>
+			            <tbody>
+			                <!-- <apex:repeat value="" var=""> -->
+			                    <tr>
+			                        <td data-title="Top Retail Items Overall">Water</td>
+			                        <td data-title="Top Fusion Products">PF Earbuds</td>
+			                        <td data-title="Top Tanning Products">EZ Eyes</td>
+			                        <td data-title="Top Beverages">PF Water</td>
+			                    </tr>
+			                <!-- </apex:repeat> -->                             
+			            </tbody>
+			        </table>
+			    </div>
+			</div>
+
+	 	</div>
+	</div>
+</apex:page>

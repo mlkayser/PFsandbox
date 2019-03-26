@@ -1,0 +1,1227 @@
+<apex:page applyHtmlTag="false" applyBodyTag="false" showHeader="false" sidebar="false" standardStylesheets="false" contentType="text/css; charset=UTF-8">
+ /* --------------------------------------------------------
+Style Sheet for Planet Fitness Franchise Community
+
+version: 1.0
+last modified: 09.23.2015 by Lindsay Ryan
+author: Brett Hammond
+email: brett.hammond@magnet360.com
+website: dev-dev-planetfitness.cs18.force.com/
+----------------------------------------------------------*/
+
+/*
+Purple #952d98
+Dark Purple #702070
+Yellow #fcd900
+White #fff
+Black #231f20
+*/
+
+/*Planet Fitness Font - Rockwell*/
+@font-face {
+    font-family: 'Rockwell';
+    src: url('/resource/CommunityAssets/fonts/Rockwell.eot');
+    src: url('/resource/CommunityAssets/fonts/Rockwell.eot?#iefix') format('embedded-opentype'), url('/resource/CommunityAssets/fonts/Rockwell.woff') format('woff'), url('/resource/CommunityAssets/fonts/Rockwell.ttf') format('truetype'), url('/resource/CommunityAssets/fonts/Rockwell.svg#Rockwell') format('svg');
+}
+
+body {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+/** SALESFORCE OVERRIDES **/
+
+/*Native pages - restrain width to 1200px and center*/
+body .bodyDiv .outer .oRight{
+	max-width: 1200px;
+	margin-left: auto;
+	margin-right: auto;
+}
+body .bPageTitle{
+	max-width: 1200px;
+	margin-left: auto;
+	margin-right: auto;
+}
+html body .bPageBlock.brandSecondaryBrd{
+	max-width: 1200px;
+	margin-left: auto;
+	margin-right: auto;
+}
+body .bodyDiv .filterOverview {
+    margin: 5px auto;
+    max-width: 1200px;
+}
+/*Native page - Knowledge - restrain width to 1200px and center*/
+body .bodyDiv #bodyTable {
+    padding-right: 0;
+    padding-left: 0;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+/*Remove padding from sides of natvie Knowledge page*/
+body.hasMotif {
+    padding: 0;
+}
+/*Add padding to the bottom of the Knowledge page*/
+.knowledgeTab .brdPalette {
+    margin-bottom: 100px;
+}
+/*Native page Container style overrides*/
+/*Removes white background color on Container*/
+.container {
+    background: none;
+    background: -moz-linear-gradient(none);
+    background: -webkit-gradient(none);
+    background: -webkit-linear-gradient(none);
+    background: -o-linear-gradient(none);
+    background: -ms-linear-gradient(none);
+    background: linear-gradient(none);
+}
+
+/*page padding*/
+.bodyDiv .outerNoSidebar {
+    padding: 0 10px 0;
+}
+/*Remove Native Navbar*/
+body #AppBodyHeader{
+    display: none;
+}
+/*Remove Native Sidebar*/
+#sidebarCell{
+    display: none;
+}
+/*Removes 10px padding from SF style*/
+.noSidebarCell{
+    padding: 0;
+
+}
+/*Remove side padding of page*/
+.hasMotif {
+  margin: 0;
+}
+
+#contentWrapper {
+	min-width: 0; 
+}
+/*Remove body styles - shadows and rounded corners - Set background color on native pages*/
+.bodyDiv {
+	background-color: #ffffff;
+    /*Removes salesforce color border on top of page body*/
+    border-top: 0px solid; 
+    -moz-border-radius-bottomleft: 0px;
+    -moz-border-radius-bottomright: 0px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    -moz-box-shadow: 0 0px 0px hsla(0,0%,0%,0);
+    -webkit-box-shadow: 0 8px 10px hsla(0,0%,0%,0);
+    box-shadow: 0 0px 0px hsla(0,0%,0%,0);
+}
+.brdPalette.brandPrimaryBrd{
+	padding-top: 100px;
+}
+/*Native Salesforce Link color override*/
+.pbBody a {
+	color: #952d98;
+}
+.pbBody a:hover, a:focus{
+	color: #702070;
+}
+/*Salesforce native detail page bug fix - remove back button*/
+.ptBreadcrumb{
+	display: none;
+}
+/*List view style overrides*/
+.listViewport .ASC, .listViewport .DESC {
+    background: #952d98;
+    background-color: 952d98;
+    color: #fff;
+}
+/*List view header row hover effect*/
+.listViewport .x-grid3-hd-row td.over {
+    background: #702070;
+    background-color: #702070;
+    color: #fff;
+}
+/*hide chatter from SF native detail pages*/
+.bPageTitle .metadata.topics {
+    display: none;
+}
+/** GLOBAL STYLES **/
+/*Override Bootstrap table padding*/
+.no-sf-style th {
+    padding: 4px 2px 4px 5px;
+}
+/*background color*/
+.page-title-container{
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+h1.page-title{
+	font-size: 20px;
+	color: #952d98;
+	border-bottom: 2px solid #952d98;
+}
+p.section-title{
+	color: #464646;
+	margin-bottom: 10px;
+	font-family: Rockwell, 'Courier Bold', Courier, Georgia, Times, 'Times New Roman', serif;
+    font-size: 21px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    line-height: 22.4px;
+}
+p.section-sub-title{
+	font-size: 18px;
+	font-weight: bold;
+	color: #464646;
+	margin-bottom: 10px;
+	border-bottom: 1px solid #464646;
+}
+.no-sf-style .btn{
+	vertical-align: baseline;
+}
+.btn.btn-pf {
+    color: #fff;
+    background-color: #952d98;
+    border-color: #702070;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-family: Rockwell, 'Courier Bold', Courier, Georgia, Times, 'Times New Roman', serif;
+    font-style: normal;
+    font-variant: normal;
+    line-height: 18px;
+    letter-spacing: .8px;
+}
+.btn.btn-pf:hover, .btn.btn-pf:focus {
+    color: #fff;
+    background-color: #702070;
+    border-color: #702070;
+}
+/*Purple links Global*/
+.no-sf-style a{
+	color: #952d98;
+}
+.no-sf-style a:hover, .no-sf-style a:focus{
+	color: #702070;
+}
+/*Custom List styles*/
+.no-sf-style .progress {
+    margin-bottom: 0px;
+}
+/*breadcrumbs*/
+.no-sf-style .breadcrumb {
+    background-color: #f3f3f3;
+    border-radius: 0px;
+    margin-bottom: 40px;
+    font-family: Rockwell, 'Courier Bold', Courier, Georgia, Times, 'Times New Roman', serif;
+    font-size: 14px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 16.4px;
+}
+.no-sf-style .breadcrumb>li{
+    margin-left: 3px;
+    font-weight: bold;
+}
+.no-sf-style .breadcrumb>li a{
+    color: #952d98;
+    font-weight: bold;
+}
+    
+    @media only screen and (max-width : 1200px ) {
+  		.global-search-bar {
+			width:100px !IMPORTANT;	
+  		}
+    	li.global-search {
+    		width: 150px;
+		}
+  		ul.nav.navbar-nav.navbar-right.nav-profile {
+    		width: 225px !IMPORTANT;
+  		}
+	}
+    
+/*responsive tables */
+@media only screen and (max-width: 992px) {
+    /* Force table to not be like tables anymore */
+    #no-more-tables table, 
+    #no-more-tables thead, 
+    #no-more-tables tbody, 
+    #no-more-tables th, 
+    #no-more-tables td, 
+    #no-more-tables tr { 
+        display: block; 
+    }
+    
+    
+    
+    /* Hide table headers (but not display: none;, for accessibility) */
+    #no-more-tables thead tr { 
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    #no-more-tables tr { 
+        border: 1px solid #ccc; 
+    }
+    #no-more-tables td { 
+        /* Behave  like a "row" */
+        border: none;
+        border-bottom: 1px solid #eee; 
+        position: relative;
+        padding-left: 53%; 
+        white-space: normal;
+        text-align:left;
+        /*Fix for no data in mobile view*/
+        min-height: 37px;
+        /*Trunicate Long Names for mobile*/
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    #no-more-tables td:before { 
+        /* Now like a table header */
+        position: absolute;
+        /* Top/left values mimic padding */
+        top: 6px;
+        left: 6px;
+        width: 45%; 
+        padding-right: 10px; 
+        white-space: nowrap;
+        text-align:left;
+        font-weight: bold;
+    }
+    /*
+    Label the data
+    */
+    #no-more-tables td:before { content: attr(data-title); }
+    .top-selling-items-section #no-more-tables > table > tbody > tr {
+    	border: none;
+    }
+    .top-selling-items-section #no-more-tables > table > tbody > tr > td {
+		padding-top: 20px;
+    }
+    .top-selling-items-section #no-more-tables > table > tbody > tr > td:first-child {
+		padding-top: 0;
+    }
+}
+@media only screen and (max-width: 767px) {
+    #no-more-tables td { 
+        text-align:right;
+    }
+}
+
+/** HEADER **/
+
+/*Profile Bar*/
+.profile-row{
+	height: 50px;
+	background-color: #f8f8f8;
+}
+.profile-container{
+	background-color: #555555;
+	width: 100px;
+}
+/* Main Navigation*/
+#navbar{
+	margin-top: 13px;
+	margin-left: 20px;
+}
+/*Remove padding below Navbar*/
+.no-sf-style .navbar {
+    margin-bottom: 0px;
+}
+/*header border and background color*/
+.no-sf-style .navbar-default {
+    background: #f5f5f5;
+    background: -moz-linear-gradient(top,#fff 0,#f3f3f3 100%);
+    background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,#fff),color-stop(100%,#f3f3f3));
+    background: -webkit-linear-gradient(top,#fff 0,#f3f3f3 100%);
+    background: -o-linear-gradient(top,#fff 0,#f3f3f3 100%);
+    background: -ms-linear-gradient(top,#fff 0,#f3f3f3 100%);
+    background: linear-gradient(to bottom,#fff 0,#f3f3f3 100%);
+    overflow: visible;
+    border-bottom: 1px solid #ccc;
+    transition: all 300ms;
+}
+.no-sf-style .nav.main-menu{
+    padding-left: 4%;
+    font-size: 14px;
+}
+/*logo styles*/
+.no-sf-style .navbar-brand {
+    float: left;
+    height: 75px;
+    padding: 10px 0;
+    line-height: 20px;
+}
+.no-sf-style .navbar-default .navbar-brand.logo-text{
+	font-size: 24px;
+	margin-left: 0;
+	margin-top: 11px;
+	margin-bottom: -11px;
+	color: #952d98;
+}
+.no-sf-style .navbar-default a.navbar-brand.logo-text:hover{
+	margin-left: 0;
+	margin-top: 11px;
+	margin-bottom: -11px;
+	color: #952d98;
+}
+/*logo styles*/
+.header-logo{
+	height: 100%;
+	margin-right: 5px;
+}
+/*logo styles*/
+.no-sf-style .navbar-brand>img {
+    display: inline;
+}
+/*logo styles*/
+.no-sf-style .navbar-default .navbar-brand {
+    color: #952d98;
+    font-size: 16px;
+    font-weight: bold;
+}
+/*Nav items styles*/
+.no-sf-style .navbar-default .navbar-nav>li>a, .no-sf-style .navbar-default .navbar-text {
+    color: #000000;
+}
+ul.nav li {
+    margin-left: 2px;
+}
+/*Active Nav items */
+.no-sf-style .navbar-default .navbar-nav>.active>a, .no-sf-style .navbar-default .navbar-nav>.active>a:focus, .no-sf-style .navbar-default .navbar-nav>.active>a:hover {
+    color: #952d98;
+    background-color: transparent;
+    border-bottom: 3px solid #952d98;
+    font-weight: bold;
+}
+/* Nav items Styles*/
+.no-sf-style .navbar-nav>li>a {
+    padding-top: 18px;
+    padding-bottom: 18px;
+    font-family: Rockwell, 'Courier Bold', Courier, Georgia, Times, 'Times New Roman', serif;
+	font-size: 16px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 400;
+}
+/*Search Bar*/
+/*bottom padding for tablet view*/
+ul.nav.navbar-nav.navbar-right.nav-profile{
+	margin-bottom: 10px;
+}
+.global-search{
+	width: 230px;
+	margin-top: 10px;
+}
+.global-search-bar{
+	width: 180px;
+	display: inline-block;
+}
+.global-search-button{
+	display: inline-block;
+	vertical-align: top;
+}
+.no-sf-style .global-search-button .form-control{
+	background-color: #952d98;
+	color: #fff;
+	border: none;
+}
+/* My Profile Button*/
+.profile-button{
+	display: inline-block;
+	margin-top: 10px;
+    width: 59px;
+}
+.no-sf-style .profile-button .form-control {
+    background-color: #952d98;
+    padding: 1px 6px 1px 3px;
+    color: #fff;
+}
+.header-profile-pic{
+	height: 30px;
+	width: 30px;
+	float: left;
+}
+.profile-pic{
+	height: 4px;
+}
+/*Bootstrap Navbar Break earlier*/
+@media (min-width: 768px) and (max-width: 991px) {
+    .no-sf-style .navbar-collapse.collapse {
+        display: none !important;
+    }
+    .no-sf-style .navbar-collapse.collapse.in {
+        display: block !important;
+    }
+    .no-sf-style .navbar-header .collapse, .navbar-toggle {
+        display:block !important;
+    }
+    .no-sf-style .navbar-header {
+        float:none;
+    }
+}
+
+/** HOME PAGE **/
+.page-home{
+	
+}
+.homepage-header{
+	background: #952d98 url("/resource/CommunityAssets/img/homepage-header-gears.png") no-repeat center center;
+    min-height: 150px;
+    margin: 20px;
+}
+/*Community Alert Styles*/
+
+.alert-text{
+
+}
+.alert-icon{
+	float: left;
+	margin-right: 10px;
+	margin-top: -8px;
+}
+/*Carousel Rotating banner*/
+/*padding below*/
+.no-sf-style .carousel {
+    margin-bottom: 20px;
+}
+/*Remove Gradient on right side of banner */
+.no-sf-style .carousel-control.right {
+    right: 0;
+    left: auto;
+    background-image: none;
+    background-image: none;
+    background-image: none;
+    background-image: none;
+    filter: none;
+    background-repeat: none;
+}
+/*Remove Gradient on left side of banner */
+.no-sf-style .carousel-control.left {
+    right: 0;
+    right: auto;
+    background-image: none;
+    background-image: none;
+    background-image: none;
+    background-image: none;
+    filter: none;
+    background-repeat: none;
+}
+.more-clubs-link-container{
+	border-top: 1px solid #000;
+}
+.more-clubs-link{
+	line-height: 28px;
+    padding-left: 10px;
+}
+.home-table{
+	border-bottom: 1px solid #000;
+}
+
+/* Smaller then mobile breakpoint - Remove black border from custom list views */
+    @media only screen and (max-width : 992px) {
+    	.home-table{
+			border-bottom: none;
+		}
+		.more-clubs-link-container {
+		    border-top: none;
+		}
+    }
+/*Homepage My Clubs custom list*/
+.my-clubs-table {
+    margin-bottom: 20px;
+    padding-bottom: 30px;
+}
+thead.thead-custom{
+	color: #fff;
+	background-color: #5f6062;
+}
+.no-sf-style .table-condensed>tbody>tr>td, .no-sf-style .table-condensed>tbody>tr>th, .no-sf-style .table-condensed>tfoot>tr>td, .no-sf-style .table-condensed>tfoot>tr>th, .no-sf-style .table-condensed>thead>tr>td, .no-sf-style .table-condensed>thead>tr>th {
+    padding: 10px;
+}
+.my-clubs-table a{
+	color: #952d98;
+	font-weight: bold;
+}
+.my-clubs-table a:hover{
+	color: #702070;
+}
+.no-sf-style p.no-data-msg{
+	line-height: 27px;
+    margin-bottom: 0px;
+}
+/*Homepage Operational Updates*/
+.row.homepage-section{
+	margin-bottom: 20px;
+}
+.operational-update a{
+	font-weight: bold;
+}
+.article-summary{
+	display: inline;
+	line-height: 17px;
+    letter-spacing: .2px;
+}
+.read-more{
+	display: inline;
+	font-weight: bold;
+}
+/*CLUB DETAIL PAGE*/
+/*My Group Health Section*/
+.no-sf-style .panel-default>.panel-heading {
+    background-color: #fff;
+    border-color: transparent;
+}
+.no-sf-style .panel-title {
+	color: #952d98;
+    margin-top: 0;
+    border-bottom: 1px solid #952d98;
+    display: block;
+    line-height: 24px;
+    font-family: Rockwell, 'Courier Bold', Courier, Georgia, Times, 'Times New Roman', serif;
+    font-size: 16px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    line-height: 18px;
+}
+/*My Group Health Panels*/
+.group-health-panel{
+	height: 300px;
+}
+.panel-sub-text{
+	font-size: 16px;
+	color: #727272;
+	text-align: center;
+}
+/*Overall EFT*/
+.eft-amount{
+	text-align: center;
+	font-weight: bold;
+	font-size: 40px;
+	color: #000;
+}
+.eft-change-amount{
+	text-align: center;
+	font-weight: bold;
+	font-size: 33px;
+}
+/*EFT Change amount positive=increase negitive=decrease equal=same*/
+.positive{
+	color: #00cc00;
+}
+.negitive{
+	color: #e80000;
+}
+.equal{
+	font-size: 24px;
+	line-height: 40px;
+}
+/*Overall Members*/
+.members-amount{
+	text-align: center;
+	font-weight: bold;
+	font-size: 40px;
+	color: #000;
+}
+.bcm-amount{
+	text-align: center;
+	font-weight: bold;
+	font-size: 40px;
+	color: #000;
+}
+/*Overall Cases*/
+.cases-amount{
+	text-align: center;
+	font-weight: bold;
+	font-size: 100px;
+	color: #000;
+}
+/*links section*/
+.links-section{
+	background-color: #ffffff;
+    padding-top: 20px;
+}
+.links-section p.section-title{
+	font-size: 18px;
+    display: block;
+    border-bottom: 1px solid #464646;
+    margin-bottom: 10px;
+}
+.links-section .panel-default{
+	border: none;
+}
+.links-section ul{
+	margin-left: -39px;
+    list-style: none;
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+.links-section ul li {
+	margin-left: 0;
+}
+.links-section ul li a {
+    color: #952d98;
+    font-size: 14px;
+    line-height: 26px;
+}
+.links-section ul li a i {
+    color: #000;
+    margin-right: 5px;
+}
+.links-section ul li a:hover, .footer ul li a:visited,.footer ul li a:focus {
+    color: #952d98;
+}
+.links-section .select-list{
+	margin-bottom: 10px;
+
+}
+.links-section  .form-control {
+    width: 80%;
+    display: inline;
+    margin-right: 10px;
+}
+.links-section label {
+    display: block;
+}
+/*MY CLUBS PAGE*/
+.no-sf-style .container .jumbotron{
+	background-color: #952d98;
+	border-radius: 0;
+	padding: 0;
+	margin-bottom: 5px;
+}
+.jumbotron .page-description{
+	color: #fff;
+	padding: 10px 20px 0px 27px;
+}
+.jumbotron .page-description-image img{
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+.no-sf-style .container .jumbotron h1{
+	font-family: Rockwell, 'Courier Bold', Courier, Georgia, Times, 'Times New Roman', serif;
+	font-size: 24px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 400;
+	line-height: 25px;
+}
+.no-sf-style .container .jumbotron p{
+	font-size: 14px;
+    margin-top: 8px;
+    letter-spacing: .5px;
+    font-weight: normal;
+}
+/* Large Devices, Wide Screens */
+    @media only screen and (max-width : 1200px) {
+    	.no-sf-style .container .jumbotron h1{
+    		font-size: 18px;
+    	}
+    	.no-sf-style .container .jumbotron p{
+    		font-size: 14px;
+    	}
+    }
+/*List view section*/
+.custom-listview-section{
+	margin-bottom: 30px;
+}
+.custom-listview-section a{
+    color: #952d98;
+    font-weight: bold;
+}
+.custom-listview-section a:hover{
+    color: #702070;
+    font-weight: bold;
+}
+.cf tr th a, .cf tr th a:hover {
+	color : #FFF;
+}
+/* CLUB DETAIL PAGE - CLUBS IN DEV*/
+.panel-heading .accordion-toggle:after {
+    /* symbol for "opening" panels */
+    font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
+    content: "\e114";    /* adjust as needed, taken from bootstrap.css */
+    float: right;        /* adjust as needed */
+    color: grey;         /* adjust as needed */
+}
+.panel-heading .accordion-toggle.collapsed:after {
+    /* symbol for "collapsed" panels */
+    content: "\e080";    /* adjust as needed, taken from bootstrap.css */
+}
+/*Change color of Selected Accordion - JQuery*/
+.no-sf-style .panel-default>.panel-heading.active {
+    background-color: #952d98;
+}
+.no-sf-style .panel-default>.panel-heading.active a {
+    color: #fff;
+}
+.no-sf-style .panel-default a:hover {
+    text-decoration: none; 
+}
+/*Contact Information*/
+/*padding next to icons*/
+.icon-padding{
+	padding-right: 10px;
+}
+.club-information-column{
+	margin-bottom: 30px;
+}
+.club-information-section{
+	margin-bottom: 30px;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+.club-information-section .club-name{
+    color: #952d98;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.club-information-section .club-number{
+    color: #414141;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.club-information-section .club-address{
+    color: #414141;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.club-information-section .address-city{
+	padding-left: 25px;
+}
+.club-information-section .club-email{
+	margin-bottom: 40px;
+}
+.club-information-section .club-email a{
+    color: #952d98;
+    font-size: 15px;
+    font-weight: bold;
+}
+.club-information-section .club-email a:hover{
+    color: #952d98;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.club-information-section .club-social{
+	margin-bottom: 20px;
+}
+.club-information-section .club-social a{
+    color: #952d98;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+/*Corporate Contacts Section*/
+.owner-contact-container{
+	height: 100px;
+}
+.contact-profile-img-container{
+	height: 100%;
+	float: left;
+	margin-right: 10px;
+}
+p.owner-name{
+	font-size: 16px;
+	color: #414141;
+	font-weight: bold;
+	margin-bottom: 0;
+}
+p.owner-title{
+	font-size: 12px;
+	color: #414141;
+	font-style: italic;
+	margin-bottom: 5px;
+}
+p.owner-phone{
+	font-size: 14px;
+	color: #414141;
+	margin-bottom: 5px;
+}
+.owner-email a{
+	font-size: 14px;
+	color: #952d98;
+}
+.owner-email a:hover{
+	font-size: 14px;
+	color: #952d98;
+}
+/*corporate contacts pagination*/
+.no-sf-style .pager {
+    text-align: left;
+}
+.pager-btn{
+	background-color: #952d98;
+}
+body .btn.pager-btn{
+	background-color: #952d98;
+	color: #ffffff;
+}
+body .btn.pager-btn:hover{
+	background-color: #702070;
+	color: #ffffff;
+}
+
+/*Clubs in dev accordion feature*/
+.no-sf-style #accordion .panel-title {
+	color: #952d98;
+    margin-top: 0;
+    font-size: 15px;
+    border-bottom: none;
+    display: block;
+    line-height: 35px;
+    font-weight: bold;
+}
+/* Small Devices, Tablets */
+    @media only screen and (max-width : 768px) {
+    	.no-sf-style #accordion .panel-title {
+    		font-size: 14px;
+    	}
+    }
+/*Accordion Panel Body*/
+.no-sf-style #accordion .panel-default>.panel-heading+.panel-collapse>.panel-body {
+    border-top-color: #ddd;
+    background-color: #f9f8f8;
+    font-size: 14px;
+}
+/*Accordion Step Status indicator*/
+ .no-sf-style #accordion .panel-heading {
+    padding: 5px 15px;
+}
+.not-started{
+	color: #eee;
+	font-size: 30px;
+	margin-right: 5px;
+	vertical-align: middle;
+}
+.in-progress{
+	color: #fef77c;
+	font-size: 30px;
+	margin-right: 5px;
+	vertical-align: middle;
+}
+.complete{
+	color: #b2dfb0;
+	font-size: 30px;
+	margin-right: 5px;
+	vertical-align: middle;
+}
+/*button within accordion*/
+.cta-button{
+	margin-top: 30px;
+}
+/*NATIVE CASES PAGE*/
+.cases-link{
+	font-size: 14px;
+	text-align: center;
+	display: block;
+	font-weight: bold;
+}
+/*Remove SF feed link PFCC-3089*/
+.caseTab .topNav .topNavTab .toggleButton{
+	display: none;
+	visibility: hidden;
+}
+/*NATIVE CHATTER PAGE */
+/*Remove native nav on chatter page*/
+.zen #tabContainer{
+	display: none;
+}
+/* Remove page borders on chatter page*/
+.zen .zen-bodyZen {
+    background-color: #fff;
+    border-top: none; 
+    position: relative; 
+    -moz-border-radius-bottomleft: 0px;
+    -moz-border-radius-bottomright: 0px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    -moz-box-shadow: 0 0px 0px hsla(0,0%,0%,0);
+    -webkit-box-shadow: 0 0px 0px hsla(0,0%,0%,0);
+    box-shadow: 0 0px 0px hsla(0,0%,0%,0);
+}
+/*Center Chatter Page*/
+.chatterPage .threecolumn, .userProfilePage, .chatterFilesTabPage .chatterFilesTabPageHeader {
+    margin-top: 2px;
+    margin-left: auto;
+    margin-right: auto;
+}
+/** RETAIL PAGE **/
+.retail-links-section{
+	max-width: 340px;
+	margin: 0 auto;
+	height: 360px;
+}
+.retail-links-section p.retail-links-title {
+    color: #952d98;
+    font-size: 20px;
+    border-bottom: 1px solid #952d98;
+    display: block;
+    padding-top: 5px;
+    font-family: Rockwell, 'Courier Bold', Courier, Georgia, Times, 'Times New Roman', serif;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    line-height: 18px;
+    letter-spacing: .8px;
+}
+.retail-links-section p{
+	font-size: 18px;
+	line-height: 22px;
+	color: #000;
+}
+.retail-links-section-btn{
+	max-width: 340px;
+	margin-bottom: 20px;
+	margin-left: auto;
+    margin-right: auto;
+}
+.view-all-products-btn{
+	margin-bottom: 40px;
+}
+
+/*Top Selling Items Section*/
+.top-selling-items-section{
+	margin-bottom: 50px;
+}
+.top-selling-items-section a{
+	color: #952d98;
+    font-weight: bold;
+}
+.top-selling-items-legend-container{
+	margin: 25px 10px;
+}
+.legend-image{
+	width: 30px;
+	display: inline;
+}
+.legend-text{
+	font-size: 14px;
+	font-weight: bold;
+}
+.top-selling-items-section #no-more-tables > table > tbody > tr > td {
+	padding-left: 0;
+	vertical-align: top;
+}
+.top-selling-items-section #no-more-tables table.table-striped.table-condensed {
+	padding-left: 0;
+	padding-right: 0;
+}
+.top-selling-items-icon {
+	height: auto;
+	margin: -7px 0 -7px 10px;
+    max-width: 20px;
+}
+/*Approved Items Section*/
+.approved-items-section{
+	margin-bottom: 50px;
+}
+.approved-items-section a{
+	color: #952d98;
+    font-weight: bold;
+}
+/*Fusion Retail Barcodes*/
+.fusion-retail-barcodes-section{
+	margin-bottom: 50px;
+}
+.fusion-retail-barcodes-section a{
+	color: #952d98;
+    font-weight: bold;
+}
+/* Large Devices, Wide Screens */
+    @media only screen and (min-width : 1200px) {
+    	.retail-links-section-btn{
+			margin-left: 7px;
+		}
+    }
+/*SUBMIT A PRODUCT*/
+/*remove sf icon and title*/
+.page-product-request h2.title{
+	display: none;
+}
+.page-product-request .pageTitleIcon{
+	display: none;
+}
+.page-product-request .x-grid3-col-ACTION_COLUMN, .page-product-request .x-grid3-td-ACTION_COLUMN{
+ 	display: none; 
+ 	visibility:hidden;
+}
+/*style new button*/
+.page-product-request .btn{
+	color: #fff;
+	background-color: #952d98;
+}
+/*Style new button*/
+.page-product-request .btn:hover{
+	color: #fff;
+	background-color: #702070;
+}
+/*Remove Refresh Button*/
+.page-product-request .refreshListButton{
+	display: none;
+}
+.page-product-request .topNav.primaryPalette{
+	display: none;
+	visibility:hidden;
+}
+/*VIEW ALL PRODUCTS*/
+body .page-all-products .pbBody table.list tr.headerRow .actionColumn, body .page-all-products .pbBody table.list tr.dataRow td.actionColumn {
+    display: none;
+    visibility:hidden;
+}
+.page-all-products .bPageBlock .pbHeader .listHeader {
+    display: none;
+}
+/*Left Align MSRP item*/
+.page-all-products .list .numericalColumn, .list .numericalColumn, .list .CurrencyElement, .list .QuoteDocCreatedBy {
+    text-align: left;
+}
+
+/**REQUEST FORM STYLES**/
+p#confirmation{
+    padding: 5px;
+    display: block;
+    min-height: 100px;
+}
+.row {
+    padding: 5px;
+}
+.row label {
+    padding: 5px 0px;
+}
+.btn-pf.form {
+    margin-bottom: 25px;
+}
+.form-text {
+    padding: 10px 5px;
+    font-size: 14px;
+}
+
+/**REQUEST A LANDING PAGE**/
+
+
+/**REQUEST A SITE**/
+.sites-listview-container{
+	margin-bottom: 40px;
+}
+/*VIEW MY SITES*/
+.page-view-my-sites .bPageBlock .pbHeader .listHeader {
+    display: none;
+    visibility:hidden;
+}
+/*VENDOR LIST PAGE*/
+/*remove the new button from list view*/
+.page-vendor-list .listButtons{
+	display: none;
+	visibility:hidden;
+}
+/*Remove SF header and chatter feed*/
+.page-vendor-list .topNav.primaryPalette{
+	display: none;
+	visibility:hidden;
+}
+/*remove action column from vendor list*/
+.page-vendor-list .x-grid3-col-ACTION_COLUMN, .page-vendor-list .x-grid3-td-ACTION_COLUMN{
+ 	display: none; 
+ 	visibility:hidden;
+}
+
+/*VENDOR LIST DETAIL PAGE*/
+/*remove chatter from detail page*/
+/*.hasMotif.accountTab.detailPage .chatterfeedshell{
+
+}*/
+
+
+/** FOOTER **/
+.footer{
+	padding-top: 50px;
+	clear: both;
+	background: #952d98 url("/resource/CommunityAssets/img/footer-bg.jpg") no-repeat center center;
+	background-size: cover;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+.footer-logo{
+    width: 237px;
+    margin: 0px 40px 20px 0;
+}
+.footer h3{
+	color: #fff;
+	font-size: 16px;
+	padding-bottom: 5px;
+	font-family: Rockwell, 'Courier Bold', Courier, Georgia, Times, 'Times New Roman', serif;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+    line-height: 18px;
+    letter-spacing: .5px;
+}
+.footer ul{
+	margin-left: -39px;
+    list-style: none;
+    margin-top: 5px;
+    margin-bottom: 30px;
+}
+.footer ul li {
+	margin-left: 0;
+}
+.footer ul li a {
+    color: #fff;
+    font-size: 13px;
+    line-height: 29px;
+}
+.footer ul li a:hover, .footer ul li a:visited,.footer ul li a:focus {
+    color: #fff;
+}
+.copyright-text{
+	color: #fff;
+}
+.copyright-text a{
+	color: #fff;
+	text-decoration: none;
+}
+.copyright-text a:hover{
+	color: #fff;
+}
+/*TERMS AND CONDITIONS PAGE - NOTE THIS PAGE IS HARD CODED AND DOES NOT UPDATE ON ARTICLE UPDATE*/
+.terms-and-conditions-sub{
+	margin-left: 40px;
+}
+.terms-and-conditions{
+	margin-bottom: 40px;
+}
+/** TERMS AND CONDITIONS MODAL */
+#termsModal .modal-body {
+	max-height: 400px;
+	overflow-y: scroll;
+}
+body > .modal-backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
+    background-color: #000
+}
+body > .modal-backdrop.fade {
+    filter: alpha(opacity=0);
+    opacity: 0
+}
+body > .modal-backdrop.in {
+    filter: alpha(opacity=50);
+    opacity: .5
+}
+
+</apex:page>

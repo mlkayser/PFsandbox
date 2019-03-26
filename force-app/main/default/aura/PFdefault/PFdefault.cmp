@@ -1,0 +1,27 @@
+<aura:component implements="forceCommunity:themeLayout" access="global" description="PF Default">
+    <aura:attribute name="search" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="profileMenu" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="navBar" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="newHeader" type="Aura.Component[]" required="false"/>
+    
+    <div class="slds-grid slds-grid_vertical">
+        <header class="slds-global-header_container">
+          <!--div class="slds-global-header">
+            <div class="slds-global-header__item">
+  				<div class="slds-global-header__logo"></div>
+			</div>
+            <div class="slds-global-header__item">{!v.navBar}</div>
+            <div class="slds-global-header__item slds-global-header__item_search">{!v.search}</div>
+            <div class="slds-global-header__item">{!v.profileMenu}</div>
+          </div-->
+            <div class="slds-global-header__item">
+              <div class="slds-global-header__logo"></div>
+            </div>            
+            <div class="slds-global-header__item">{!v.navBar}</div>
+         </header>  
+        
+        <div class="slds-col content">
+            {!v.body}
+        </div>
+    </div>   
+</aura:component>

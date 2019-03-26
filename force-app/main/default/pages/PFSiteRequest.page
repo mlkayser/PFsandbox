@@ -1,0 +1,33 @@
+<apex:page docType="html-5.0" title="Request a Site | Planet Fitness Franchise Community" label="PFSiteRequest" name="PFSiteRequest" showHeader="true" sidebar="false" standardStylesheets="false">
+	<div class="no-sf-style page-body page-site-request">
+	 	<div class="container">
+	 		<div class="jumbotron">
+		        <div class="row">
+		        	<div class="col-md-6 page-description">
+		        		<h1>Request A Site</h1>
+		        		<p>placeholder</p>
+		        	</div>
+		        	<div class="col-md-6 page-description-image hidden-xs hidden-sm">
+		        		<img class="img-responsive" src="http://placehold.it/555x139"/>
+		        	</div>
+		        </div>
+	      	</div>
+
+	      	<ol class="breadcrumb">
+			  <li><a href="/apex/PFHomepage">Home</a></li>
+			  <li>Request A Site</li>
+ 			</ol>
+
+	  		<div class="row">
+	 			<div class="col-md-12">
+	 				<div class="main-section">
+			 			<p class="section-title">Request A Site</p>
+			 		</div>
+			 	</div>
+			</div>
+			<div class="sites-listview-container">
+				<apex:listViews type="Sites__c"/>
+			</div>
+	 	</div>
+	</div>
+</apex:page>

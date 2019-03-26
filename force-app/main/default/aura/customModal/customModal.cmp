@@ -1,0 +1,25 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" 
+                access="global" >
+    
+    <aura:attribute name="buttonLabel" type="String" default="Click Me" access="global"/>
+    <aura:attribute name="url" type="String" default="https://fm-planetfitness.force.com/myPF" access="global"/>
+
+    <ui:button class="slds-align_absolute-center slds-button slds-button_brand askCommunityBtn forceCommunityAskCommunity " label="{!v.buttonLabel}" press="{!c.openmodal}"  /> 
+    <div role="dialog" tabindex="-1" aria-labelledby="header43" aura:id="Modalbox" 
+         class="slds-modal slds-modal_large">
+        <div class="slds-modal__container" style="width: 50%;">
+            <div class="slds-modal__header">
+            </div>
+            <div class="slds-modal__content slds-p-around--medium">
+                <div class="iframe-container">
+                    <!--iframe src="https://www.tfaforms.com/458254"></iframe-->
+                    <iframe src="{!v.url}"></iframe>
+                </div>
+            </div>            
+            <div class="slds-modal__footer">
+                <ui:button class="uiButton-brand" label="close" press="{!c.closeModal}"  />
+            </div>
+        </div>
+    </div>
+    <div class="slds-backdrop" aura:id="Modalbackdrop"></div>   
+</aura:component>

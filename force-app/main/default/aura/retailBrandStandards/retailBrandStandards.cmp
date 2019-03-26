@@ -1,0 +1,9 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+
+    <article class="center">
+        <img class="img-responsive" src="https://app.planetfitness.com/salesforce/assets/brand_standards.png"/>
+       	<h2 class="slds-text-heading_medium">Brand Standards</h2>
+    	<p>Consistency is a high priority with our brand stregth in order to reflect a uniform brand experience for our members.</p>
+    </article>
+    
+</aura:component>

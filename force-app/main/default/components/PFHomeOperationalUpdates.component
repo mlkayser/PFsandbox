@@ -1,0 +1,33 @@
+<apex:component >
+<!--apex:component controller="PFHomeOperationalUpdatesController"-->
+    <!-- Operational Updates -->
+    <!--div class="col-md-12">
+	    <div class="row">
+        	<div class="col-md-12" id="no-more-tables">
+                <table class="col-md-12 table-striped table-condensed cf">
+                    <thead class="cf thead-custom">
+                        <tr>
+                            <th>Operational Update</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                         <apex:repeat value="{!operational_updates_list}" var="opp" id="theRepeat">
+                            <tr>
+                                <td data-title="Operational Update">
+                                    <apex:outputLink value="/{!opp.article_id}" >
+                                        {!opp.article_title}
+                                    </apex:outputLink>
+                                </td>
+                                <td data-title="Description">
+                                	<apex:outputText value="{!opp.article_summary}" escape="false" />
+                                	<apex:outputLink rendered="{!opp.read_more}" styleClass="read-more" value="/{!opp.article_id}" > ... Read more</apex:outputLink>
+                            	</td>
+                            </tr>
+                         </apex:repeat>
+                    </tbody>
+                </table>
+        	</div>
+	    </div>
+	</div-->
+</apex:component>

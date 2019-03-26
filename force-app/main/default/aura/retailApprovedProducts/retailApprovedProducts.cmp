@@ -1,0 +1,12 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+
+    <article class="center">
+    	<a href="/all-products">
+            <img class="img-responsive" src="https://app.planetfitness.com/salesforce/assets/approved_items.png"/>
+        </a>
+        <h2 class="slds-text-heading_medium">Approved Product List</h2>
+        <p>The PF Retail Committee has approved the sale of the items listed below. All items are available in each POS system and can be sold at PF locations.</p>
+        <lightning:button variant="brand" label="View Approved Product List" onclick="{! c.gotoPage}" title="/all-products" />
+    </article>
+        
+</aura:component>

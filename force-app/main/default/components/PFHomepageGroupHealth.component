@@ -1,0 +1,490 @@
+<apex:component controller="PFHomepageGroupHealthController">
+    <style>
+		.box {
+	  		margin: 0;
+  			border: 0px;
+        	float:right;
+		}
+
+		.overlay {
+  			position: fixed;
+  			top: 0;
+  			bottom: 0;
+  			left: 0;
+  			right: 0;
+  			background: rgba(0, 0, 0, 0.7);
+  			transition: opacity 500ms;
+  			visibility: hidden;
+  			opacity: 0;
+        	z-index:99;
+		}
+		
+        .overlay:target {
+  			visibility: visible;
+  			opacity: 1;
+		}
+
+		.popup {
+  			margin: 70px auto;
+        	margin-top:100px;
+  			padding: 20px;
+  			background: #fff;
+  			border-radius: 5px;
+  			width: 40%;
+  			position: relative;
+  			transition: all 5s ease-in-out;
+		} 
+
+        .popup h2 {
+  			color: #333;
+  			font-family: Tahoma, Arial, sans-serif;
+		}
+        
+		.popup .close {
+  			position: absolute;
+  			top: 20px;
+  			right: 30px;
+  			transition: all 200ms;
+  			font-size: 30px;
+  			font-weight: bold;
+  			text-decoration: none;
+  			color: #333;
+		}
+		
+        .popup .close:hover {
+  			color: #06D85F;
+		}
+
+        .popup .content {
+  			max-height: 30%;
+  			overflow: auto;
+        	margin-top:25px;
+		}
+
+		@media screen and (max-width: 700px){
+  			.box{
+    			width: 70%;
+  			}
+  			.popup{
+    		width: 70%;
+  			}
+		}
+    </style>
+    
+    <!-- OLD EFT Dashboard
+		<div class="col-md-4">
+            <div class="panel panel-default group-health-panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Overall EFT</h3>
+                  </div>
+            <div class="panel-body">
+                <p class="eft-amount">
+                    <apex:outputText value="${0, number, ###,###}">
+                        <apex:param value="{!myGroupHealth.eft.sumOfEFT}"/>
+                    </apex:outputText>
+                </p> 
+                <p class="panel-sub-text"> 
+                    <apex:outputPanel rendered="{!myGroupHealth.eft.validEFTDate!=null}" > 
+                        Valid {!myGroupHealth.eft.validEFTDate}
+                    </apex:outputPanel>
+                </p>
+                <br/>
+                <br/>
+                <br/>
+
+                <p class="eft-change-amount negitive" >
+                    <apex:outputText value="${0, number, ###,###}" rendered="{!lastDraftStatus=-1}">
+                        <i class="fa fa-angle-down"></i>
+                        &nbsp;  
+                        <apex:param value="{!myGroupHealth.eft.lastDraft}"  />
+                    </apex:outputText>
+                </p> 
+                <p class="eft-change-amount positive" >
+                    <apex:outputText value="${0, number, ###,###}" rendered="{!lastDraftStatus=1}">
+                        <i class="fa fa-angle-up"></i>
+                        &nbsp;  
+                        <apex:param value="{!myGroupHealth.eft.lastDraft}"  />
+                    </apex:outputText>
+                </p> 
+                <p class="eft-amount equal" >
+                    <apex:outputText value="No Change" rendered="{!lastDraftStatus=0}">
+                        <apex:param value="{!myGroupHealth.eft.lastDraft}"  />
+                    </apex:outputText>
+                </p> 
+
+                <p class="panel-sub-text">from last draft</p>
+            </div>
+        </div>
+    </div>
+    -->
+    
+    <!-- START -- CLUB EFT REPLACEMENT -->
+    <div class="col-md-4" style="{!IF(showMe, 'display:block', 'display:none')}" >
+        <div class="panel panel-default group-health-panel">
+            <div class="panel-heading">
+                <div style="margin:0px; float:right;">
+					<div class="panel-sub-text" style="float:right; font-size:12px;">
+                    	<apex:outputPanel rendered="{!myGroupHealth.eft.validEFTDate!=null}" > 
+                        	{!myGroupHealth.eft.validEFTDate}
+	                    </apex:outputPanel>
+                	</div>
+				</div>
+                <h3 class="panel-title">Overall EFT</h3>
+			</div>
+            <div class="panel-body" style="padding-top:0px;">
+                
+                <p class="eft-amount" style="font-size:32px;">
+                    <apex:outputText value="${0, number, ###,###}">
+                        <apex:param value="{!myGroupHealth.eft.sumOfEFT}"/>
+                    </apex:outputText>
+                </p>
+                <p class="eft-change-amount negitive" style="font-size:26px;">
+                    <apex:outputText value="${0, number, ###,###}" rendered="{!lastDraftStatus=-1}">
+                        <i class="fa fa-angle-down"></i>
+                        &nbsp;  
+                        <apex:param value="{!myGroupHealth.eft.lastDraft}"  />
+                    </apex:outputText>
+                </p> 
+                <p class="eft-change-amount positive" style="font-size:26px;">
+                    <apex:outputText value="${0, number, ###,###}" rendered="{!lastDraftStatus=1}">
+                        <i class="fa fa-angle-up"></i>
+                        &nbsp;  
+                        <apex:param value="{!myGroupHealth.eft.lastDraft}" />
+                    </apex:outputText>
+                </p> 
+                <p class="eft-amount equal" style="font-size:26px;">
+                    <!-- <apex:outputText value="${0, number, ###,###.00}" rendered="{!lastDraftStatus=0}"> -->
+                    <apex:outputText value="No Change" rendered="{!lastDraftStatus=0}">
+                        <apex:param value="{!myGroupHealth.eft.lastDraft}"  />
+                    </apex:outputText>
+                </p> 
+                <p class="panel-sub-text" style="padding:0px; margin:0px; font-size:13px;">from last draft</p>
+            </div>
+             <div class="panel-body" style="padding-top:0px; margin-top:-2px;">
+                <div style="margin:0px; float:right;">
+					<div class="panel-sub-text" style="float:right; font-size:12px;">
+                    	<apex:outputPanel rendered="{!myGroupHealth.eft.validEFTDate!=null}" > 
+                        	{!myGroupHealth.eft.validEFTDate}
+	                    </apex:outputPanel>
+                	</div>
+				</div>
+                 <h3 class="panel-title">Overall EFT with Taxes</h3>
+			</div>
+            <div class="panel-body" style="padding-top:0px;">
+                
+                <p class="eft-amount" style="font-size:32px;">
+                    <apex:outputText value="${0, number, ###,###}">
+                        <apex:param value="{!myGroupHealth.eft.sumOfEFTTax}"/>
+                    </apex:outputText>
+                </p>
+                <p class="eft-change-amount negitive" style="font-size:26px;">
+                    <apex:outputText value="${0, number, ###,###}" rendered="{!lastDraftTaxStatus=-1}">
+                        <i class="fa fa-angle-down"></i>
+                        &nbsp;  
+                        <apex:param value="{!myGroupHealth.eft.lastDraftTax}"  />
+                    </apex:outputText>
+                </p> 
+                <p class="eft-change-amount positive" style="font-size:26px;">
+                    <apex:outputText value="${0, number, ###,###}" rendered="{!lastDraftTaxStatus=1}">
+                        <i class="fa fa-angle-up"></i>
+                        &nbsp;  
+                        <apex:param value="{!myGroupHealth.eft.lastDraftTax}" />
+                    </apex:outputText>
+                </p> 
+                <p class="eft-amount equal" style="font-size:26px;">
+                    <!-- <apex:outputText value="${0, number, ###,###.00}" rendered="{!lastDraftTaxStatus=0}"> -->
+                    <apex:outputText value="No Change" rendered="{!lastDraftTaxStatus=0}">
+                        <apex:param value="{!myGroupHealth.eft.lastDraftTax}"  />
+                    </apex:outputText>
+                </p> 
+                <p class="panel-sub-text" style="padding:0px; margin:0px; font-size:13px;">from last draft</p>
+            </div>
+		</div>
+    </div>
+    <!-- END -- CLUB EFT REPLACEMENT -->
+    
+    
+    
+    <!-- START -- MEMBER COUNT REPLACEMENT -->
+    <div class="col-md-4" >
+        <div class="panel panel-default group-health-panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Members</h3>  
+			</div>
+            <div class="panel-body">				
+                <table width="100%">
+                    <tr width="100%" height="75">
+                    	<td align="center" width="50%" style="border-right:1px solid #E0E0E0;">
+                            <p class="members-amount" style="font-size:32px;">
+				            	<apex:outputText value="{0, number, ###,###}" >
+                        			<apex:param value="{!myGroupHealth.members.totalMembers}"  />
+                    			</apex:outputText>
+	                		</p> 
+                        </td>
+                        <td align="center" width="50%">
+                            <p class="members-amount" style="font-size:32px;">
+				            	<apex:outputText value="{0, number, ###,###}" >
+        			            	<apex:param value="{!myGroupHealth.members.totalEFTMembers}" />
+            			       	</apex:outputText>
+	                		</p> 
+                        </td>
+                    </tr>
+                    <tr>
+                    	<td style="border-right:1px solid #E0E0E0; border-bottom:1px solid #E0E0E0;">
+                            <p class="panel-sub-text" style="margin-top:-5px; font-size:14px;">
+		        		    	TOTAL MEMBERS
+	    		        	</p> 
+                        </td>
+                        <td style="border-bottom:1px solid #E0E0E0;">
+                            <p class="panel-sub-text" style="margin-top:-5px; font-size:14px;">
+		        		    	DRAFTED MEMBERS
+	    		        	</p> 
+                        </td>
+                    </tr>
+                    <tr width="100%" height="75">
+                    	<td align="center" width="50%" style="border-right:1px solid #E0E0E0;">
+                            <p class="members-amount" style="font-size:32px;">
+				            	<apex:outputText value="{0, number, ###,###}" >
+        			            	<apex:param value="{!myGroupHealth.members.totalBCMMembers}" />
+            			       	</apex:outputText>
+	                		</p> 
+                        </td>
+                        <td align="center" width="50%">
+                            <p class="members-amount" style="font-size:32px;">
+				            	<apex:outputText value="{0, number, ###,###}" >
+        			            	<apex:param value="{!myGroupHealth.members.totalBCMEFTMembers}" />
+            			       	</apex:outputText>
+	                		</p> 
+                        </td>
+                    </tr>
+                    <tr>
+                    	<td style="border-right:1px solid #E0E0E0;">
+                            <p class="panel-sub-text" style="margin-top:-5px; font-size:14px;">
+		        		    	TOTAL BCM
+	    		        	</p> 
+                        </td>
+                        <td>
+                            <p class="panel-sub-text" style="margin-top:-5px; font-size:14px;">
+		        		    	DRAFTED BCM
+	    		        	</p> 
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+	</div>
+    <!-- END -- MEMBER COUNT REPLACEMENT -->
+    
+    <!--
+    <div class="col-md-4">
+        <div class="panel panel-default group-health-panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Members</h3>
+              </div>
+            <div class="panel-body">
+                <p class="members-amount">
+                    <apex:outputText value="{0, number, ###,###}" >
+                        <apex:param value="{!myGroupHealth.members.totalMembers}"  />
+                    </apex:outputText>
+                </p> 
+                <p class="panel-sub-text">TOTAL</p>
+                <br/>
+                <br/>
+                <br/>
+                <p class="bcm-amount">
+                    <apex:outputText value="{0, number, ###,###}" >
+                        <apex:param value="{!myGroupHealth.members.bcm}"  />
+                    </apex:outputText>
+                </p> 
+                <p class="panel-sub-text">BCM</p>
+            </div>
+        </div>
+    </div>
+    -->
+    
+    
+    <div class="col-md-4">
+        <div class="panel panel-default group-health-panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Cases</h3>
+              </div>
+            <div class="panel-body">
+                <p class="cases-amount">{!myGroupHealth.totalCases}</p> 
+                <p class="panel-sub-text">TOTAL TRANSFERRED CASES<br/>IN THE LAST 30 DAYS</p>
+                <br/>
+                <br/>
+                <a href="/500/o" class="cases-link" style="display:none;">View Cases Transferred To Group &rarr;</a>
+            </div>
+        </div>
+    </div>
+    
+    
+    <!--
+    <div class="col-md-4" style="{!IF(ShowMe = True,'display:block;', 'display:none;')}">
+        <div class="panel panel-default group-health-panel">
+            <div class="panel-heading">
+                <div class="box">
+					<a href="#popup1">
+                    	<apex:image url="{!$Resource.InformationIcon}" style="width:15px; margin-top:-4px;"/>
+                    </a>
+				</div>
+				<div id="popup1" class="overlay">
+					<div class="popup">
+						<h2>What are Social Cases?</h2>
+						<a class="close" href="#">&times;</a>
+						<div class="content">
+							<p>
+                                Social cases are all incoming comments and reviews across our social media channels. These are monitored 
+                                and responded to by our Reputation Management Agency, Ansira, following our corporate strategy.
+                            </p>
+                            <p>
+                                If you have any questions, please contact Jenna Reynolds, <a href="mailto:jenna.reynolds@pfhq.com">jenna.reynolds@pfhq.com</a>. Thank you. 
+                            </p>
+						</div>
+					</div>
+				</div>
+                <h3 class="panel-title">Social Cases</h3>
+                
+                
+			</div>
+            <div class="panel-body">
+				
+                <table width="100%">
+                    <tr width="100%">
+                    	<td align="center" width="50%" style="border-right:1px solid #E0E0E0;">
+                            <apex:image url="{!URLFOR($Resource.Social_Icons, 'images/facebook_icon_sm.png')}" style="padding-left:5px; float:left; margin-top:8px;"/>
+                            <p class="members-amount" style="font-size:32px;">
+				            	<apex:outputText value="{0, number, ###,###}" >
+        			            	<apex:param value="{!FacebookCount}" />
+            			       	</apex:outputText>
+	                		</p> 
+                        </td>
+                        <td align="center" width="50%">
+                            <apex:image url="{!URLFOR($Resource.Social_Icons, 'images/googleplus_icon_sm.png')}" style="padding-left:5px; float:left; margin-top:8px;"/>
+                            <p class="members-amount" style="font-size:32px;">
+				            	<apex:outputText value="{0, number, ###,###}" >
+        			            	<apex:param value="{!GoogleCount}" />
+            			       	</apex:outputText>
+	                		</p> 
+                        </td>
+                    </tr>
+                    <tr>
+                    	<td style="border-right:1px solid #E0E0E0; border-bottom:1px solid #E0E0E0;">
+                            <p class="panel-sub-text" style="margin-left:33px; margin-top:-5px;">
+		        		    	Facebook
+	    		        	</p> 
+                        </td>
+                        <td style="border-bottom:1px solid #E0E0E0;">
+                            <p class="panel-sub-text" style="margin-left:33px; margin-top:-5px;">
+		        		    	Google+
+	    		        	</p> 
+                        </td>
+                    </tr>
+                    <tr width="100%">
+                    	<td align="center" width="50%" style="border-right:1px solid #E0E0E0;">
+                            <apex:image url="{!URLFOR($Resource.Social_Icons, 'images/twitter_icon_sm.png')}" style="padding-left:5px; float:left; margin-top:8px;"/>
+                            <p class="members-amount" style="font-size:32px;">
+				            	<apex:outputText value="{0, number, ###,###}" >
+        			            	<apex:param value="{!TwitterCount}" />
+            			       	</apex:outputText>
+	                		</p> 
+                        </td>
+                        <td align="center" width="50%">
+                            <apex:image url="{!URLFOR($Resource.Social_Icons, 'images/yelp_icon_sm.png')}" style="padding-left:5px; float:left; margin-top:8px;"/>
+                            <p class="members-amount" style="font-size:32px;">
+				            	<apex:outputText value="{0, number, ###,###}" >
+        			            	<apex:param value="{!YelpCount}" />
+            			       	</apex:outputText>
+	                		</p> 
+                        </td>
+                    </tr>
+                    <tr>
+                    	<td style="border-right:1px solid #E0E0E0;">
+                            <p class="panel-sub-text" style="margin-left:33px; margin-top:-5px;">
+		        		    	Twitter
+	    		        	</p> 
+                        </td>
+                        <td>
+                            <p class="panel-sub-text" style="margin-left:33px; margin-top:-5px;">
+		        		    	Yelp
+	    		        	</p> 
+                        </td>
+                    </tr>
+                </table>
+                <p class="panel-sub-text" style="margin-top:10px;">TOTAL SOCIAL CASES ACROSS ALL PLANET FITNESS LOCATIONS</p>
+                <p class="panel-sub-text" style="font-size:12px;"><apex:outputText value="{0, date, MMMM d','  yyyy}"><apex:param value="{!StartDate}" /></apex:outputText> - <apex:outputText value="{0, date, MMMM d','  yyyy}"><apex:param value="{!EndDate}" /></apex:outputText></p>
+            </div>
+        </div>
+	</div>
+    
+    -->
+    
+    
+    
+    
+    
+    
+	
+    
+    <div class="col-md-4" style="{!IF(ShowMe = True,'display:block;', 'display:none;')}">
+        <div class="panel panel-default group-health-panel">
+            <div style="text-align:center; color:#ddd; font-size:100px; padding-top:70px;">
+                +
+                <p class="panel-sub-text" style="margin-top:10px;">ADDITIONAL DASHBOARD ELEMENTS ARE BEING DEVELOPED.  CHECK BACK OFTEN FOR FUTURE ITEMS.</p>
+            </div>
+        </div>
+    </div>
+	
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <!-- Release 2 -->
+    
+    <!-- <div class="col-md-4">
+        <div class="panel panel-default group-health-panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Brand Excellence</h3>
+              </div>
+            <div class="panel-body">
+                Release 2 - Future
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-default group-health-panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Happy or Not</h3>
+              </div>
+            <div class="panel-body">
+                Release 2 - Future
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+            <div class="panel panel-default group-health-panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">ADA Stats</h3>
+                  </div>
+            <div class="panel-body">
+                Release 2 - Future
+            </div>
+        </div>
+    </div> -->
+</apex:component>

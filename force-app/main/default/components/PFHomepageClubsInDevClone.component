@@ -1,0 +1,131 @@
+<apex:component controller="PFMyClubsControllerClone" >
+    <apex:outputPanel id="resultsContainer">
+        <apex:form >
+            <table class="col-md-12 table-striped table-condensed cf home-table">
+                <thead class="cf thead-custom">
+                    <tr>
+                        <th>
+                            <apex:commandLink action="{!sortDevRecords}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="ShippingCity" />
+                                <apex:param name="sortDirection" value="{!IF(sortDirection='ASC', 'DESC', 'ASC')}" assignTo="{!sortDirection}" /> 
+                                Location
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'ShippingCity'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}" />
+                            </apex:commandLink>
+                        </th>
+                        <th>
+                            <apex:commandLink action="{!sortDevRecords}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="Franchise_Agreement_Status__c" />
+                                <apex:param name="sortDirection" value="{!IF(sortDirection='ASC', 'DESC', 'ASC')}" assignTo="{!sortDirection}" /> FA Status
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'Franchise_Agreement_Status__c'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}" />
+                            </apex:commandLink>
+                        </th>
+                        <th>
+                            <apex:commandLink action="{!sortDevRecords}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="Equipment_Status__c" />
+                                <apex:param name="sortDirection" value="{!IF(sortDirection='ASC', 'DESC', 'ASC')}" assignTo="{!sortDirection}" /> Equipment Status
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'Equipment_Status__c'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}" />
+                            </apex:commandLink>
+                        </th>
+                        <th>
+                            <apex:commandLink action="{!sortDevRecords}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="Projected_Online_Presale_Start_Date__c" />
+                                <apex:param name="sortDirection" value="{!IF(sortDirection='ASC', 'DESC', 'ASC')}" assignTo="{!sortDirection}" /> Online Presale Date
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'Projected_Online_Presale_Start_Date__c'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}" />
+                            </apex:commandLink>
+                        </th>
+                        <th>
+                            <apex:commandLink action="{!sortDevRecords}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="Projected_Physical_Presale_Start_Date__c" />
+                                <apex:param name="sortDirection" value="{!IF(sortDirection='ASC', 'DESC', 'ASC')}" assignTo="{!sortDirection}" /> Physical Presale Date
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'Projected_Physical_Presale_Start_Date__c'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}" />
+                            </apex:commandLink>
+                        </th>
+                        <th>
+                            <apex:commandLink action="{!sortDevRecords}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="Franchisee_Projected_Open_Date__c" />
+                                <apex:param name="sortDirection" value="{!IF(sortDirection='ASC', 'DESC', 'ASC')}" assignTo="{!sortDirection}" /> Open Date
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'Franchisee_Projected_Open_Date__c'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}" />
+                            </apex:commandLink>
+                        </th>
+                        <!--<th>
+                            <apex:commandLink action="{!sortDevRecords}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="Status__c" />
+                                <apex:param name="sortDirection" value="{!IF(sortDirection='ASC', 'DESC', 'ASC')}" assignTo="{!sortDirection}" /> Status
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'Status__c'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}" />
+                            </apex:commandLink>
+                        </th>-->
+                        <!--<th>
+                            <apex:commandLink action="{!sortDevRecords}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="Presale_Date__c" />
+                                <apex:param name="sortDirection" value="{!IF(sortDirection='ASC', 'DESC', 'ASC')}" assignTo="{!sortDirection}" /> Presale
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'Presale_Date__c'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}"/>
+                            </apex:commandLink>
+                        </th>-->
+                        <!--<th>
+                            <apex:commandLink action="{!sortDevRecords}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="Date_Opened__c" />
+                                <apex:param name="sortDirection" value="{!IF(sortDirection='ASC', 'DESC', 'ASC')}" assignTo="{!sortDirection}" /> Opening
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'Date_Opened__c'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}" />
+                            </apex:commandLink>
+                        </th>-->
+                        <th style="{!IF(NOT(isHomePage), '', 'display:none;')}">
+                            <apex:commandLink action="{!sortDevRecords}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="buildPhase" />
+                                <apex:param name="sortDirection" value="{!IF(sortDirection='ASC', 'DESC', 'ASC')}" assignTo="{!sortDirection}" /> Build Phase
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'buildPhase'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}" />
+                            </apex:commandLink>
+                        </th>
+                        <!--<th style="{!IF(NOT(isHomePage), '', 'display:none;')}">  
+                            <apex:commandLink action="{!sortDevRecords}" reRender="resultsContainer" status="searchStaus"  >
+                                <apex:param name="sortField" assignTo="{!sortField}" value="EFT_Members__c" />
+                                <apex:param name="sortDirection" value="{!IF(sortDirection='ASC', 'DESC', 'ASC')}" assignTo="{!sortDirection}" />Members
+                                <apex:image value="/img/s.gif" rendered="{!sortField == 'EFT_Members__c'}" styleClass="{!IF(IsAscending, 'sortAsc', 'sortDesc')}" />
+                            </apex:commandLink> 
+                        </th>-->
+                    </tr>
+                </thead>
+                <tbody>
+                    <apex:repeat value="{!DevRecords}" var="myClub" rows="{!if(isHomePage,5,100)}">
+                        <tr>
+                            <td data-title="Location"><a href="/apex/PFClubDetail?Id={!myClub.clubObj.Id}">{!myClub.clubObj['Name']}</a></td>
+                            <td data-title="FA Status">{!myClub.faStatus}</td>
+                            <td data-title="Equipment Status">{!myClub.equipmentStatus}</td>
+                            <td data-title="Online Presale Date">
+                                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                                    <apex:param value="{!myClub.onlinePresaleDate}" />
+                                </apex:outputText>
+                            </td>
+                            <td data-title="Physical Presale Date">
+                                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                                    <apex:param value="{!myClub.physicalPresaleDate}" />
+                                </apex:outputText>
+                            </td>
+                            <td data-title="Open Date">
+                                <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                                    <apex:param value="{!myClub.projectedOpenDate}" />
+                                </apex:outputText>
+                            </td>
+                            
+                            <!--<td data-title="FA Status">{!myClub.clubObj['Franchise_Agreement_Status__c']}</td>
+                            <td data-title="Equipment Status">{!myClub.clubObj['Equipment_Status__c']}</td>
+                            <td data-title="Online Presale Date">{!myClub.clubObj['Projected_Online_Presale_Start_Date__c']}</td>
+                            <td data-title="Physical Presale Date">{!myClub.clubObj['Projected_Physical_Presale_Start_Date__c']}</td>
+                            <td data-title="Open Date">{!myClub.clubObj['Franchisee_Projected_Open_Date__c']}</td>-->
+                            <!--<td data-title="Status">{!myClub.clubObj['Status__c']}</td>-->
+                            <!--<td data-title="Presale"><apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                                                        <apex:param value="{!myClub.presale_date}" /> 
+                                                     </apex:outputText></td>-->
+                            <!--<td data-title="Opening"><apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                                                        <apex:param value="{!myClub.open_date}" /> 
+                                                     </apex:outputText></td>-->
+                            <td data-title="Build Phase" style="{!IF(NOT(isHomePage), '', 'display:none;')}">{!myClub.buildPhase}</td>
+                            <!--<td data-title="Members" style="{!IF(NOT(isHomePage), '', 'display:none;')}">{!myClub.clubObj['All_Active_Members__c']}</td>-->
+                        </tr>
+                    </apex:repeat>
+                </tbody>
+            </table>
+            <apex:outputText rendered="{!Records.size == 0}"><p class="no-data-msg">There are no clubs in development</p></apex:outputText>
+        </apex:form>
+    </apex:outputPanel>
+
+</apex:component>

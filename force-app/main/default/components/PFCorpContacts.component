@@ -1,0 +1,29 @@
+<apex:component controller="PFCorpContactsController">
+    <apex:attribute name="AccountID" description="AccountId" type="String" required="true" assignTo="{!accID}"/>
+    
+    <apex:form id="theForm">
+    	
+        <apex:commandButton styleClass="btn" style="height:100px;" action="{!previous}" value="<" disabled="{! !has_previous}" reRender="theForm,thePanel" ></apex:commandButton>
+    		   
+    	 <apex:repeat value="{!CorporateContacts}" var="csi">
+        	<div style="display:inline-block; vertical-align:top; width:258px; border:1px solid #c6c6c6; background-color:#f9f9f9; padding:10px; margin-right:5px; border-radius:3px;">
+                <!--<img style="float: left; width: 65px; padding-right:10px;" src="{!csi.SmallPhotoUrl}"/>-->
+                <span class="contact-profile-text-container">
+                    <p class="owner-name">{!csi.Name}</p>
+                    <!--<p class="owner-title">{!user_role[csi.Id]}</p>-->
+                    <p class="ower-title">
+                        {!csi.Title}
+                    </p>
+                    </span>
+                <apex:outputPanel rendered="{!csi.Phone!=null}">
+                        <p class="owner-phone"><i class="fa fa-phone icon-padding"></i> {!csi.Phone}</p>
+                    </apex:outputPanel>
+                    <div style="width:240px; overflow:hidden; white-space: nowrap;"><i class="fa fa-envelope icon-padding"></i><a href="mailto:{!csi.Email}" style="font-weight:bold;">{!csi.Email}</a></div>
+        			
+            </div>
+    	</apex:repeat> 
+        <apex:commandButton styleClass="btn" style="height:100px;" action="{!next}" value=">" disabled="{! !has_next}" reRender="theForm,thePanel" ></apex:commandButton>
+     
+    </apex:form>
+
+</apex:component>

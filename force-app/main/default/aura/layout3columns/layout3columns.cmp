@@ -1,0 +1,27 @@
+<aura:component implements="forceCommunity:layout" access="global" 
+                description="Custom Layout Homepage">
+    
+    <aura:attribute name="column1" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="column2" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="column3" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="column4" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="column5" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="column6" type="Aura.Component[]" required="false"></aura:attribute>
+    
+    <div class="slds-p-horizontal_medium">
+        <div class="slds-grid slds-gutters slds-wrap">
+            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12">
+                <span>{!v.column1}</span>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12">
+                <span>{!v.column2}</span>
+            </div>
+        </div>
+        <div class="slds-grid slds-gutters slds-wrap">
+            <div class="slds-col slds-size_1-of-1">
+                <span>{!v.column3}</span>
+            </div>
+        </div>
+    </div>
+
+</aura:component>

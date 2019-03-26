@@ -1,0 +1,16 @@
+.THIS.slds-button {
+    display:block;
+    width:100%;
+    padding:1em;
+    font-size:1em !important;
+    text-transform: uppercase !important;
+}
+.THIS.slds-button a {
+    display:block;
+    width:100% !important;
+    text-decoration:none;
+    color:inherit;
+}
+.THIS.slds-button a:hover, .THIS.slds-button a:focus {
+    text-decoration:none !important;
+}
